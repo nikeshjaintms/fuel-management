@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vehicles;
+use Auth;
 use Illuminate\Http\Request;
 
 class VehiclesController extends Controller
@@ -10,6 +11,15 @@ class VehiclesController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        if (Auth::guard('admin')->check()) {
+           return redirect()->route('index');
+        } else {
+            return redirect()->route('login');
+        }
+
+    }
     public function index()
     {
         //
@@ -29,6 +39,18 @@ class VehiclesController extends Controller
      */
     public function store(Request $request)
     {
+        $add = new Vehicles();
+        $add->create([
+            "vehicle_no" => $request->post('vehicle_no'),
+            "vehicle_engine_no" => $request->post('vehicle_engine_no'),
+            "vehicle_chassis_no" => $request->post('vehicle_chassis_no'),
+            "vehicle_policy_no" => $request->post('vehicle_policy_no'),
+            "vehicle_policy_expiry_date" => $request->post('vehicle_policy_expiry_date'),
+            "vehicle_fitness_expiry_date" => $request->post('vehicle_fitness_expiry_date'),
+            "vehicle_puc_expiry_date" => $request->post('vehicle_puc_expiry_date'),
+        ]);
+        return redirect()->route('vehicles.index');
+        
         //
     }
 

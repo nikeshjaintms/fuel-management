@@ -28,8 +28,8 @@
       </div>
 
       <!-- Custom template | don't include it in your project! -->
-      <div class="custom-template">
-        <div class="title">Settings</div>
+      {{-- <div class="custom-template"> --}}
+        {{-- <div class="title">Settings</div>
         <div class="custom-content">
           <div class="switcher">
             <div class="switch-block">
@@ -222,4 +222,4 @@
       </div>
       <!-- End Custom template -->
     </div>
-    <!--   Core JS Files   -->
+    <!--   Core JS Files   --> --}}
