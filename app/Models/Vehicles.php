@@ -9,7 +9,7 @@ class Vehicles extends Model
 {
     protected $table = 'vehicles';
     protected $primaryKey = 'id';
-    protected $fillable = ['vehicle_no','vehicle_engine_no','vehicle_chassis_no','vehicle_policy_no','vehicle_policy_expiry_date','vehicle_fitness_expiry','vehicle_puck_expiry'];
-    
+    protected $fillable = ['vehicle_no','vehicle_engine_no','vehicle_chassis_no','vehicle_policy_no','vehicle_policy_expiry_date','vehicle_fitness_expiry_date','vehicle_puc_expiry_date'];
+
     use HasFactory;
 }

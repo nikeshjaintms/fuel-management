@@ -22,6 +22,8 @@ class VehiclesController extends Controller
     }
     public function index()
     {
+        $vehicles = Vehicles::all();
+        return view('vehicle_info.index', compact('vehicles'));
         //
     }
 
@@ -50,7 +52,7 @@ class VehiclesController extends Controller
             "vehicle_puc_expiry_date" => $request->post('vehicle_puc_expiry_date'),
         ]);
         return redirect()->route('vehicles.index');
-        
+
         //
     }
 
