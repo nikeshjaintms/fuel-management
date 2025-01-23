@@ -37,8 +37,14 @@ Route::middleware('auth:admin')->group(function (){
     Route::get('/logout', [\App\Http\Controllers\AdminController::class, 'logout'])->name('logout');
 
     Route::controller(App\Http\Controllers\VehiclesController::class)->group(function(){
-        Route::get('/vehicles','create')->name('vehicles.create');
-        Route::post('/vehicles','store')->name('vehicles.store');
+        Route::get('/vehicles','index')->name('admin.vehicles.index');
+        Route::get('/vehicles/create','create')->name('admin.vehicles.create');
+        Route::post('/vehicles/create','store')->name('admin.vehicles.store');
+        Route::get('/vehicles/{id}','show')->name('admin.vehicles.show');
+        Route::get('/vehicles/edit/{id}','edit')->name('admin.vehicles.edit');
+        Route::put('/vehicles/edit/{id}','update')->name('admin.vehicles.update');
+        Route::delete('/vehicles/{id}','destroy')->name('admin.vehicles.destroy');
+
 
     });
 });

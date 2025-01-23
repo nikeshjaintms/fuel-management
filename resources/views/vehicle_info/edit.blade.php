@@ -21,7 +21,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Add Vehicle Information</a>
+                        <a href="#">Edit Vehicle Information</a>
                     </li>
                 </ul>
             </div>
@@ -29,46 +29,47 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title">Add Vehicle Information </div>
+                            <div class="card-title">Edit Vehicle Information </div>
                         </div>
-                        <form method="POST" action="{{ route('admin.vehicles.store') }}" id="vehicleForm" >
+                        <form method="POST" action="{{ route('admin.vehicles.update', $vehicle->id ) }}" id="vehicleForm" >
                             @csrf
+                            @method('PUT')
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="vehicle_no">Vehicle No</label>
-                                            <input type="text" class="form-control" name="vehicle_no" id="vehicle_no" placeholder="GJ 16 XX 0000" required/>
+                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_no }}" name="vehicle_no" id="vehicle_no" placeholder="GJ 16 XX 0000" required/>
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_engine_no">Vehicle Engine No</label>
-                                            <input type="text" class="form-control" name="vehicle_engine_no" id="vehicle_engine_no" placeholder="Enter Vechile no" required />
+                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_engine_no }}" name="vehicle_engine_no" id="vehicle_engine_no" placeholder="Enter Vechile no" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="vehicle_chassis_no">Vehicle Chassis No</label>
-                                            <input type="text" class="form-control" name="vehicle_chassis_no" id="vehicle_chassis_no" placeholder="Enter Chassic no" required />
+                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_chassis_no }}" name="vehicle_chassis_no" id="vehicle_chassis_no" placeholder="Enter Chassic no" required />
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_policy_no">Vehicle Policy No</label>
-                                            <input type="text" class="form-control" name="vehicle_policy_no" id="vehicle_policy_no" placeholder="Enter Policy no" required />
+                                            <input type="text" class="form-control" name="vehicle_policy_no" value="{{ $vehicle->vehicle_policy_no }}" id="vehicle_policy_no" placeholder="Enter Policy no" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="vehicle_policy_expiry_date">Vehicle Policy Expiry Date</label>
-                                            <input type="date" class="form-control" name="vehicle_policy_expiry_date" id="vehicle_policy_expiry_date" placeholder="GJ 16 XX 0000" />
+                                            <input type="date" class="form-control" name="vehicle_policy_expiry_date" value="{{ $vehicle->vehicle_policy_expiry_date }}" id="vehicle_policy_expiry_date" placeholder="GJ 16 XX 0000" />
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_fitness_expiry_date">Vehicle Fitness Expiry Date</label>
-                                            <input type="date" class="form-control" name="vehicle_fitness_expiry_date" id="vehicle_fitness_expiry_date" placeholder="GJ 16 XX 0000" />
+                                            <input type="date" class="form-control" name="vehicle_fitness_expiry_date" value="{{ $vehicle->vehicle_fitness_expiry_date }}" id="vehicle_fitness_expiry_date" placeholder="GJ 16 XX 0000" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="vehicle_puc_expiry_date">Vehicle PUC Expiry Date</label>
-                                            <input type="date" class="form-control" name="vehicle_puc_expiry_date" id="vehicle_puc_expiry_date" placeholder="GJ 16 XX 0000" />
+                                            <input type="date" class="form-control" name="vehicle_puc_expiry_date" value="{{ $vehicle->vehicle_puc_expiry_date }}" id="vehicle_puc_expiry_date" placeholder="GJ 16 XX 0000" />
                                         </div>
                                     </div>
                                 </div>

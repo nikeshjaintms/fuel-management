@@ -18,7 +18,7 @@
 <script src="{{ asset('backend/assets/js/plugin/datatables/datatables.min.js')}}"></script>
 
 <!-- Bootstrap Notify -->
-{{-- <script src="{{ asset('backend/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script> --}}
+<script src="{{ asset('backend/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
 
 <!-- jQuery Vector Maps -->
 <script src="{{ asset('backend/assets/js/plugin/jsvectormap/jsvectormap.min.js')}}"></script>
