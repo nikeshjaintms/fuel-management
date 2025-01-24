@@ -43,7 +43,11 @@ Route::middleware('auth:admin')->group(function (){
         Route::get('/vehicles/{id}','show')->name('admin.vehicles.show');
         Route::get('/vehicles/edit/{id}','edit')->name('admin.vehicles.edit');
         Route::put('/vehicles/edit/{id}','update')->name('admin.vehicles.update');
-        Route::delete('/vehicles/{id}','destroy')->name('admin.vehicles.destroy');
+        Route::delete('/vehicles/delete/{id}','destroy')->name('admin.vehicles.destroy');
+        Route::get('/vehicles/alert', 'alertmsg')->name('admin.vehicles.msg');
+        Route::post('/admin/vehicles/check', 'check')->name('admin.vehicles.check');
+
+
 
 
     });

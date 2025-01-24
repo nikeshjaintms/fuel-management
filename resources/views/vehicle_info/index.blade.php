@@ -1,6 +1,23 @@
 @extends('layouts.app')
 
 @section('content-page')
+
+@if (!empty($alerts))
+    <script>
+        window.onload = function() {
+            let alerts = @json($alerts);
+            console.log(alerts);
+            alerts.forEach(function(alert) {
+                Swal.fire({
+                    title: 'Reminder',
+                    text: alert,
+                    icon: 'info',
+                    confirmButtonText: 'Okay'
+                });
+            });
+        };
+    </script>
+@endif
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
@@ -58,11 +75,12 @@
                                 <a href="{{ route('admin.vehicles.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
-                                <a href="#" class="btn btn-link btn-danger">
+                                <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
                                   <i class="fa fa-trash">
                                 </i>
-                                </a>                   
-                            </tr>                                
+                                </button>
+                              </td>
+                            </tr>
                             @endforeach
                           </tbody>
                         </table>
@@ -73,6 +91,65 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+    function deletevehicle_info(id) {
+        var url = '{{ route("admin.vehicles.destroy", "id") }}'.replace("id", id);
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: url,
+                    type: 'DELETE',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id: id
+                    },
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Vehicle Information has been deleted.',
+                                'success'
+                            ).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Failed!',
+                                'Failed to delete Vehicle Information.',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire(
+                            'Error!',
+                            'An error occurred: ' + xhr.responseText,
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    }
+</script>
+
 @endsection
 
 

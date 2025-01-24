@@ -4,6 +4,7 @@
 @include('layouts.header')
 @yield('content-page')
 @include('layouts.footer')
+{{-- @include('layouts.alertmsg') --}}
 @include('layouts.footer-script')
 @yield('footer-script')
 
