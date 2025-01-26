@@ -86,14 +86,59 @@
 @endsection
 
 @section('footer-script')
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#vehicle_no, #vehicle_chassis_no').on('blur', function () {
+            let field = $(this).attr('name'); // Get the field name ('vehicle_no' or 'vehicle_chassis_no')
+            let value = $(this).val();
+            let input = $(this);
+
+            if (value) {
+                $.ajax({
+                    url: "{{ route('admin.vehicles.check') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        field: field,
+                        value: value,
+                    },
+                    success: function (response) {
+                        if (response.exists) {
+                            // Display the error message
+                            input.addClass('is-invalid');
+                            input.next('.invalid-feedback').remove();
+                            input.after(`<div class="invalid-feedback">${response.message}</div>`);
+                        } else {
+                            // Clear the error message if the field is valid
+                            input.removeClass('is-invalid');
+                            input.next('.invalid-feedback').remove();
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred while checking the field. Please try again.');
+                    }
+                });
+            }
+        });
+
+        $('#vehicleForm').on('submit', function (e) {
+            if ($('.is-invalid').length > 0) {
+                e.preventDefault(); // Prevent submission if there are errors
+                alert('Please fix errors before submitting the form.');
+            }
+        });
+    });
+</script>
 
 <script>
     $.validator.addMethod("alphanumeric", function(value, element) {
         return this.optional(element) || /^[a-z0-9]+$/i.test(value);
     }, "Please enter a valid alphanumeric value.");
-    
+
     $(document).ready(function () {
         $("#vehicleForm").validate({
             onfocusout: function (element) {
@@ -179,5 +224,5 @@
         });
     });
     </script>
-    
+
 @endsection

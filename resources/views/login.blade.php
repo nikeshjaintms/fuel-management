@@ -9,35 +9,51 @@
         body {
             margin: 0;
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298, #4e4376);
-            background-size: 400% 400%;
-            animation: gradientShift 10s ease infinite;
-            display: flex;
+            color: black;;
+        }
+
+        .container-fluid {
             height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .image-section {
+            background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center center/cover; /* Travel-related image */
+            width: 70%;
+        }
+
+        .form-section {
+            width: 30%;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #fff;
+            padding: 40px;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .form-section .logo {
+            margin-bottom: 20px;
         }
 
-        .login-container {
-            background: rgba(0, 0, 0, 0.7);
+        .form-section .logo img {
+            max-width: 150px; /* Adjust size of the logo */
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             padding: 40px;
-            width: 400px;
-            max-width: 90%;
+            width: 100%;
+            max-width: 400px;
             text-align: center;
-        }
-
-        .login-container h2 {
-            margin-bottom: 20px;
-            font-size: 2rem;
+            backdrop-filter: blur(15px);
         }
 
         .btn {
@@ -66,63 +82,73 @@
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Admin Login</h2>
-        <form method="POST" action="{{ route('login.submit')}}" id="loginForm">
-            @csrf
-            @if(Session::has('error'))
-            <div class="alert alert-danger" role="alert">
-                {{ Session::get('error') }}
-            </div>
-            @endif
-            <div class="mb-3">
-                <input type="email" name="email" class="form-control" placeholder="Username" required>
-            </div>
-            <div class="mb-3">
-                <input type="password" name="password" class="form-control" placeholder="Password" required>
-            </div>
-            <button class="btn btn-primary w-100" type="submit">Login</button>
-        </form>
+    <div class="container-fluid" style="padding: 0px; !important">
+        <!-- Image Section -->
+        <div class="image-section">
+        </div>
 
+        <!-- Form Section -->
+        <div class="form-section">
+            <div class="logo">
+                <img src="https://via.placeholder.com/150x50" alt="Company Logo"> <!-- Replace with your logo -->
+            </div>
+            <div class="form-container">
+                <h2>Admin Login</h2>
+                <form method="POST" action="{{ route('login.submit') }}" id="loginForm">
+                    @csrf
+                    @if(Session::has('error'))
+                    <div class="alert alert-danger" role="alert">
+                        {{ Session::get('error') }}
+                    </div>
+                    @endif
+                    <div class="mb-3">
+                        <input type="email" name="email" class="form-control" placeholder="Username" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" name="password" class="form-control" placeholder="Password" required>
+                    </div>
+                    <button class="btn btn-primary w-100" type="submit">Login</button>
+                </form>
+            </div>
+        </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', function (e) {
-            // e.preventDefault(); // Prevent form submission
-
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
             const errorMessage = document.getElementById('errorMessage');
 
             // Reset error message
-            errorMessage.style.display = 'none';
+            if (errorMessage) errorMessage.style.display = 'none';
 
             // Validate inputs
-            if (!email) {
+            if (!email.value.trim()) {
                 errorMessage.textContent = 'Email is required.';
                 errorMessage.style.display = 'block';
+                e.preventDefault();
                 return;
             }
-            if (!validateEmail(email)) {
+            if (!validateEmail(email.value.trim())) {
                 errorMessage.textContent = 'Enter a valid email address.';
                 errorMessage.style.display = 'block';
+                e.preventDefault();
                 return;
             }
-            if (!password) {
+            if (!password.value.trim()) {
                 errorMessage.textContent = 'Password is required.';
                 errorMessage.style.display = 'block';
+                e.preventDefault();
                 return;
             }
-            if (password.length < 6) {
+            if (password.value.trim().length < 6) {
                 errorMessage.textContent = 'Password must be at least 6 characters long.';
                 errorMessage.style.display = 'block';
+                e.preventDefault();
                 return;
             }
-
-            // Send data to the server
-            console.log('Login form is valid. Submitting...');
-            // You can use fetch() or another method to send the login request here.
         });
 
         // Function to validate email format
