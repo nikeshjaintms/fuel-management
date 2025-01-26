@@ -38,7 +38,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="vehicle_no">Vehicle No</label>
-                                            <input type="text" class="form-control" name="vehicle_no" id="vehicle_no" placeholder="GJ 16 XX 0000" required/>
+                                            <input type="text" class="form-control" name="vehicle_no" id="vehicle_no" placeholder="GJ 16 XX 0000" />
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_engine_no">Vehicle Engine No</label>
@@ -147,7 +147,6 @@
             onkeyup: false, // Optional: Disable validation on keyup for performance
             rules: {
                 vehicle_no: {
-                    required: true,
                     maxlength: 10,
                     alphanumeric: true
                 },
