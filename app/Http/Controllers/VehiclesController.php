@@ -36,21 +36,25 @@ class VehiclesController extends Controller
 
             // // dd($daysforpolicy);
 
+            $itemVehicleNoOrChassisNo = $item->vehicle_no ?? $item->vehicle_chassis_no;
+
             if ($Policydate->diffInDays($today) <= 10 && $Policydate->isFuture()) {
-                $itemVehicleNoOrChassisNo = $item->vehicle_no  ?? $item->vehicle_chassis_no;
-                $alerts[] = "Expiry: " . $itemVehicleNoOrChassisNo . " Policy  is due on " . $Policydate->toFormattedDateString();
+                $alerts[] = "Expiry: " . $itemVehicleNoOrChassisNo . " Policy is due on " . $Policydate->toFormattedDateString();
             }
+            
             if ($fitnessDate->diffInDays($today) <= 10 && $fitnessDate->isFuture()) {
-                $itemVehicleNoOrChassisNo = $item->vehicle_no  ?? $item->vehicle_chassis_no;
-                $alerts[] = "Expiry: " . $itemVehicleNoOrChassisNo . " Fitness is due on " . $Policydate->toFormattedDateString();
+                $alerts[] = "Expiry: " . $itemVehicleNoOrChassisNo . " Fitness is due on " . $fitnessDate->toFormattedDateString();
             }
+            
             if ($PUCdate->diffInDays($today) <= 10 && $PUCdate->isFuture()) {
-                $itemVehicleNoOrChassisNo = $item->vehicle_no  ?? $item->vehicle_chassis_no;
-                $alerts[] = "Expiry: " . $itemVehicleNoOrChassisNo . " PUC is due on " . $Policydate->toFormattedDateString();
+                $alerts[] = "Expiry: " . $itemVehicleNoOrChassisNo . " PUC is due on " . $PUCdate->toFormattedDateString();
             }
-        }
-        return view('vehicle_info.index', compact(['vehicles', 'alerts']));
+            
+            // If there are any alerts, you can display them, for example:
+           
+            return view('vehicle_info.index', compact(['vehicles', 'alerts']));
         //
+        }
     }
 
     public function check(Request $request)
@@ -70,15 +74,7 @@ class VehiclesController extends Controller
         return response()->json(['error' => 'Invalid field'], 400);
     }
 
-    public function alertmsg()
-    {
-
-
-
-        // Pass alerts to the view
-        return view('', compact('alerts'));
-    }
-
+    
     /**
      * Show the form for creating a new resource.
      */
