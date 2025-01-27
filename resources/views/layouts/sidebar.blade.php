@@ -6,8 +6,8 @@
                 <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
                     <a href="index.html" class="logo">
-                        <img src="{{ asset('backend/assets/img/kaiadmin/logo_light.svg') }}" alt="navbar brand"
-                            class="navbar-brand" height="20" />
+                        <img src="{{ asset('backend/assets/logo/logo.png') }}" alt="navbar brand"
+                            class="navbar-brand" height="65" />
                     </a>
                     <div class="nav-toggle">
                         <button class="btn btn-toggle toggle-sidebar">
@@ -47,7 +47,15 @@
                             </a>
 
                         </li>
-                        
+                        <li class="nav-item {{ request()->segment(1) == 'driver' ? 'active' : '' }}">
+                            <a href="{{ route('admin.driver.index')}}">
+                                <i class="fas fa-layer-group"></i>
+                                <p>Drivers</p>
+                                <span class="caret"></span>
+                            </a>
+
+                        </li>
+
                     </ul>
                 </div>
             </div>

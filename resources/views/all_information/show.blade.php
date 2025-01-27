@@ -64,10 +64,6 @@
                         <th>PUC Expiry</th>
                         <td>{{ $data->vehicle_puc_expiry_date}}</td>
                     </tr>
-                     <tr>
-                        <th>Average </th>
-                        <td>{{ $data->average}}</td>
-                     </tr>
                 </table>
               </div>
             </div>

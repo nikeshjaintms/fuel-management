@@ -39,17 +39,17 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="vehicle_no">Vehicle No</label>
-                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_no }}" name="vehicle_no" id="vehicle_no" placeholder="GJ 16 XX 0000" required/>
+                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_no }}" {{ $vehicle->vehicle_no != NULL ? 'readonly' : '' }} name="vehicle_no" id="vehicle_no" placeholder="GJ 16 XX 0000" required/>
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_engine_no">Vehicle Engine No</label>
-                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_engine_no }}" name="vehicle_engine_no" id="vehicle_engine_no" placeholder="Enter Vechile no" required />
+                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_engine_no }}" name="vehicle_engine_no" id="vehicle_engine_no" placeholder="Enter Vechile no" required readonly />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="vehicle_chassis_no">Vehicle Chassis No</label>
-                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_chassis_no }}" name="vehicle_chassis_no" id="vehicle_chassis_no" placeholder="Enter Chassic no" required />
+                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_chassis_no }}" name="vehicle_chassis_no" id="vehicle_chassis_no" placeholder="Enter Chassic no" required readonly/>
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_policy_no">Vehicle Policy No</label>
@@ -70,6 +70,10 @@
                                         <div class="form-group">
                                             <label for="vehicle_puc_expiry_date">Vehicle PUC Expiry Date</label>
                                             <input type="date" class="form-control" name="vehicle_puc_expiry_date" value="{{ $vehicle->vehicle_puc_expiry_date }}" id="vehicle_puc_expiry_date" placeholder="GJ 16 XX 0000" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="average">Average Claim by Company</label>
+                                            <input type="number" class="form-control" value="{{ $vehicle->average }}" name="average" id="average" placeholder="Enter a Average" />
                                         </div>
                                     </div>
                                 </div>
@@ -94,7 +98,7 @@
     $.validator.addMethod("alphanumeric", function(value, element) {
         return this.optional(element) || /^[a-z0-9]+$/i.test(value);
     }, "Please enter a valid alphanumeric value.");
-    
+
     $(document).ready(function () {
         $("#vehicleForm").validate({
             onfocusout: function (element) {
@@ -133,6 +137,9 @@
                 vehicle_puc_expiry_date: {
                     required: true,
                     date: true
+                },
+                average: {
+                    required: true,
                 }
             },
             messages: {
@@ -163,6 +170,9 @@
                 vehicle_puc_expiry_date: {
                     required: "PUC expiry date is required",
                     date: "Please enter a valid date"
+                },
+                average: {
+                    required: "Average claim by company is required",
                 }
             },
             errorClass: "text-danger",
@@ -180,5 +190,5 @@
         });
     });
     </script>
-    
+
 @endsection
