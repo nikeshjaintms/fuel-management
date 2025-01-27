@@ -72,8 +72,18 @@ class CustomerMasterdataController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CustomerMasterdata $customerMasterdata)
+    public function update(Request $request, CustomerMasterdata $customerMasterdata,$id)
     {
+        $update = CustomerMasterdata::find($id);
+        $update->update([
+            'customer_name' => $request->customer_name,
+            'customer_address' => $request->customer_address,
+            'customer_type' => $request->customer_type,
+            'customer_mobile_no' => $request->customer_mobile_no,
+            'customer_email' => $request->customer_email,
+        ]);
+        Session::flash('success', 'Customer updated successfully');
+        return redirect()->route('admin.customer_info.index');
         //
     }
 

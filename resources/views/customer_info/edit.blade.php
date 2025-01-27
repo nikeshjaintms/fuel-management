@@ -31,8 +31,9 @@
                         <div class="card-header">
                             <div class="card-title">Add Customer Information</div>
                         </div>
-                        <form method="POST" action="{{ route('admin.customer_info.update') }}" id="vehicleForm">
+                        <form method="POST" action="{{ route('admin.customer_info.update', $data->id) }}" id="vehicleForm">
                             @csrf
+                            @method('PUT')
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -62,7 +63,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="customer_address">Address</label>
-                                            <input type="text" class="form-control" alue="{{ $data->customer_address }}" name="customer_address" id="customer_address" placeholder="Enter Address" required />
+                                            <input type="text" class="form-control" value="{{ $data->customer_address }}" name="customer_address" id="customer_address" placeholder="Enter Address" required />
                                         </div>
                                     </div>
                                 </div>
