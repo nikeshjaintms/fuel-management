@@ -47,6 +47,18 @@
                             </a>
 
                         </li>
+<<<<<<< HEAD
+                        <li class="nav-item {{ request()->segment(1) == 'driver' ? 'active' : '' }}">
+                            <a href="{{ route('admin.driver.index')}}">
+                                <i class="fas fa-layer-group"></i>
+                                <p>Drivers</p>
+                                <span class="caret"></span>
+                            </a>
+
+                        </li>
+
+=======
+>>>>>>> 1fa25fb346000bd65a9d43e65ee968549bb7b58a
                     </ul>
                 </div>
             </div>

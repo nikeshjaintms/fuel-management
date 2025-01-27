@@ -38,7 +38,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="vehicle_no">Vehicle No</label>
-                                            <input type="text" class="form-control" name="vehicle_no" id="vehicle_no" placeholder="GJ 16 XX 0000" />
+                                            <input type="text" class="form-control" name="vehicle_no" id="vehicle_no" placeholder="GJ 16 XX 0000" required/>
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_engine_no">Vehicle Engine No</label>
@@ -68,12 +68,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="vehicle_puc_expiry_date">Vehicle PUC Expiry Date</label>
-                                            <input type="date" class="form-control" name="vehicle_puc_expiry_date" id="vehicle_puc_expiry_date" />
-                                        </div>
-                                    
-                                        <div class="form-group">
-                                            <label for="average">Average Claim by Company</label>
-                                            <input type="number" class="form-control" name="average" id="average" placeholder="Enter a Average" />
+                                            <input type="date" class="form-control" name="vehicle_puc_expiry_date" id="vehicle_puc_expiry_date" placeholder="GJ 16 XX 0000" />
                                         </div>
                                     </div>
                                 </div>
@@ -152,6 +147,7 @@
             onkeyup: false, // Optional: Disable validation on keyup for performance
             rules: {
                 vehicle_no: {
+                    required: true,
                     maxlength: 10,
                     alphanumeric: true
                 },
@@ -181,9 +177,6 @@
                 vehicle_puc_expiry_date: {
                     required: true,
                     date: true
-                },
-                average: {
-                    required: true,
                 }
             },
             messages: {
@@ -214,9 +207,6 @@
                 vehicle_puc_expiry_date: {
                     required: "PUC expiry date is required",
                     date: "Please enter a valid date"
-                },
-                average: {
-                    required: "Average claim by company is required",
                 }
             },
             errorClass: "text-danger",

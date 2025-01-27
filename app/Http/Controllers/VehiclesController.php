@@ -98,6 +98,7 @@ class VehiclesController extends Controller
             "vehicle_policy_expiry_date" => $request->post('vehicle_policy_expiry_date'),
             "vehicle_fitness_expiry_date" => $request->post('vehicle_fitness_expiry_date'),
             "vehicle_puc_expiry_date" => $request->post('vehicle_puc_expiry_date'),
+            "average" => $request->post('average'),
         ]);
 
         Session::flash('success', 'Vehicle added successfully');
@@ -139,6 +140,7 @@ class VehiclesController extends Controller
         $vehicle->vehicle_policy_expiry_date = $request->post('vehicle_policy_expiry_date');
         $vehicle->vehicle_fitness_expiry_date = $request->post('vehicle_fitness_expiry_date');
         $vehicle->vehicle_puc_expiry_date = $request->post('vehicle_puc_expiry_date');
+        $vehicle->average = $request->post('average');
         $vehicle->save();
 
         Session::flash('success', 'Vehicle updated successfully');

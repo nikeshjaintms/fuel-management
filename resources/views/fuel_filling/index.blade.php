@@ -2,35 +2,11 @@
 
 @section('content-page')
 
-{{-- @if (!empty($alerts))
-    <script>
-        window.onload = function() {
-            let alerts = @json($alerts);
-            console.log(alerts);
 
-            // This function shows each alert one after the other
-            function showAlerts(index) {
-                if (index < alerts.length) {
-                    Swal.fire({
-                        title: 'Reminder',
-                        text: alerts[index],
-                        icon: 'info',
-                        confirmButtonText: 'Okay'
-                    }).then(function() {
-                        showAlerts(index + 1); // Show next alert after the current one is dismissed
-                    });
-                }
-            }
-
-            // Start showing alerts from the first one
-            showAlerts(0);
-        };
-    </script>
-@endif --}}
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Master information</h3>
+                <h3 class="fw-bold mb-3">Fuel Fillings information</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ route('index') }}">
@@ -41,13 +17,13 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.vehicles.index')}}">Master Information</a>
+                        <a href="{{ route('admin.fuel_filling.index')}}">Fuel Fillings  Information</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">List of Master Information</a>
+                        <a href="#">List of Fuel Fillings Information</a>
                     </li>
                 </ul>
             </div>
@@ -55,7 +31,7 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
-                        <a href="{{ route('admin.vehicles.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Vehicle Information</a>
+                        <a href="{{ route('admin.fuel_filling.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Vehicle Information</a>
                       <h4 class="card-title">Add Vehicle Information</h4>
                     </div>
                     <div class="card-body">
@@ -64,24 +40,26 @@
                           <thead>
                             <tr>
                               <th>Id</th>
-                              <th>Owner</th>
+                              <th>Driver Name</th>
                               <th>Vehicle No</th>
-                              <th>Model</th>
+                              <th>fillling Date</th>
+                              <th>Quantity</th>
                               <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            @foreach ($vehicles as $item)
+                            @foreach ($fuelFillings as $item)
                             <tr>
                               <td>{{$item->id }}</td>
-                              <td>{{$item->vehicle_no }}</td>
-                              <td>{{$item->vehicle_engine_no }}</td>
-                              <td>{{$item->vehicle_chassis_no }}</td>
+                              <td>{{$item->driver_name }}</td>
+                              <td>{{$item->vehicel_no }}</td>
+                              <td>{{$item->filling_date }}</td>
+                              <td>{{$item->quantity }}</td>
                               <td>
-                                <a href="{{ route('admin.vehicles.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                <a href="{{ route('admin.fuel_filling.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
-                                <a href="{{ route('admin.vehicles.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                <a href="{{ route('admin.fuel_filling.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
@@ -105,7 +83,7 @@
 
 <script>
     function deletevehicle_info(id) {
-        var url = '{{ route("admin.vehicles.destroy", "id") }}'.replace("id", id);
+        var url = '{{ route("admin.fuel_filling.destroy", "id") }}'.replace("id", id);
 
         Swal.fire({
             title: 'Are you sure?',

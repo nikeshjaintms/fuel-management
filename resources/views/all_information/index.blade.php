@@ -2,35 +2,26 @@
 
 @section('content-page')
 
-{{-- @if (!empty($alerts))
+@if (!empty($alerts))
     <script>
         window.onload = function() {
             let alerts = @json($alerts);
             console.log(alerts);
-
-            // This function shows each alert one after the other
-            function showAlerts(index) {
-                if (index < alerts.length) {
-                    Swal.fire({
-                        title: 'Reminder',
-                        text: alerts[index],
-                        icon: 'info',
-                        confirmButtonText: 'Okay'
-                    }).then(function() {
-                        showAlerts(index + 1); // Show next alert after the current one is dismissed
-                    });
-                }
-            }
-
-            // Start showing alerts from the first one
-            showAlerts(0);
+            alerts.forEach(function(alert) {
+                Swal.fire({
+                    title: 'Reminder',
+                    text: alert,
+                    icon: 'info',
+                    confirmButtonText: 'Okay'
+                });
+            });
         };
     </script>
-@endif --}}
+@endif
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Master information</h3>
+                <h3 class="fw-bold mb-3">Vehicle Information</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ route('index') }}">
@@ -41,13 +32,13 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.vehicles.index')}}">Master Information</a>
+                        <a href="{{ route('admin.vehicles.index')}}">Vehicle Information</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">List of Master Information</a>
+                        <a href="#">List of Vehicle Information</a>
                     </li>
                 </ul>
             </div>
@@ -64,9 +55,9 @@
                           <thead>
                             <tr>
                               <th>Id</th>
-                              <th>Owner</th>
                               <th>Vehicle No</th>
-                              <th>Model</th>
+                              <th>Engine No</th>
+                              <th>Chassis No</th>
                               <th>Action</th>
                             </tr>
                           </thead>

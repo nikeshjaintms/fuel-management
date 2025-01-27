@@ -43,7 +43,11 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_engine_no">Vehicle Engine No</label>
+<<<<<<< HEAD
+                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_engine_no }}" name="vehicle_engine_no" id="vehicle_engine_no" placeholder="Enter Vechile no" required readonly />
+=======
                                             <input type="text" class="form-control" value="{{ $vehicle->vehicle_engine_no }}" name="vehicle_engine_no" id="vehicle_engine_no" placeholder="Enter Vechile no" required readonly/>
+>>>>>>> 1fa25fb346000bd65a9d43e65ee968549bb7b58a
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -71,6 +75,10 @@
                                             <label for="vehicle_puc_expiry_date">Vehicle PUC Expiry Date</label>
                                             <input type="date" class="form-control" name="vehicle_puc_expiry_date" value="{{ $vehicle->vehicle_puc_expiry_date }}" id="vehicle_puc_expiry_date" placeholder="GJ 16 XX 0000" />
                                         </div>
+                                        <div class="form-group">
+                                            <label for="average">Average Claim by Company</label>
+                                            <input type="number" class="form-control" value="{{ $vehicle->average }}" name="average" id="average" placeholder="Enter a Average" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +102,7 @@
     $.validator.addMethod("alphanumeric", function(value, element) {
         return this.optional(element) || /^[a-z0-9]+$/i.test(value);
     }, "Please enter a valid alphanumeric value.");
-    
+
     $(document).ready(function () {
         $("#vehicleForm").validate({
             onfocusout: function (element) {
@@ -133,6 +141,9 @@
                 vehicle_puc_expiry_date: {
                     required: true,
                     date: true
+                },
+                average: {
+                    required: true,
                 }
             },
             messages: {
@@ -163,6 +174,9 @@
                 vehicle_puc_expiry_date: {
                     required: "PUC expiry date is required",
                     date: "Please enter a valid date"
+                },
+                average: {
+                    required: "Average claim by company is required",
                 }
             },
             errorClass: "text-danger",
@@ -180,5 +194,5 @@
         });
     });
     </script>
-    
+
 @endsection

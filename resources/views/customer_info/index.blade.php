@@ -7,23 +7,14 @@
         window.onload = function() {
             let alerts = @json($alerts);
             console.log(alerts);
-
-            // This function shows each alert one after the other
-            function showAlerts(index) {
-                if (index < alerts.length) {
-                    Swal.fire({
-                        title: 'Reminder',
-                        text: alerts[index],
-                        icon: 'info',
-                        confirmButtonText: 'Okay'
-                    }).then(function() {
-                        showAlerts(index + 1); // Show next alert after the current one is dismissed
-                    });
-                }
-            }
-
-            // Start showing alerts from the first one
-            showAlerts(0);
+            alerts.forEach(function(alert) {
+                Swal.fire({
+                    title: 'Reminder',
+                    text: alert,
+                    icon: 'info',
+                    confirmButtonText: 'Okay'
+                });
+            });
         };
     </script>
 @endif --}}
