@@ -38,7 +38,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="customer_type_id">Customer Type</label>
-                                            <select class="form-control" name="customer_type_id" id="customer_type_id" required>
+                                            <select class="form-control" name="customer_type" id="customer_type_id" required>
                                                 <option value="">Select Customer Type</option>
                                                 <option value="Companies">Companies</option>
                                                 <option value="Individual">Individual</option>
@@ -91,7 +91,7 @@
             },
             onkeyup: false, // Optional: Disable validation on keyup for performance
             rules: {
-                customer_type_id: {
+                customer_type: {
                     required: true,
                 },
                 customer_name: {
@@ -102,6 +102,7 @@
                 customer_mobile_no: {
                     required: true,
                     digits: true,
+                    minlength: 10,
                     maxlength: 10,
                 },
                 customer_email: {

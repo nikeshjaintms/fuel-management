@@ -43,11 +43,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_engine_no">Vehicle Engine No</label>
-<<<<<<< HEAD
                                             <input type="text" class="form-control" value="{{ $vehicle->vehicle_engine_no }}" name="vehicle_engine_no" id="vehicle_engine_no" placeholder="Enter Vechile no" required readonly />
-=======
-                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_engine_no }}" name="vehicle_engine_no" id="vehicle_engine_no" placeholder="Enter Vechile no" required readonly/>
->>>>>>> 1fa25fb346000bd65a9d43e65ee968549bb7b58a
                                         </div>
                                     </div>
                                     <div class="col-md-6">

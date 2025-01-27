@@ -3,7 +3,7 @@
 <div class="container">
     <div class="page-inner">
       <div class="page-header">
-        <h3 class="fw-bold mb-3">Vehicle Information</h3>
+        <h3 class="fw-bold mb-3">Customer Information</h3>
         <ul class="breadcrumbs mb-3">
           <li class="nav-home">
             <a href="{{ route('index') }}">
@@ -14,7 +14,7 @@
             <i class="icon-arrow-right"></i>
           </li>
           <li class="nav-item">
-            <a href="{{ route('admin.vehicles.index') }}">Vehicle Information</a>
+            <a href="{{ route('admin.customer_info.index') }}">Customer Information</a>
           </li>
           <li class="separator">
             <i class="icon-arrow-right"></i>
@@ -28,7 +28,7 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
-              <a href="{{ route('admin.vehicles.index') }}" class="btn btn-rounded btn-primary float-end" > <i class="fas fa-angle-left"></i> Back</a>
+              <a href="{{ route('admin.customer_info.index') }}" class="btn btn-rounded btn-primary float-end" > <i class="fas fa-angle-left"></i> Back</a>
               <h4 class="card-title">Result</h4>
             </div>
             <div class="card-body">
@@ -39,31 +39,25 @@
                       <td>{{ $data->id}}</td>
                     </tr>
                     <tr>
-                        <th>Registered Number</th>
-                        <td>{{ $data->vehicle_no}}</td>
+                        <th>Customer Type</th>
+                        <td>{{ $data->customer_type}}</td>
                     </tr>
                     <tr>
-                        <th>Engine No</th>
-                        <td>{{ $data->vehicle_engine_no}}</td>
+                        <th>Customer Name</th>
+                        <td>{{ $data->customer_name}}</td>
                     </tr>
                     <tr>
-                        <th>Chassis No</th>
-                        <td>{{ $data->vehicle_chassis_no}}</td>
+                        <th>Mobile NO</th>
+                        <td>{{ $data->customer_mobile_no}}</td>
                     </tr>
                     <tr>
-                        <th>Policy No</th>
-                        <td>{{ $data->vehicle_policy_no}}</td>
+                        <th>Email</th>
+                        <td>{{ $data->customer_email}}</td>
                     </tr>
                     <tr>
-                        <th> Policy Expiry</th>
-                        <td>{{ $data->vehicle_policy_expiry_date}}</td>
-                    </tr><tr>
-                        <th>Fitness Expiry </th>
-                        <td>{{ $data->vehicle_fitness_expiry_date}}</td>
-                    </tr><tr>
-                        <th>PUC Expiry</th>
-                        <td>{{ $data->vehicle_puc_expiry_date}}</td>
-                    </tr>
+                      <th>Address</th>
+                      <td>{{ $data->customer_address}}</td>
+                  </tr>
                 </table>
               </div>
             </div>

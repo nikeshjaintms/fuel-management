@@ -4,7 +4,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Vehicle Information</h3>
+                <h3 class="fw-bold mb-3">Customer Information</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ route('index') }}">
@@ -15,13 +15,13 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.vehicles.index')}}">Vehicle Information</a>
+                        <a href="{{ route('admin.customer_info.index')}}">Customer Information</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Edit Vehicle Information</a>
+                        <a href="#">Add Customer Information</a>
                     </li>
                 </ul>
             </div>
@@ -29,54 +29,47 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title">Edit Vehicle Information </div>
+                            <div class="card-title">Add Customer Information</div>
                         </div>
-                        <form method="POST" action="{{ route('admin.vehicles.update', $vehicle->id ) }}" id="vehicleForm" >
+                        <form method="POST" action="{{ route('admin.customer_info.update') }}" id="vehicleForm">
                             @csrf
-                            @method('PUT')
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="vehicle_no">Vehicle No</label>
-                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_no }}" {{ $vehicle->vehicle_no != NULL ? 'readonly' : '' }} name="vehicle_no" id="vehicle_no" placeholder="GJ 16 XX 0000" required/>
+                                            <label for="customer_type_id">Customer Type</label>
+                                            <select class="form-control" name="customer_type" id="customer_type_id" required>
+                                                <option value="">Select Customer Type</option>
+                                                <option {{$data->customer_type == 'Companies' ? 'selected': '' }} value="Companies">Companies</option>
+                                                <option {{$data->customer_type == 'Individual'? 'selected': '' }} value="Individual">Individual</option>
+                                            </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="vehicle_engine_no">Vehicle Engine No</label>
-                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_engine_no }}" name="vehicle_engine_no" id="vehicle_engine_no" placeholder="Enter Vechile no" required readonly />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="vehicle_chassis_no">Vehicle Chassis No</label>
-                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_chassis_no }}" name="vehicle_chassis_no" id="vehicle_chassis_no" placeholder="Enter Chassic no" required readonly/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="vehicle_policy_no">Vehicle Policy No</label>
-                                            <input type="text" class="form-control" name="vehicle_policy_no" value="{{ $vehicle->vehicle_policy_no }}" id="vehicle_policy_no" placeholder="Enter Policy no" required />
+                                            <label for="customer_name">Name</label>
+                                            <input type="text" class="form-control" value="{{ $data->customer_name }}" name="customer_name" id="customer_name" placeholder="Customer Name" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="vehicle_policy_expiry_date">Vehicle Policy Expiry Date</label>
-                                            <input type="date" class="form-control" name="vehicle_policy_expiry_date" value="{{ $vehicle->vehicle_policy_expiry_date }}" id="vehicle_policy_expiry_date" placeholder="GJ 16 XX 0000" />
+                                            <label for="customer_mobile_no">Mobile No</label>
+                                            <input type="text" class="form-control" value="{{ $data->customer_mobile_no }}" name="customer_mobile_no" id="customer_mobile_no" placeholder="Enter Mobile No" required />
                                         </div>
                                         <div class="form-group">
-                                            <label for="vehicle_fitness_expiry_date">Vehicle Fitness Expiry Date</label>
-                                            <input type="date" class="form-control" name="vehicle_fitness_expiry_date" value="{{ $vehicle->vehicle_fitness_expiry_date }}" id="vehicle_fitness_expiry_date" placeholder="GJ 16 XX 0000" />
+                                            <label for="customer_email">Email</label>
+                                            <input type="email" class="form-control" value="{{ $data->customer_email }}" name="customer_email" id="customer_email" placeholder="Enter Email" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="vehicle_puc_expiry_date">Vehicle PUC Expiry Date</label>
-                                            <input type="date" class="form-control" name="vehicle_puc_expiry_date" value="{{ $vehicle->vehicle_puc_expiry_date }}" id="vehicle_puc_expiry_date" placeholder="GJ 16 XX 0000" />
+                                            <label for="customer_address">Address</label>
+                                            <input type="text" class="form-control" alue="{{ $data->customer_address }}" name="customer_address" id="customer_address" placeholder="Enter Address" required />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-action">
                                 <button class="btn btn-success" type="submit">Submit</button>
-                                <a href="{{ route('admin.vehicles.index')}}" class="btn btn-danger" >Cancel</a>
+                                <a href="{{ route('admin.customer_info.index') }}" class="btn btn-danger">Cancel</a>
                             </div>
                         </form>
                     </div>
@@ -91,10 +84,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
 <script>
-    $.validator.addMethod("alphanumeric", function(value, element) {
-        return this.optional(element) || /^[a-z0-9]+$/i.test(value);
-    }, "Please enter a valid alphanumeric value.");
-
     $(document).ready(function () {
         $("#vehicleForm").validate({
             onfocusout: function (element) {
@@ -102,68 +91,52 @@
             },
             onkeyup: false, // Optional: Disable validation on keyup for performance
             rules: {
-                vehicle_no: {
+                customer_type: {
                     required: true,
+                },
+                customer_name: {
+                    required: true,
+                    minlength: 2, // Corrected from minlenght
+                    maxlength: 50,
+                },
+                customer_mobile_no: {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
                     maxlength: 10,
-                    alphanumeric: true
                 },
-                vehicle_engine_no: {
+                customer_email: {
                     required: true,
-                    maxlength: 20,
-                    alphanumeric: true
+                    email: true,
                 },
-                vehicle_chassis_no: {
+                customer_address: {
                     required: true,
-                    maxlength: 17,
-                    alphanumeric: true
+                    maxlength: 500,
                 },
-                vehicle_policy_no: {
-                    required: true,
-                    maxlength: 20,
-                    alphanumeric: true
-                },
-                vehicle_policy_expiry_date: {
-                    required: true,
-                    date: true
-                },
-                vehicle_fitness_expiry_date: {
-                    required: true,
-                    date: true
-                },
-                vehicle_puc_expiry_date: {
-                    required: true,
-                    date: true
-                }
             },
             messages: {
-                vehicle_no: {
-                    required: "Vehicle number is required",
-                    maxlength: "Vehicle number cannot exceed 10 characters"
+                customer_type_id: {
+                    required: "Please Select Customer Type",
                 },
-                vehicle_engine_no: {
-                    required: "Engine number is required",
-                    maxlength: "Engine number cannot exceed 20 characters"
+                customer_name: {
+                    required: "Name is required",
+                    minlength: "Name should be at least 2 characters",
+                    maxlength: "Name cannot exceed 50 characters"
                 },
-                vehicle_chassis_no: {
-                    required: "Chassis number is required",
-                    maxlength: "Chassis number cannot exceed 17 characters"
+                customer_mobile_no: {
+                    required: "Mobile number is required",
+                    minlength: "Mobile number cannot be less than 10 characters",
+                    digits: "Mobile number should only contain digits",
+                    maxlength: "Mobile number cannot exceed 10 characters"
                 },
-                vehicle_policy_no: {
-                    required: "Policy number is required",
-                    maxlength: "Policy number cannot exceed 20 characters"
+                customer_email: {
+                    required: "Email is required",
+                    email: "Please enter a valid email address",
                 },
-                vehicle_policy_expiry_date: {
-                    required: "Policy expiry date is required",
-                    date: "Please enter a valid date"
+                customer_address: {
+                    required: "Address is required",
+                    maxlength: "Address cannot exceed 500 characters" // Corrected from 1000 to 500
                 },
-                vehicle_fitness_expiry_date: {
-                    required: "Fitness expiry date is required",
-                    date: "Please enter a valid date"
-                },
-                vehicle_puc_expiry_date: {
-                    required: "PUC expiry date is required",
-                    date: "Please enter a valid date"
-                }
             },
             errorClass: "text-danger",
             errorElement: "span",
@@ -179,6 +152,5 @@
             }
         });
     });
-    </script>
-
+</script>
 @endsection

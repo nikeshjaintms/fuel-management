@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('customer_masterdatas', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('customer_type_id')->nullable();
+            $table->string('customer_type')->nullable();
             $table->string('customer_name')->nullable();
             $table->string('customer_address')->nullable();
             $table->string('customer_mobile_no')->nullable();

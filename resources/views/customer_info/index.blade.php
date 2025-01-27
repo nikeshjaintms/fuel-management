@@ -21,7 +21,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Master information</h3>
+                <h3 class="fw-bold mb-3">Customer information</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ route('index') }}">
@@ -32,13 +32,13 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.vehicles.index')}}">Master Information</a>
+                        <a href="{{ route('admin.customer_info.index')}}">Customer Information</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">List of Master Information</a>
+                        <a href="#">List of Customer Information</a>
                     </li>
                 </ul>
             </div>
@@ -46,8 +46,8 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
-                        <a href="{{ route('admin.vehicles.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Vehicle Information</a>
-                      <h4 class="card-title">Add Vehicle Information</h4>
+                        <a href="{{ route('admin.customer_info.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Customer Information</a>
+                      <h4 class="card-title">Add Customer Information</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -55,24 +55,24 @@
                           <thead>
                             <tr>
                               <th>Id</th>
-                              <th>Owner</th>
-                              <th>Vehicle No</th>
-                              <th>Model</th>
+                              <th>Customer Type</th>
+                              <th>Name</th>
+                              <th>Email</th>
                               <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            @foreach ($vehicles as $item)
+                            @foreach ($customers as $item)
                             <tr>
                               <td>{{$item->id }}</td>
-                              <td>{{$item->vehicle_no }}</td>
-                              <td>{{$item->vehicle_engine_no }}</td>
-                              <td>{{$item->vehicle_chassis_no }}</td>
+                              <td>{{$item->customer_type }}</td>
+                              <td>{{$item->customer_name }}</td>
+                              <td>{{$item->customer_email }}</td>
                               <td>
-                                <a href="{{ route('admin.vehicles.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                <a href="{{ route('admin.customer_info.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
-                                <a href="{{ route('admin.vehicles.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                <a href="{{ route('admin.customer_info.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
@@ -96,7 +96,7 @@
 
 <script>
     function deletevehicle_info(id) {
-        var url = '{{ route("admin.vehicles.destroy", "id") }}'.replace("id", id);
+        var url = '{{ route("admin.customer_info.destroy", "id") }}'.replace("id", id);
 
         Swal.fire({
             title: 'Are you sure?',
