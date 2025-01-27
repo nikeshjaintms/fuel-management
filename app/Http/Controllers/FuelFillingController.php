@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FuelFilling;
 use App\Models\Vehicles;
 use App\Models\Driver;
+use Session;
 use Illuminate\Http\Request;
 
 class FuelFillingController extends Controller
@@ -59,10 +60,11 @@ class FuelFillingController extends Controller
      */
     public function show(FuelFilling $fuelFilling, $id)
     {
-        $fuelFilling = FuelFilling::find($id)->join('vehicles','fuel_fillings.vehicle_id','=','vehicles.id')
+        $data = FuelFilling::join('vehicles','fuel_fillings.vehicle_id','=','vehicles.id')
             ->join('drivers','fuel_fillings.driver_id','=','drivers.id')
-            ->select('fuel_fillings.*','vehicles.vehicle_no')->get();
-        return view('fuel_filling.show', compact('fuelFilling'));
+            ->select('fuel_fillings.*','vehicles.vehicle_no','drivers.driver_name')->find($id);
+
+        return view('fuel_filling.show', compact(['data']));
         //
     }
 

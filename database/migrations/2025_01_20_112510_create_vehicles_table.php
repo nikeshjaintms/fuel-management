@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('vehicle_policy_expiry_date');
             $table->date('vehicle_fitness_expiry_date');
             $table->date('vehicle_puc_expiry_date');
+            $table->decimal('average')->nullable();
             $table->timestamps();
         });
     }

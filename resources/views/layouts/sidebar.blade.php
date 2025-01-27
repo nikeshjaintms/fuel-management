@@ -47,7 +47,14 @@
                             </a>
 
                         </li>
-<<<<<<< HEAD
+                        <li class="nav-item {{ request()->segment(1) == 'fuel_filling' ? 'active' : '' }}">
+                            <a href="{{ route('admin.fuel_filling.index')}}">
+                                <i class="fas fa-layer-group"></i>
+                                <p>Fuel Fillings</p>
+                                <span class="caret"></span>
+                            </a>
+
+                        </li>
                         <li class="nav-item {{ request()->segment(1) == 'driver' ? 'active' : '' }}">
                             <a href="{{ route('admin.driver.index')}}">
                                 <i class="fas fa-layer-group"></i>
@@ -57,8 +64,6 @@
 
                         </li>
 
-=======
->>>>>>> 1fa25fb346000bd65a9d43e65ee968549bb7b58a
                     </ul>
                 </div>
             </div>

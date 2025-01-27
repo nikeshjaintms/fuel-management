@@ -32,7 +32,7 @@
                   <div class="card">
                     <div class="card-header">
                         <a href="{{ route('admin.fuel_filling.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Vehicle Information</a>
-                      <h4 class="card-title">Add Vehicle Information</h4>
+                      <h4 class="card-title">Add Fuel Fillings Information</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -52,7 +52,7 @@
                             <tr>
                               <td>{{$item->id }}</td>
                               <td>{{$item->driver_name }}</td>
-                              <td>{{$item->vehicel_no }}</td>
+                              <td>{{$item->vehicle_no }}</td>
                               <td>{{$item->filling_date }}</td>
                               <td>{{$item->quantity }}</td>
                               <td>

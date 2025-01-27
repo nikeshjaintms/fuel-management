@@ -39,7 +39,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="driver_id">Drive By</label>
-                                            <select name="driver_id" id="">
+                                            <select name="driver_id" class="form-control" id="">
                                                 <option value="">Select Driver</option>
                                                 @foreach($drivers as $driver)
                                                     <option value="{{$driver->id }}"
@@ -49,7 +49,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_no">Vehicle No</label>
-                                            <select name="vehicle_id" id="">
+                                            <select name="vehicle_id" id="" class="form-control"> 
                                                 <option value="">Select Vehicle</option>
                                                 @foreach($vehicles as $vehicle)
                                                     <option value="{{$vehicle->id }}"
@@ -67,7 +67,7 @@
 
                                         <div class="form-group">
                                             <label for="quantity">Quantity (ltr)</label>
-                                            <input type="text" class="form-control" value="{{$fuelFilling->average_fuel_consumption }}"  name="quantity" id="quantity" placeholder="Enter Chassic no" required />
+                                            <input type="text" class="form-control" value="{{$fuelFilling->quantity }}"  name="quantity" id="quantity" placeholder="Enter Chassic no" required />
                                         </div>
 
                                     </div>
@@ -76,11 +76,12 @@
                                             <label for="kilometers">Kilometers Driven</label>
                                             <input type="text" class="form-control" value="{{$fuelFilling->kilometers }}"  name="kilometers" id="kilometers" placeholder="Enter Policy no" required />
                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="average_fuel_consumption">Average </label>
                                             <input type="text" readonly class="form-control" value="{{$fuelFilling->average_fuel_consumption }}" name="average_fuel_consumption" id="average_fuel_consumption" placeholder="GJ 16 XX 0000" />
                                         </div>
-
                                     </div>
                                 </div>
                             </div>

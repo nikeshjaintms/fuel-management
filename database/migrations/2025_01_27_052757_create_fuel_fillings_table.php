@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('fuel_fillings', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('vehicle_id');
+            $table->bigInteger('driver_id');
             $table->date('filling_date');
             $table->decimal('quantity');
             $table->decimal('kilometers');
