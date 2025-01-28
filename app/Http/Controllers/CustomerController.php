@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CustomerMasterdata;
+use App\Models\Customer;
 use App\Models\CustomerType;
 use Illuminate\Http\Request;
 use Session;
 
-class CustomerMasterdataController extends Controller
+class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $customers = CustomerMasterdata::all();
+        $customers = Customer::all();
         return view('customer_info.index', compact('customers'));
         //
     }
@@ -34,7 +34,7 @@ class CustomerMasterdataController extends Controller
      */
     public function store(Request $request)
     {
-        $add = new CustomerMasterdata();
+        $add = new Customer();
         $add->create([
             'customer_name' => $request->customer_name,
             'customer_address' => $request->customer_address,
@@ -51,9 +51,9 @@ class CustomerMasterdataController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CustomerMasterdata $customerMasterdata, $id)
+    public function show(Customer $Customer, $id)
     {
-        $data = CustomerMasterdata::find($id);
+        $data = Customer::find($id);
         return view('customer_info.show', compact('data'));
         //
     }
@@ -61,20 +61,20 @@ class CustomerMasterdataController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(CustomerMasterdata $customerMasterdata, $id)
+    public function edit(Customer $Customer, $id)
     {
-        $data = CustomerMasterdata::find($id);
+        $data = Customer::find($id);
         return view('customer_info.edit', compact(['data']));
         //
     }
-  
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CustomerMasterdata $customerMasterdata,$id)
+    public function update(Request $request, Customer $Customer,$id)
     {
-        $update = CustomerMasterdata::find($id);
+        $update = Customer::find($id);
         $update->update([
             'customer_name' => $request->customer_name,
             'customer_address' => $request->customer_address,
@@ -90,9 +90,9 @@ class CustomerMasterdataController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CustomerMasterdata $customerMasterdata, $id)
+    public function destroy(Customer $Customer, $id)
     {
-        $delete = CustomerMasterdata::find($id);
+        $delete = Customer::find($id);
         $delete->delete();
         $msg = "Deleted Successfully";
         return response()->json($msg);

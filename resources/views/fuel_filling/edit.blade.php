@@ -49,7 +49,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_no">Vehicle No</label>
-                                            <select name="vehicle_id" id="" class="form-control"> 
+                                            <select name="vehicle_id" id="" class="form-control">
                                                 <option value="">Select Vehicle</option>
                                                 @foreach($vehicles as $vehicle)
                                                     <option value="{{$vehicle->id }}"
@@ -87,7 +87,7 @@
                             </div>
                             <div class="card-action">
                                 <button class="btn btn-success" type="submit">Submit</button>
-                                <a href="{{ route('admin.vehicles.index')}}" class="btn btn-danger" >Cancel</a>
+                                <a href="{{ route('admin.fuel_filling.index')}}" class="btn btn-danger" >Cancel</a>
                             </div>
                         </form>
                     </div>

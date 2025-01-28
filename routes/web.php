@@ -48,7 +48,7 @@ Route::middleware('auth:admin')->group(function (){
         Route::post('/admin/vehicles/check', 'check')->name('admin.vehicles.check');
     });
 
-    Route::controller(\App\Http\Controllers\CustomerMasterdataController::class)->group(function(){
+    Route::controller(\App\Http\Controllers\CustomerController::class)->group(function(){
         Route::get('/customer_info','index')->name('admin.customer_info.index');
         Route::get('/customer_info/create','create')->name('admin.customer_info.create');
         Route::post('/customer_info/create','store')->name('admin.customer_info.store');

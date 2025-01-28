@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('vehicle_id');
             $table->bigInteger('driver_id');
-            // $table->bigInteger('customer_id');
+            $table->bigInteger('customer_id');
             $table->date('filling_date');
             $table->decimal('quantity');
             $table->decimal('kilometers');

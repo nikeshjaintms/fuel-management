@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FuelFilling;
 use App\Models\Vehicles;
 use App\Models\Driver;
+use App\Models\Customer;
 use Session;
 use Illuminate\Http\Request;
 
@@ -31,7 +32,8 @@ class FuelFillingController extends Controller
     {
         $vehicles = Vehicles::get();
         $drivers = Driver::get();
-        return view('fuel_filling.create',compact(['vehicles','drivers']));
+        $customers = Customer::get();
+        return view('fuel_filling.create',compact(['vehicles','drivers','customers']));
         //
     }
 
@@ -40,19 +42,29 @@ class FuelFillingController extends Controller
      */
     public function store(Request $request)
     {
+        $fuelFilling = FuelFilling::where('vehicle_id',$request->vehicle_id)->orderBy('id','desc')->first();
+        // dd($fuelFilling);
+        $kilometer = $fuelFilling->kilometers;
+        $kilometers = $request->kilometers;
+        $average =  $kilometer - $kilometers /$request->quantity;
+
+        // dd($data);
+        // dd($average);
+        // dd($request->all());
         $add = new FuelFilling();
         $add->create([
             'vehicle_id' => $request->post('vehicle_id'),
             'driver_id' => $request->post('driver_id'),
+            'customer_id' => $request->post('customer_id'),
             'filling_date' => $request->post('filling_date'),
             'quantity' => $request->post('quantity'),
             'kilometers' => $request->post('kilometers'),
-            'average_fuel_consumption' => $request->post('average_fuel_consumption'),
+            'average_fuel_consumption' => $average ??'0',
         ]);
 
         $msg = "Fuel Filling added successfully";
         Session::flash('success', $msg);
-        return redirect()->route('admin.fuel_fillings.index');
+        return redirect()->route('admin.fuel_filling.index');
     }
 
     /**
@@ -76,7 +88,8 @@ class FuelFillingController extends Controller
         $fuelFilling = FuelFilling::find($id);
         $vehicles = Vehicles::get();
         $drivers = Driver::get();
-        return view('fuel_filling.edit', compact(['fuelFilling','vehicles','drivers']));
+        $customers = Customer::get();
+        return view('fuel_filling.edit', compact(['fuelFilling','vehicles','drivers','customers']));
         //
     }
 
@@ -89,12 +102,13 @@ class FuelFillingController extends Controller
         $fuelFilling->update([
             'vehicle_id' => $request->post('vehicle_id'),
             'driver_id' => $request->post('driver_id'),
+            'customer_id' => $request->post('customer_id'),
            'filling_date' => $request->post('filling_date'),
             'quantity' => $request->post('quantity'),
             'kilometers' => $request->post('kilometers'),
             'average_fuel_consumption' => $request->post('average_fuel_consumption'),
         ]);
-        $msg = "Fuel Filling updated successfully";
+        Session::flash('success',"Fuel Filling updated successfully");
         return redirect()->route('admin.fuel_filling.index');
         //
     }

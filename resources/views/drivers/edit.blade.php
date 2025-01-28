@@ -21,7 +21,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Add Drivers Information</a>
+                        <a href="#">Edit Drivers Information</a>
                     </li>
                 </ul>
             </div>
@@ -29,7 +29,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title">Add Drivers Information</div>
+                            <div class="card-title">Edit Drivers Information</div>
                         </div>
                         <form method="POST" action="{{ route('admin.driver.update', $data->id ) }}" id="vehicleForm">
                             @csrf

@@ -57,26 +57,36 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="filling_date">Filling Date</label>
-                                            <input type="date" class="form-control" name="filling_date" id="filling_date" placeholder="Enter Vechile no" required />
+                                            <label for="customer_id">Customer</label>
+                                            <select name="customer_id" id="customer_id" class="form-control">
+                                                <option value="">Select Customer</option>
+                                                @foreach($customers as $customer)
+                                                    <option value="{{$customer->id }}">{{ $customer->customer_name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-
-                                        <div class="form-group">
-                                            <label for="quantity">Quantity (ltr)</label>
-                                            <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Enter Quantity " required />
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="kilometers">Kilometers Driven</label>
                                             <input type="text" class="form-control" name="kilometers" id="kilometers" placeholder="Enter Kilometers" required />
                                         </div>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="filling_date">Filling Date</label>
+                                            <input type="date" class="form-control" name="filling_date" id="filling_date" placeholder="Enter Vechile no" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="quantity">Quantity (ltr)</label>
+                                            <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Enter Quantity " required />
+                                        </div>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="average_fuel_consumption">Average </label>
-                                            <input type="text" readonly class="form-control" name="average_fuel_consumption" id="average_fuel_consumption" placeholder="GJ 16 XX 0000" />
+                                            <input type="text" readonly class="form-control" name="average_fuel_consumption" id="average_fuel_consumption"/>
                                         </div>
                                     </div>
                                 </div>
@@ -94,6 +104,9 @@
 @endsection
 
 @section('footer-script')
+<script>
+    
+</script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
@@ -107,6 +120,9 @@
                     required: true,
                 },
                 vehicle_id: {
+                    required: true,
+                },
+                customer_id: {
                     required: true,
                 },
                 filling_date: {
@@ -130,6 +146,9 @@
                 },
                 vehicle_id: {
                     required: "Please select a vehicle.",
+                },
+                customer_id: {
+                    required: "Please select a customer.",
                 },
                 filling_date: {
                     required: "Please enter a filling date.",
