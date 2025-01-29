@@ -8,6 +8,8 @@ use Session;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\VehiclesImport;
 
 class VehiclesController extends Controller
 {
@@ -20,6 +22,20 @@ class VehiclesController extends Controller
             return redirect()->route('index');
         } else {
             return redirect()->route('login');
+        }
+    }
+
+    public function import(Request $request){
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv',
+        ]);
+
+        try {
+            Excel::import(new VehiclesImport, $request->file('file'));
+            return back()->with('success', 'Vehicles imported successfully!');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            // Handle validation failures
+            return back()->withErrors($e->failures())->withInput();
         }
     }
     public function index()
@@ -41,17 +57,17 @@ class VehiclesController extends Controller
             if ($Policydate->diffInDays($today) <= 10 && $Policydate->isFuture()) {
                 $alerts[] = "Expiry: " . $itemVehicleNoOrChassisNo . " Policy is due on " . $Policydate->toFormattedDateString();
             }
-            
+
             if ($fitnessDate->diffInDays($today) <= 10 && $fitnessDate->isFuture()) {
                 $alerts[] = "Expiry: " . $itemVehicleNoOrChassisNo . " Fitness is due on " . $fitnessDate->toFormattedDateString();
             }
-            
+
             if ($PUCdate->diffInDays($today) <= 10 && $PUCdate->isFuture()) {
                 $alerts[] = "Expiry: " . $itemVehicleNoOrChassisNo . " PUC is due on " . $PUCdate->toFormattedDateString();
             }
-            
+
             // If there are any alerts, you can display them, for example:
-           
+
             return view('vehicle_info.index', compact(['vehicles', 'alerts']));
         //
         }
@@ -74,7 +90,7 @@ class VehiclesController extends Controller
         return response()->json(['error' => 'Invalid field'], 400);
     }
 
-    
+
     /**
      * Show the form for creating a new resource.
      */

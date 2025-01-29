@@ -12,4 +12,8 @@ class Vehicles extends Model
     protected $fillable = ['vehicle_no','vehicle_engine_no','vehicle_chassis_no','vehicle_policy_no','vehicle_policy_expiry_date','vehicle_fitness_expiry_date','vehicle_puc_expiry_date','average'];
 
     use HasFactory;
+
+    // public function fuel_records(){
+    //     return $this->hasMany(FuelFilling::class,'vehicle_id','id');
+    // }
 }

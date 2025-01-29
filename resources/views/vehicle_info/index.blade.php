@@ -30,7 +30,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Master information</h3>
+                <h3 class="fw-bold mb-3">Vehicle information</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ route('index') }}">
@@ -41,21 +41,49 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.vehicles.index')}}">Master Information</a>
+                        <a href="{{ route('admin.vehicles.index')}}">Vehicle Information</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">List of Master Information</a>
+                        <a href="#">List of Vehicle Information</a>
                     </li>
                 </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                <form action="{{ route('admin.vehicles.import')}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="d-flex align-items-center">
+                        <div class="mb-2">
+                            <input type="file" name="file" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2">
+                            <i class="fas fa-upload"></i> import
+                        </button>
+                        <a href="{{ asset('samples/vehicle_info_sample.xlsx') }}" download class="ms-3 mb-2 btn btn-info btn-sm ">
+                            <i class="fas fa-download"></i> Download Sample
+                        </a>
+
+                </form>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
-                        <a href="{{ route('admin.vehicles.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Vehicle Information</a>
+                        <a href="{{ route('admin.vehicles.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary "><i class="fas fa-plus"></i> Vehicle Information</a>
+                        <a href="{{ route('admin.vehicles.export')}}" class=" float-end btn btn-sm btn-rounded btn-success me-2"><i class="fas fa-file-excel"></i> Export</a>
                       <h4 class="card-title">Add Vehicle Information</h4>
                     </div>
                     <div class="card-body">

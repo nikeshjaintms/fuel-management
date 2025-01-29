@@ -99,6 +99,11 @@ class FuelFillingController extends Controller
     public function update(Request $request, FuelFilling $fuelFilling, $id)
     {
         $fuelFilling = FuelFilling::find($id);
+        $fuelFillings = FuelFilling::where('vehicle_id',$request->vehicle_id)->orderBy('id','desc')->first();
+        $kilometer = $fuelFillings->kilometers;
+        $kilometers = $request->kilometers;
+        $average =  $kilometer - $kilometers /$request->quantity;
+
         $fuelFilling->update([
             'vehicle_id' => $request->post('vehicle_id'),
             'driver_id' => $request->post('driver_id'),
@@ -106,7 +111,7 @@ class FuelFillingController extends Controller
            'filling_date' => $request->post('filling_date'),
             'quantity' => $request->post('quantity'),
             'kilometers' => $request->post('kilometers'),
-            'average_fuel_consumption' => $request->post('average_fuel_consumption'),
+            'average_fuel_consumption' =>  $average,
         ]);
         Session::flash('success',"Fuel Filling updated successfully");
         return redirect()->route('admin.fuel_filling.index');

@@ -17,4 +17,9 @@ class Customer extends Model
         'customer_email',
     ];
     use HasFactory;
+
+    // public function fuel_records(){
+    //     return $this->hasMany(FuelFilling::class,'customer_id','id');
+    // }
+
 }

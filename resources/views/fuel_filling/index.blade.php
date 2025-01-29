@@ -26,11 +26,13 @@
                         <a href="#">List of Fuel Fillings Information</a>
                     </li>
                 </ul>
+
             </div>
             <div class="row">
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
+                        <a href="{{ route('admin.fuel_filling.export')}}" class=" float-end btn btn-sm btn-rounded btn-success me-2"><i class="fas fa-file-excel"></i> Export</a>
                         <a href="{{ route('admin.fuel_filling.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Vehicle Information</a>
                       <h4 class="card-title">Add Fuel Fillings Information</h4>
                     </div>

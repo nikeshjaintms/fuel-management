@@ -6,12 +6,24 @@ use App\Models\Customer;
 use App\Models\CustomerType;
 use Illuminate\Http\Request;
 use Session;
+use App\Imports\CustomerImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    public function import(Request $request)
+    {
+        if($request->file('file')){
+            Excel::import(new CustomerImport, $request->file('file'));
+            Session::flash('success', 'File imported successfully');
+            return redirect()->route('admin.customer_info.index');
+        }
+        return back()->with('error','Please Select a File');
+    }
     public function index()
     {
         $customers = Customer::all();

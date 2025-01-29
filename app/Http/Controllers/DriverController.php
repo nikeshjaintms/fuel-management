@@ -2,15 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\DriverImport;
 use App\Models\Driver;
 use Illuminate\Http\Request;
 use Session;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class DriverController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function import(Request $request)
+    {
+        // dd($request->all());
+        if($request->file('file'))
+        {
+            Excel::import(new DriverImport, $request->file('file'));
+            Session::flash('success', 'File imported successfully');
+            return redirect()->route('admin.driver.index');
+        }
+        return back()->with('error', 'Please upload a valid Excel file!');
+    }
+
     public function index()
     {
         $drivers = Driver::get();
