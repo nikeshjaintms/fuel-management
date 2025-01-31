@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@if(Auth::guard('admin')->check())
+    @section('title','Admin Panel')
+@endif
 @section('content-page')
 <div class="container">
     <div class="page-inner">

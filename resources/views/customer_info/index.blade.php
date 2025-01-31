@@ -1,5 +1,8 @@
 @extends('layouts.app')
+@if(Auth::guard('admin')->check())
+@section('title','Admin Panel')
 
+@endif
 @section('content-page')
 
 {{-- @if (!empty($alerts))

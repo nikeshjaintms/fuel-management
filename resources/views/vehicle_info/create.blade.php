@@ -1,4 +1,8 @@
 @extends('layouts.app')
+@if(Auth::guard('admin')->check())
+@section('title','Admin Panel')
+
+@endif
 
 @section('content-page')
     <div class="container">
@@ -70,7 +74,7 @@
                                             <label for="vehicle_puc_expiry_date">Vehicle PUC Expiry Date</label>
                                             <input type="date" class="form-control" name="vehicle_puc_expiry_date" id="vehicle_puc_expiry_date" />
                                         </div>
-                                    
+
                                         <div class="form-group">
                                             <label for="average">Average Claim by Company</label>
                                             <input type="number" class="form-control" name="average" id="average" placeholder="Enter a Average" />

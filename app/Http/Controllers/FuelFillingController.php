@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Carbon;
 use App\Models\FuelFilling;
 use App\Models\Vehicles;
 use App\Models\Driver;
 use App\Models\Customer;
 use Session;
 use Illuminate\Http\Request;
+use Mpdf\Mpdf;
+
 
 class FuelFillingController extends Controller
 {
@@ -16,11 +19,13 @@ class FuelFillingController extends Controller
      */
     public function index()
     {
+        $vehicles = Vehicles::get();
         $fuelFillings = FuelFilling::join('vehicles','fuel_fillings.vehicle_id','=','vehicles.id')
         ->join('drivers','fuel_fillings.driver_id','=','drivers.id')
         ->select('fuel_fillings.*','vehicles.vehicle_no','drivers.driver_name')
+        ->orderBy('fuel_fillings.id','desc')
         ->get();
-        return view('fuel_filling.index', compact('fuelFillings'));
+        return view('fuel_filling.index', compact(['fuelFillings', 'vehicles']));
 
         //
     }
@@ -44,9 +49,16 @@ class FuelFillingController extends Controller
     {
         $fuelFilling = FuelFilling::where('vehicle_id',$request->vehicle_id)->orderBy('id','desc')->first();
         // dd($fuelFilling);
-        $kilometer = $fuelFilling->kilometers;
-        $kilometers = $request->kilometers;
-        $average =  $kilometer - $kilometers /$request->quantity;
+        if($fuelFilling){
+            $kilometer = $fuelFilling->kilometers;
+            $kilometers = $request->kilometers;
+            $average = $request->quantity / $kilometer - $kilometers ;
+        }
+        else{
+            $kilometers = $request->kilometers;
+            $average =  $request->quantity / $kilometers;
+        }
+
 
         // dd($data);
         // dd($average);
@@ -79,6 +91,96 @@ class FuelFillingController extends Controller
         return view('fuel_filling.show', compact(['data']));
         //
     }
+    public function genratePDF(){
+
+
+        $data = FuelFilling::join('vehicles','fuel_fillings.vehicle_id','=','vehicles.id')
+            ->join('drivers','fuel_fillings.driver_id','=','drivers.id')
+            ->join('customer_masterdatas','fuel_fillings.customer_id','=','customer_masterdatas.id')
+            ->select('fuel_fillings.*','vehicles.vehicle_no','drivers.driver_name','customer_masterdatas.customer_name','vehicles.average')->get();
+
+        $html = "<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+</style>".view('fuel_filling.pdf', compact('data'))->render();
+
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML($html);
+
+        return $mpdf->Output('fuel_filling.pdf','I');
+
+    }
+
+    public function custompdf(Request $request){
+
+        $vehicle_no = $request->vehicle_no ?? NULL;
+        $start_date = $request->start_date ?? NULL;
+        $end_date = $request->end_date?? Carbon::today();
+        $today = Carbon::today();
+
+            if($vehicle_no && $start_date && $end_date)
+            $data = FuelFilling::join('vehicles','fuel_fillings.vehicle_id','=','vehicles.id')
+            ->join('drivers','fuel_fillings.driver_id','=','drivers.id')
+            ->join('customer_masterdatas','fuel_fillings.customer_id','=','customer_masterdatas.id')
+            ->select('fuel_fillings.*','vehicles.vehicle_no','drivers.driver_name','customer_masterdatas.customer_name','vehicles.average')
+            ->where('vehicles.vehicle_no', $vehicle_no)
+            ->whereBetween('fuel_fillings.filling_date', [$start_date, $end_date])
+            ->get();
+            elseif($vehicle_no){
+                $data = FuelFilling::join('vehicles','fuel_fillings.vehicle_id','=','vehicles.id')
+                ->join('drivers','fuel_fillings.driver_id','=','drivers.id')
+                ->join('customer_masterdatas','fuel_fillings.customer_id','=','customer_masterdatas.id')
+                ->select('fuel_fillings.*','vehicles.vehicle_no','drivers.driver_name','customer_masterdatas.customer_name','vehicles.average')
+                ->where('vehicles.vehicle_no', $vehicle_no)
+                ->get();
+            }
+            elseif($start_date && $end_date){
+                $data = FuelFilling::join('vehicles','fuel_fillings.vehicle_id','=','vehicles.id')
+                ->join('drivers','fuel_fillings.driver_id','=','drivers.id')
+                ->join('customer_masterdatas','fuel_fillings.customer_id','=','customer_masterdatas.id')
+                ->select('fuel_fillings.*','vehicles.vehicle_no','drivers.driver_name','customer_masterdatas.customer_name','vehicles.average')
+                ->whereBetween('fuel_fillings.filling_date', [$start_date, $end_date])
+                ->get();
+            }
+            else{
+                $data = FuelFilling::join('vehicles','fuel_fillings.vehicle_id','=','vehicles.id')
+                ->join('drivers','fuel_fillings.driver_id','=','drivers.id')
+                ->join('customer_masterdatas','fuel_fillings.customer_id','=','customer_masterdatas.id')
+                ->select('fuel_fillings.*','vehicles.vehicle_no','drivers.driver_name','customer_masterdatas.customer_name','vehicles.average')
+                ->where('fuel_fillings.filling_date', $today)
+                ->get();
+            }
+
+            $html = "<style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>".view('fuel_filling.pdf', compact('data'))->render();
+
+                $mpdf = new Mpdf();
+                $mpdf->WriteHTML($html);
+
+                return $mpdf->Output('fuel_filling.pdf','I');
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -100,9 +202,16 @@ class FuelFillingController extends Controller
     {
         $fuelFilling = FuelFilling::find($id);
         $fuelFillings = FuelFilling::where('vehicle_id',$request->vehicle_id)->orderBy('id','desc')->first();
-        $kilometer = $fuelFillings->kilometers;
-        $kilometers = $request->kilometers;
-        $average =  $kilometer - $kilometers /$request->quantity;
+        if($fuelFillings)
+        {
+            $kilometer = $fuelFillings->kilometers;
+            $kilometers = $request->kilometers;
+            $average =  $request->quantity / $kilometer - $kilometers;
+        }
+        else{
+
+            $average =  $request->quantity /  $request->kilometers;
+        }
 
         $fuelFilling->update([
             'vehicle_id' => $request->post('vehicle_id'),

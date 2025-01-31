@@ -1,4 +1,8 @@
 @extends('layouts.app')
+@if(Auth::guard('admin')->check())
+@section('title','Admin Panel')
+
+@endif
 
 @section('content-page')
     <div class="container">
@@ -54,10 +58,26 @@
                                                 @foreach($vehicles as $vehicle)
                                                     <option value="{{$vehicle->id }}"
                                                         {{ $vehicle->id == $fuelFilling->vehicle_id ? 'selected' : '' }}>{{ $vehicle->vehicle_no }}</option>
-
                                                 @endforeach
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="customer_id">Customer</label>
+                                            <select name="customer_id" id="customer_id" class="form-control">
+                                                <option value="">Select Customer</option>
+                                                @foreach($customers as $customer)
+                                                {{ $customer->id == $fuelFilling->customer_id ? 'selected' : '' }}
+                                                    <option value="{{$customer->id }}">{{ $customer->customer_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="kilometers">Kilometers Driven</label>
+                                            <input type="text" class="form-control" value="{{$fuelFilling->kilometers }}"  name="kilometers" id="kilometers" placeholder="Enter Policy no" required />
+                                        </div>
+
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -71,12 +91,7 @@
                                         </div>
 
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="kilometers">Kilometers Driven</label>
-                                            <input type="text" class="form-control" value="{{$fuelFilling->kilometers }}"  name="kilometers" id="kilometers" placeholder="Enter Policy no" required />
-                                        </div>
-                                    </div>
+
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="average_fuel_consumption">Average </label>
@@ -112,6 +127,9 @@
                 vehicle_id: {
                     required: true,
                 },
+                customer_id: {
+                    required: true,
+                },
                 filling_date: {
                     required: true,
                     date: true,
@@ -133,6 +151,9 @@
                 },
                 vehicle_id: {
                     required: "Please select a vehicle.",
+                },
+                customer_id: {
+                    required: "Please select a customer.",
                 },
                 filling_date: {
                     required: "Please enter a filling date.",

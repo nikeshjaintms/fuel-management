@@ -1,4 +1,8 @@
 @extends('layouts.app')
+@if(Auth::guard('admin')->check())
+@section('title','Admin Panel')
+
+@endif
 
 @section('content-page')
     <div class="container">
@@ -105,7 +109,7 @@
 
 @section('footer-script')
 <script>
-    
+
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -1,4 +1,8 @@
 @extends('layouts.app')
+@if(Auth::guard('admin')->check())
+@section('title','Admin Panel')
+
+@endif
 
 @section('content-page')
 
@@ -32,11 +36,37 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
+                        <a href="{{ route('admin.fuel_filling.pdf')}}" class="float-end btn btn-sm btn-rounded btn-info ">PDF</a>
                         <a href="{{ route('admin.fuel_filling.export')}}" class=" float-end btn btn-sm btn-rounded btn-success me-2"><i class="fas fa-file-excel"></i> Export</a>
                         <a href="{{ route('admin.fuel_filling.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Vehicle Information</a>
                       <h4 class="card-title">Add Fuel Fillings Information</h4>
                     </div>
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <form action="{{ route('admin.fuel_filling.custompdf')}}" method="POST" >
+                                    @csrf
+                                    <div class="mb-2">
+                                    <div class="d-flex align-items-center">
+                                            <label for="" class="me-2">Vehicle No</label>
+                                            <select class="form-control me-2" name="vehicle_no" id="">
+                                                <option value="">Select Vehicle</option>
+                                                @foreach($vehicles as $vehicle)
+                                                    <option value="{{$vehicle->vehicle_no }}">{{ $vehicle->vehicle_no }}</option>
+                                                @endforeach
+                                            </select>
+                                            <label for="" class="ms-2 me-2">From Date</label>
+                                            <input type="date" id="start_date" name="start_date" class="form-control">
+                                            <label for="" class="ms-2 me-2">To Date</label>
+                                            <input type="date" id="end_date" name="end_date" class="form-control">
+                                            <button type="submit" class=" me-2 ms-2 btn btn-primary">Search</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <br>
+                        <hr>
                       <div class="table-responsive">
                         <table id="basic-datatables" class="display table table-striped table-hover">
                           <thead>

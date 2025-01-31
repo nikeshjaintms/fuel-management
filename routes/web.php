@@ -74,6 +74,8 @@ Route::middleware('auth:admin')->group(function () {
         Route::get('/fuel-filling/edit/{id}', 'edit')->name('admin.fuel_filling.edit');
         Route::put('/fuel-filling/edit/{id}', 'update')->name('admin.fuel_filling.update');
         Route::delete('/fuel-filling/delete/{id}', 'destroy')->name('admin.fuel_filling.destroy');
+        Route::get('/fuel-filling-pdf','genratePDF')->name('admin.fuel_filling.pdf');
+        Route::post('/fuel-filling-pdf','custompdf')->name('admin.fuel_filling.custompdf');
     });
 
     // Route::get('/fuel-filling/export', function () {
