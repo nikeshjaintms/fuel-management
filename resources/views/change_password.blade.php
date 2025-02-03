@@ -3,14 +3,15 @@
 @section('title','Admin Panel')
 
 @endif
+
 @section('content-page')
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Vehicle Information</h3>
+                <h3 class="fw-bold mb-3">Change Password</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
-                        <a href="{{ route('index') }}">
+                        <a hreAf="{{ route('index') }}">
                             <i class="icon-home"></i>
                         </a>
                     </li>
@@ -18,13 +19,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.vehicles.index')}}">Vehicle Information</a>
-                    </li>
-                    <li class="separator">
-                        <i class="icon-arrow-right"></i>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">Edit Vehicle Information</a>
+                        <a href="#">Change Password</a>
                     </li>
                 </ul>
             </div>
@@ -32,47 +27,51 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title">Edit Vehicle Information </div>
+                            <div class="card-title">Change Password </div>
                         </div>
-                        <form method="POST" action="{{ route('admin.vehicles.update', $vehicle->id ) }}" id="vehicleForm" >
+                        <form method="POST" action="{{ route('admin.change-password.submit') }}" id="vehicleForm" >
                             @csrf
-                            @method('PUT')
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="vehicle_no">Vehicle No</label>
-                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_no }}" {{ $vehicle->vehicle_no != NULL ? 'readonly' : '' }} name="vehicle_no" id="vehicle_no" placeholder="GJ 16 XX 0000" required/>
+                                            <input type="text" class="form-control" name="vehicle_no" id="vehicle_no" placeholder="GJ 16 XX 0000" />
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_engine_no">Vehicle Engine No</label>
-                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_engine_no }}" name="vehicle_engine_no" id="vehicle_engine_no" placeholder="Enter Vechile no" required readonly />
+                                            <input type="text" class="form-control" name="vehicle_engine_no" id="vehicle_engine_no" placeholder="Enter Vechile no" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="vehicle_chassis_no">Vehicle Chassis No</label>
-                                            <input type="text" class="form-control" value="{{ $vehicle->vehicle_chassis_no }}" name="vehicle_chassis_no" id="vehicle_chassis_no" placeholder="Enter Chassic no" required readonly/>
+                                            <input type="text" class="form-control" name="vehicle_chassis_no" id="vehicle_chassis_no" placeholder="Enter Chassic no" required />
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_policy_no">Vehicle Policy No</label>
-                                            <input type="text" class="form-control" name="vehicle_policy_no" value="{{ $vehicle->vehicle_policy_no }}" id="vehicle_policy_no" placeholder="Enter Policy no" required />
+                                            <input type="text" class="form-control" name="vehicle_policy_no" id="vehicle_policy_no" placeholder="Enter Policy no" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="vehicle_policy_expiry_date">Vehicle Policy Expiry Date</label>
-                                            <input type="date" class="form-control" name="vehicle_policy_expiry_date" value="{{ $vehicle->vehicle_policy_expiry_date }}" id="vehicle_policy_expiry_date" placeholder="GJ 16 XX 0000" />
+                                            <input type="date" class="form-control" name="vehicle_policy_expiry_date" id="vehicle_policy_expiry_date" placeholder="GJ 16 XX 0000" />
                                         </div>
                                         <div class="form-group">
                                             <label for="vehicle_fitness_expiry_date">Vehicle Fitness Expiry Date</label>
-                                            <input type="date" class="form-control" name="vehicle_fitness_expiry_date" value="{{ $vehicle->vehicle_fitness_expiry_date }}" id="vehicle_fitness_expiry_date" placeholder="GJ 16 XX 0000" />
+                                            <input type="date" class="form-control" name="vehicle_fitness_expiry_date" id="vehicle_fitness_expiry_date" placeholder="GJ 16 XX 0000" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="vehicle_puc_expiry_date">Vehicle PUC Expiry Date</label>
-                                            <input type="date" class="form-control" name="vehicle_puc_expiry_date" value="{{ $vehicle->vehicle_puc_expiry_date }}" id="vehicle_puc_expiry_date" placeholder="GJ 16 XX 0000" />
+                                            <input type="date" class="form-control" name="vehicle_puc_expiry_date" id="vehicle_puc_expiry_date" />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="average">Average Claim by Company</label>
+                                            <input type="number" class="form-control" name="average" id="average" placeholder="Enter a Average" />
                                         </div>
                                     </div>
                                 </div>
@@ -90,8 +89,53 @@
 @endsection
 
 @section('footer-script')
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#vehicle_no, #vehicle_chassis_no').on('blur', function () {
+            let field = $(this).attr('name'); // Get the field name ('vehicle_no' or 'vehicle_chassis_no')
+            let value = $(this).val();
+            let input = $(this);
+
+            if (value) {
+                $.ajax({
+                    url: "{{ route('admin.vehicles.check') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        field: field,
+                        value: value,
+                    },
+                    success: function (response) {
+                        if (response.exists) {
+                            // Display the error message
+                            input.addClass('is-invalid');
+                            input.next('.invalid-feedback').remove();
+                            input.after(`<div class="invalid-feedback">${response.message}</div>`);
+                        } else {
+                            // Clear the error message if the field is valid
+                            input.removeClass('is-invalid');
+                            input.next('.invalid-feedback').remove();
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred while checking the field. Please try again.');
+                    }
+                });
+            }
+        });
+
+        $('#vehicleForm').on('submit', function (e) {
+            if ($('.is-invalid').length > 0) {
+                e.preventDefault(); // Prevent submission if there are errors
+                alert('Please fix errors before submitting the form.');
+            }
+        });
+    });
+</script>
 
 <script>
     $.validator.addMethod("alphanumeric", function(value, element) {
@@ -106,7 +150,6 @@
             onkeyup: false, // Optional: Disable validation on keyup for performance
             rules: {
                 vehicle_no: {
-                    required: true,
                     maxlength: 10,
                     alphanumeric: true
                 },
@@ -136,6 +179,9 @@
                 vehicle_puc_expiry_date: {
                     required: true,
                     date: true
+                },
+                average: {
+                    required: true,
                 }
             },
             messages: {
@@ -166,6 +212,9 @@
                 vehicle_puc_expiry_date: {
                     required: "PUC expiry date is required",
                     date: "Please enter a valid date"
+                },
+                average: {
+                    required: "Average claim by company is required",
                 }
             },
             errorClass: "text-danger",

@@ -41,7 +41,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="driver_id">Drive By</label>
+                                            <label for="driver_id">Drive By<span style="color: red">*</span></label>
                                             <select name="driver_id" id="" class="form-control">
                                                 <option value="">Select Driver</option>
                                                 @foreach($drivers as $driver)
@@ -50,7 +50,7 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="vehicle_no">Vehicle No</label>
+                                            <label for="vehicle_no">Vehicle No<span style="color: red">*</span></label>
                                             <select name="vehicle_id" id="" class="form-control">
                                                 <option value="">Select Vehicle</option>
                                                 @foreach($vehicles as $vehicle)
@@ -61,7 +61,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="customer_id">Customer</label>
+                                            <label for="customer_id">Customer<span style="color: red">*</span></label>
                                             <select name="customer_id" id="customer_id" class="form-control">
                                                 <option value="">Select Customer</option>
                                                 @foreach($customers as $customer)
@@ -70,27 +70,27 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="kilometers">Kilometers Driven</label>
+                                            <label for="kilometers">Kilometers Driven<span style="color: red">*</span></label>
                                             <input type="text" class="form-control" name="kilometers" id="kilometers" placeholder="Enter Kilometers" required />
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="filling_date">Filling Date</label>
+                                            <label for="filling_date">Filling Date<span style="color: red">*</span></label>
                                             <input type="date" class="form-control" name="filling_date" id="filling_date" placeholder="Enter Vechile no" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="quantity">Quantity (ltr)</label>
+                                            <label for="quantity">Quantity (ltr)<span style="color: red">*</span></label>
                                             <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Enter Quantity " required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="average_fuel_consumption">Average </label>
-                                            <input type="text" readonly class="form-control" name="average_fuel_consumption" id="average_fuel_consumption"/>
+                                            <label for="nozzle_no">Nozzle no<span style="color: red">*</span> </label>
+                                            <input type="text" required class="form-control"  placeholder="Nozzle no" name="nozzle_no" id="nozzle_no"/>
                                         </div>
                                     </div>
                                 </div>
@@ -143,6 +143,11 @@
                     number: true,
                     min: 0,
                 },
+                nozzle_no:{
+                    required: true,
+                    number: true,
+                    min: 1,
+                }
             },
             messages: {
                 driver_id: {
@@ -168,6 +173,11 @@
                     number: "Please enter a valid number.",
                     min: "Kilometers must not be negative.",
                 },
+                nozzle_no:{
+                    required: "Please enter nozzle no.",
+                    number: "Please enter a valid number.",
+                    min: "Nozzle no must be greater than zero.",
+                }
             },
             errorElement: "span",
             errorClass: "text-danger",

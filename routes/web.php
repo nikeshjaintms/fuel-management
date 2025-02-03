@@ -93,4 +93,15 @@ Route::middleware('auth:admin')->group(function () {
         Route::delete('/driver/delete/{id}', 'destroy')->name('admin.driver.destroy');
         Route::post('/driver/import', 'import')->name('admin.driver.import');
     });
+
+    Route::controller(\App\Http\Controllers\MasterdataController::class)->group(function () {
+        Route::get('/owner', 'index')->name('admin.owner.index');
+        Route::get('/owner/create', 'create')->name('admin.owner.create');
+        Route::post('/owner/create', 'store')->name('admin.owner.store');
+        Route::get('/owner/{id}', 'show')->name('admin.owner.show');
+        Route::get('/owner/edit/{id}', 'edit')->name('admin.owner.edit');
+        Route::put('/owner/edit/{id}', 'update')->name('admin.owner.update');
+        Route::delete('/owner/delete/{id}', 'destroy')->name('admin.owner.destroy');
+        Route::post('/owner/import', 'import')->name('admin.owner.import');
+    });
 });

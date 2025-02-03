@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('owner_name');
             $table->bigInteger('vehicle_id');
             $table->string('type');
-            $table->string('title');
             $table->string('asset_make_model');
             $table->string('segment');
             $table->string('model');
@@ -31,7 +30,7 @@ return new class extends Migration
             $table->string('pending_emi');
             $table->string('start_date');
             $table->string('end_date');
-            $table->string('company_name');
+            $table->bigInteger('customer_id');
             $table->string('rate_of_interest');
             $table->timestamps();
         });

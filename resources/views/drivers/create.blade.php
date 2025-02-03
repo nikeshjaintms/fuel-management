@@ -41,7 +41,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="driver_name">Driver Full Name</label>
+                                            <label for="driver_name">Driver Full Name<span style="color: red">*</span></label>
                                             <input type="text" class="form-control" name="driver_name" id="driver_name" placeholder="Enter Address" required />
                                         </div>
                                     </div>

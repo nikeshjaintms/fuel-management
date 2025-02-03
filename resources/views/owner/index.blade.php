@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @if(Auth::guard('admin')->check())
 @section('title','Admin Panel')
-@endsection
+
 @endif
 
 @section('content-page')
@@ -44,19 +44,19 @@
                           <thead>
                             <tr>
                               <th>Id</th>
+                              <th>Name</th>
                               <th>Vehicle No</th>
-                              <th>Engine No</th>
-                              <th>Chassis No</th>
+                              <th>Customer</th>
                               <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            @foreach ($vehicles as $item)
+                            @foreach ($owners as $item)
                             <tr>
                               <td>{{$item->id }}</td>
+                              <td>{{$item->owner_name }}</td>
                               <td>{{$item->vehicle_no }}</td>
-                              <td>{{$item->vehicle_engine_no }}</td>
-                              <td>{{$item->vehicle_chassis_no }}</td>
+                              <td>{{$item->customer_name }}</td>
                               <td>
                                 <a href="{{ route('admin.vehicles.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">

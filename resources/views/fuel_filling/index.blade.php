@@ -38,12 +38,12 @@
                     <div class="card-header">
                         <a href="{{ route('admin.fuel_filling.pdf')}}" class="float-end btn btn-sm btn-rounded btn-info ">PDF</a>
                         <a href="{{ route('admin.fuel_filling.export')}}" class=" float-end btn btn-sm btn-rounded btn-success me-2"><i class="fas fa-file-excel"></i> Export</a>
-                        <a href="{{ route('admin.fuel_filling.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Vehicle Information</a>
+                        <a href="{{ route('admin.fuel_filling.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary me-2"><i class="fas fa-plus"></i> Fuel Filling Information</a>
                       <h4 class="card-title">Add Fuel Fillings Information</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-12">
                                 <form action="{{ route('admin.fuel_filling.custompdf')}}" method="POST" >
                                     @csrf
                                     <div class="mb-2">
@@ -53,6 +53,13 @@
                                                 <option value="">Select Vehicle</option>
                                                 @foreach($vehicles as $vehicle)
                                                     <option value="{{$vehicle->vehicle_no }}">{{ $vehicle->vehicle_no }}</option>
+                                                @endforeach
+                                            </select>
+                                            <label for="" class="me-2">Customer</label>
+                                            <select class="form-control me-2" name="customer_id" id="">
+                                                <option value="">Select Customer</option>
+                                                @foreach($customers as $customer)
+                                                    <option value="{{$customer->id }}">{{ $customer->customer_name }}</option>
                                                 @endforeach
                                             </select>
                                             <label for="" class="ms-2 me-2">From Date</label>

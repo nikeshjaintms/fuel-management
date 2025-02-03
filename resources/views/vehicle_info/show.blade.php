@@ -32,7 +32,7 @@
           <div class="card">
             <div class="card-header">
               <a href="{{ route('admin.vehicles.index') }}" class="btn btn-rounded btn-primary float-end" > <i class="fas fa-angle-left"></i> Back</a>
-              <h4 class="card-title">Result</h4>
+              <h4 class="card-title">Vehicle Detailed</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">

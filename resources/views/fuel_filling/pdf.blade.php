@@ -7,9 +7,9 @@
     <title>Fuel Filling</title>
 </head>
 <body>
-    <h2> </h2>
+
         @if($data->isEmpty())
-        <p>Nothing to show</p>
+        <center><h2>No Information is Avaiable</h2></center>
 
         @else
         <table style="border-collapse: collapse; width: 100%;">
@@ -19,6 +19,7 @@
                 <th>Driver</th>
                 <th>Customer</th>
                 <th>Filling Date</th>
+                <th>Nozzle No</th>
                 <th>Quantity</th>
                 <th>Kilometers</th>
                 <th>Average (Fuel Consupmation)</th>
@@ -33,11 +34,11 @@
                     <td>{{$item->driver_name }}</td>
                     <td>{{$item->customer_name }}</td>
                     <td>{{$item->filling_date }}</td>
+                    <td>{{$item->nozzle_no }}</td>
                     <td>{{$item->quantity }}</td>
                     <td>{{$item->kilometers }}</td>
                     <td>{{$item->average_fuel_consumption }}</td>
                     <td>{{$item->average }}</td>
-                    <>
                 </tr>
             @endforeach
 

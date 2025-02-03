@@ -34,7 +34,7 @@
 
                             <span class="profile-username">
                                 <span class="op-7">Hi,</span>
-                                <span class="fw-bold">{{ Auth::guard('admin')->user()->name}}</span>
+                                <span class="fw-bold">{{ Auth::guard('admin')->user()->name ?? Auth::guard('web')->user()->name }}</span>
                             </span>
                         </a>
                         <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -43,8 +43,8 @@
                                     <div class="user-box">
 
                                         <div class="u-text">
-                                            <h4>{{ Auth::guard('admin')->user()->name}}</h4>
-                                            <p class="text-muted">{{ Auth::guard('admin')->user()->email}}</p>
+                                            <h4>{{ Auth::guard('admin')->user()->name ?? Auth::guard('web')->user()->name}}</h4>
+                                            <p class="text-muted">{{ Auth::guard('admin')->user()->email ?? Auth::guard('web')->user()->email}}</p>
                                         </div>
                                     </div>
                                 </li>

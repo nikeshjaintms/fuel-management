@@ -47,10 +47,18 @@
                             </a>
 
                         </li>
-                        <li class="nav-item {{ request()->segment(1) == 'fuel_filling' ? 'active' : '' }}">
+                        <li class="nav-item {{ request()->segment(1) == 'fuel-filling' ? 'active' : '' }}">
                             <a href="{{ route('admin.fuel_filling.index')}}">
                                 <i class="fas fa-layer-group"></i>
                                 <p>Fuel Fillings</p>
+                                <span class="caret"></span>
+                            </a>
+
+                        </li>
+                        <li class="nav-item {{ request()->segment(1) == 'customer-info' ? 'active' : '' }}">
+                            <a href="{{ route('admin.customer_info.index')}}">
+                                <i class="fas fa-layer-group"></i>
+                                <p>Customer</p>
                                 <span class="caret"></span>
                             </a>
 

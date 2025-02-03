@@ -33,7 +33,7 @@
           <div class="card">
             <div class="card-header">
               <a href="{{ route('admin.fuel_filling.index') }}" class="btn btn-rounded btn-primary float-end" > <i class="fas fa-angle-left"></i> Back</a>
-              <h4 class="card-title">Result</h4>
+              <h4 class="card-title">Fuel Filled Detailed</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -53,6 +53,10 @@
                     <tr>
                         <th>Filling Date</th>
                         <td>{{ $data->filling_date}}</td>
+                    </tr>
+                    <tr>
+                        <th>Nozzle</th>
+                        <td>{{ $data->nozzle_no }}</td>
                     </tr>
                     <tr>
                         <th>Quantity</th>

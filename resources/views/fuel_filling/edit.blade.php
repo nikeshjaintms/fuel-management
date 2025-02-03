@@ -42,7 +42,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="driver_id">Drive By</label>
+                                            <label for="driver_id">Drive By<span style="color: red">*</span></label>
                                             <select name="driver_id" class="form-control" id="">
                                                 <option value="">Select Driver</option>
                                                 @foreach($drivers as $driver)
@@ -52,7 +52,7 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="vehicle_no">Vehicle No</label>
+                                            <label for="vehicle_no">Vehicle No<span style="color: red">*</span></label>
                                             <select name="vehicle_id" id="" class="form-control">
                                                 <option value="">Select Vehicle</option>
                                                 @foreach($vehicles as $vehicle)
@@ -64,37 +64,44 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="customer_id">Customer</label>
+                                            <label for="customer_id">Customer<span style="color: red">*</span></label>
                                             <select name="customer_id" id="customer_id" class="form-control">
                                                 <option value="">Select Customer</option>
                                                 @foreach($customers as $customer)
-                                                {{ $customer->id == $fuelFilling->customer_id ? 'selected' : '' }}
-                                                    <option value="{{$customer->id }}">{{ $customer->customer_name }}</option>
+                                                    <option
+                                                    {{ $customer->id == $fuelFilling->customer_id ? 'selected' : '' }}
+                                                    value="{{$customer->id }}">{{ $customer->customer_name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="kilometers">Kilometers Driven</label>
+                                            <label for="kilometers">Kilometers Driven<span style="color: red">*</span></label>
                                             <input type="text" class="form-control" value="{{$fuelFilling->kilometers }}"  name="kilometers" id="kilometers" placeholder="Enter Policy no" required />
                                         </div>
 
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="filling_date">Filling Date</label>
+                                            <label for="filling_date">Filling Date<span style="color: red">*</span></label>
                                             <input type="date" class="form-control" value="{{$fuelFilling->filling_date }}"  name="filling_date" id="filling_date" placeholder="Enter Vechile no" required />
                                         </div>
-
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="quantity">Quantity (ltr)</label>
+                                            <label for="quantity">Quantity (ltr)<span style="color: red">*</span></label>
                                             <input type="text" class="form-control" value="{{$fuelFilling->quantity }}"  name="quantity" id="quantity" placeholder="Enter Chassic no" required />
                                         </div>
-
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="nozzle_no">Nozzle no<span style="color: red">*</span> </label>
+                                            <input type="text" required value="{{$fuelFilling->nozzle_no }}" class="form-control"  placeholder="Nozzle no" name="nozzle_no" id="nozzle_no"/>
+                                        </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="average_fuel_consumption">Average </label>
+                                            <label for="average_fuel_consumption">Average<span style="color: red">*</span> </label>
                                             <input type="text" readonly class="form-control" value="{{$fuelFilling->average_fuel_consumption }}" name="average_fuel_consumption" id="average_fuel_consumption" placeholder="GJ 16 XX 0000" />
                                         </div>
                                     </div>
@@ -144,6 +151,11 @@
                     number: true,
                     min: 0,
                 },
+                nozzle_no: {
+                    required: true,
+                    min: 1,
+                    digits: true,
+                }
             },
             messages: {
                 driver_id: {
@@ -169,6 +181,11 @@
                     number: "Please enter a valid number.",
                     min: "Kilometers must not be negative.",
                 },
+                nozzle_no: {
+                    required: "Please enter a valid nozzle no.",
+                    min: "Nozzle no must be a positive integer.",
+                    digits: "Nozzle no must be a positive integer.",
+                }
             },
             errorElement: "span",
             errorClass: "text-danger",

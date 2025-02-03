@@ -41,7 +41,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="customer_type_id">Customer Type</label>
+                                            <label for="customer_type_id">Customer Type<span style="color: red">*</span></label>
                                             <select class="form-control" name="customer_type" id="customer_type_id" required>
                                                 <option value="">Select Customer Type</option>
                                                 <option {{$data->customer_type == 'Companies' ? 'selected': '' }} value="Companies">Companies</option>
@@ -49,23 +49,23 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="customer_name">Name</label>
+                                            <label for="customer_name">Name<span style="color: red">*</span></label>
                                             <input type="text" class="form-control" value="{{ $data->customer_name }}" name="customer_name" id="customer_name" placeholder="Customer Name" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="customer_mobile_no">Mobile No</label>
+                                            <label for="customer_mobile_no">Mobile No<span style="color: red">*</span></label>
                                             <input type="text" class="form-control" value="{{ $data->customer_mobile_no }}" name="customer_mobile_no" id="customer_mobile_no" placeholder="Enter Mobile No" required />
                                         </div>
                                         <div class="form-group">
-                                            <label for="customer_email">Email</label>
+                                            <label for="customer_email">Email<span style="color: red">*</span></label>
                                             <input type="email" class="form-control" value="{{ $data->customer_email }}" name="customer_email" id="customer_email" placeholder="Enter Email" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="customer_address">Address</label>
+                                            <label for="customer_address">Address<span style="color: red">*</span></label>
                                             <input type="text" class="form-control" value="{{ $data->customer_address }}" name="customer_address" id="customer_address" placeholder="Enter Address" required />
                                         </div>
                                     </div>
