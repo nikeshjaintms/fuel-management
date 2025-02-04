@@ -58,10 +58,10 @@
                               <td>{{$item->vehicle_no }}</td>
                               <td>{{$item->customer_name }}</td>
                               <td>
-                                <a href="{{ route('admin.vehicles.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                <a href="{{ route('admin.owner.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
-                                <a href="{{ route('admin.vehicles.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                <a href="{{ route('admin.owner.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
@@ -85,7 +85,7 @@
 
 <script>
     function deletevehicle_info(id) {
-        var url = '{{ route("admin.vehicles.destroy", "id") }}'.replace("id", id);
+        var url = '{{ route("admin.owner.destroy", "id") }}'.replace("id", id);
 
         Swal.fire({
             title: 'Are you sure?',
@@ -113,7 +113,7 @@
                         if (response) {
                             Swal.fire(
                                 'Deleted!',
-                                'Vehicle Information has been deleted.',
+                                'Owner Information has been deleted.',
                                 'success'
                             ).then(() => {
                                 window.location.reload();

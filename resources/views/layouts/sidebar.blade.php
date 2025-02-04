@@ -63,13 +63,19 @@
                             </a>
 
                         </li>
+                        <li class="nav-item {{ request()->segment(1) == 'rto' ? 'active' : '' }}">
+                            <a href="{{ route('admin.rto.index')}}">
+                                <i class="fas fa-layer-group"></i>
+                                <p>RTO</p>
+                                <span class="caret"></span>
+                            </a>
+                        </li>
                         <li class="nav-item {{ request()->segment(1) == 'driver' ? 'active' : '' }}">
                             <a href="{{ route('admin.driver.index')}}">
                                 <i class="fas fa-layer-group"></i>
                                 <p>Drivers</p>
                                 <span class="caret"></span>
                             </a>
-
                         </li>
 
                     </ul>

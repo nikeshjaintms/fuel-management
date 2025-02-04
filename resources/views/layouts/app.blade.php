@@ -5,6 +5,7 @@
 @yield('content-page')
 @include('layouts.footer')
 {{-- @include('layouts.alertmsg') --}}
+@include('layouts.flash')
 @include('layouts.footer-script')
 @yield('footer-script')
 

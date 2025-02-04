@@ -154,7 +154,7 @@
                         if (response) {
                             Swal.fire(
                                 'Deleted!',
-                                'Vehicle Information has been deleted.',
+                                'Customer Information has been deleted.',
                                 'success'
                             ).then(() => {
                                 window.location.reload();
@@ -162,7 +162,7 @@
                         } else {
                             Swal.fire(
                                 'Failed!',
-                                'Failed to delete Vehicle Information.',
+                                'Failed to delete Customer Information.',
                                 'error'
                             );
                         }

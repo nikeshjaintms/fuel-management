@@ -19,7 +19,7 @@ class AdminAuth
         if(Auth::guard('admin')->check()){
             return $next($request);
         }else{
-            return redirect()->route('admin.login.form');
+            return redirect()->route('login');
         }
     }
 }

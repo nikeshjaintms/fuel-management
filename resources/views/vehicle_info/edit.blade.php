@@ -54,26 +54,8 @@
                                             <label for="vehicle_chassis_no">Vehicle Chassis No<span style="color: red">*</span></label>
                                             <input type="text" class="form-control" value="{{ $vehicle->vehicle_chassis_no }}" name="vehicle_chassis_no" id="vehicle_chassis_no" placeholder="Enter Chassic no" required readonly/>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="vehicle_policy_no">Vehicle Policy No<span style="color: red">*</span></label>
-                                            <input type="text" class="form-control" name="vehicle_policy_no" value="{{ $vehicle->vehicle_policy_no }}" id="vehicle_policy_no" placeholder="Enter Policy no" required />
-                                        </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="vehicle_policy_expiry_date">Vehicle Policy Expiry Date<span style="color: red">*</span></label>
-                                            <input type="date" class="form-control" name="vehicle_policy_expiry_date" value="{{ $vehicle->vehicle_policy_expiry_date }}" id="vehicle_policy_expiry_date" placeholder="GJ 16 XX 0000" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="vehicle_fitness_expiry_date">Vehicle Fitness Expiry Date<span style="color: red">*</span></label>
-                                            <input type="date" class="form-control" name="vehicle_fitness_expiry_date" value="{{ $vehicle->vehicle_fitness_expiry_date }}" id="vehicle_fitness_expiry_date" placeholder="GJ 16 XX 0000" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="vehicle_puc_expiry_date">Vehicle PUC Expiry Date<span style="color: red">*</span></label>
-                                            <input type="date" class="form-control" name="vehicle_puc_expiry_date" value="{{ $vehicle->vehicle_puc_expiry_date }}" id="vehicle_puc_expiry_date" placeholder="GJ 16 XX 0000" />
-                                        </div>
                                         <div class="form-group">
                                             <label for="average">Average Claim by Company<span style="color: red">*</span></label>
                                             <input type="number" class="form-control" value="{{ $vehicle->average }}" name="average" id="average" placeholder="Enter a Average" />
@@ -124,23 +106,6 @@
                     maxlength: 17,
                     alphanumeric: true
                 },
-                vehicle_policy_no: {
-                    required: true,
-                    maxlength: 20,
-                    alphanumeric: true
-                },
-                vehicle_policy_expiry_date: {
-                    required: true,
-                    date: true
-                },
-                vehicle_fitness_expiry_date: {
-                    required: true,
-                    date: true
-                },
-                vehicle_puc_expiry_date: {
-                    required: true,
-                    date: true
-                },
                 average: {
                     required: true,
                 }
@@ -157,22 +122,6 @@
                 vehicle_chassis_no: {
                     required: "Chassis number is required",
                     maxlength: "Chassis number cannot exceed 17 characters"
-                },
-                vehicle_policy_no: {
-                    required: "Policy number is required",
-                    maxlength: "Policy number cannot exceed 20 characters"
-                },
-                vehicle_policy_expiry_date: {
-                    required: "Policy expiry date is required",
-                    date: "Please enter a valid date"
-                },
-                vehicle_fitness_expiry_date: {
-                    required: "Fitness expiry date is required",
-                    date: "Please enter a valid date"
-                },
-                vehicle_puc_expiry_date: {
-                    required: "PUC expiry date is required",
-                    date: "Please enter a valid date"
                 },
                 average: {
                     required: "Average claim by company is required",

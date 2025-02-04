@@ -6,26 +6,11 @@
 
 @section('content-page')
 
-{{-- @if (!empty($alerts))
-    <script>
-        window.onload = function() {
-            let alerts = @json($alerts);
-            console.log(alerts);
-            alerts.forEach(function(alert) {
-                Swal.fire({
-                    title: 'Reminder',
-                    text: alert,
-                    icon: 'info',
-                    confirmButtonText: 'Okay'
-                });
-            });
-        };
-    </script>
-@endif --}}
+
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Drivers information</h3>
+                <h3 class="fw-bold mb-3">RTO information</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ route('index') }}">
@@ -36,62 +21,63 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.driver.index')}}">Drivers Information</a>
+                        <a href="{{ route('admin.rto.index')}}">RTO Information</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">List of Drivers Information</a>
+                        <a href="#">List of RTO Information</a>
                     </li>
                 </ul>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                <form action="{{ route('admin.driver.import')}}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <div class="d-flex align-items-center">
-                        <div class="mb-2">
-                            <input type="file" name="file" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary mb-2">
-                            <i class="fas fa-upload"></i> import
-                        </button>
-                        <a href="{{ asset('samples/driver_sample.xlsx') }}" download class="ms-3 mb-2 btn btn-info btn-sm ">
-                            <i class="fas fa-download"></i> Download Sample
-                        </a>
 
-                </form>
-                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
-                        <a href="{{ route('admin.driver.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Driver Information</a>
-                      <h4 class="card-title">Add Drivers Information</h4>
+                        {{-- <a href="{{ route('admin.rto.pdf')}}" class="float-end btn btn-sm btn-rounded btn-info ">PDF</a>
+                        <a href="{{ route('admin.rto.export')}}" class=" float-end btn btn-sm btn-rounded btn-success me-2"><i class="fas fa-file-excel"></i> Export</a> --}}
+                        <a href="{{ route('admin.rto.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary me-2"><i class="fas fa-plus"></i> RTO Information</a>
+                      <h4 class="card-title">Add RTO Information</h4>
                     </div>
                     <div class="card-body">
+
                       <div class="table-responsive">
                         <table id="basic-datatables" class="display table table-striped table-hover">
                           <thead>
                             <tr>
                               <th>Id</th>
-                              <th>Driver Name</th>
-                            <th>Action</th>
-
+                              <th>Vehicle No</th>
+                              <th>Policy No</th>
+                              <th>Status</th>
+                              <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            @foreach ($drivers as $item)
+                            @foreach ($rtos as $item)
                             <tr>
                               <td>{{$item->id }}</td>
-                              <td>{{$item->driver_name }}</td>
+                              <td>{{$item->vehicle_no }}</td>
+                              <td>{{$item->policy_no }}</td>
                               <td>
-                                <a href="{{ route('admin.driver.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                @if ($item->year == \Carbon\Carbon::now()->format('Y') && $item->month == \Carbon\Carbon::now()->format('M') && $item->status == 'Paid')
+                                <span class="badge badge-success text-center">Paid</span>
+                                @else
+                                <form action="{{ route('admin.rto.pay_tax', $item->id) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="status" value="Paid">
+                                    <button {{ $item->status ? '' : ''}} type="submit" class="btn btn-lg btn-link btn-primary">
+                                        <i class="fas fa-money-check-alt"></i> Pay Tax
+                                    </button>
+                                </form>
+                                @endif
+                              </td>
+                              <td>
+                                <a href="{{ route('admin.rto.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
-                                <a href="{{ route('admin.driver.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                <a href="{{ route('admin.rto.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
@@ -115,7 +101,7 @@
 
 <script>
     function deletevehicle_info(id) {
-        var url = '{{ route("admin.driver.destroy", "id") }}'.replace("id", id);
+        var url = '{{ route("admin.rto.destroy", "id") }}'.replace("id", id);
 
         Swal.fire({
             title: 'Are you sure?',
@@ -143,7 +129,7 @@
                         if (response) {
                             Swal.fire(
                                 'Deleted!',
-                                'Driver Information has been deleted.',
+                                'Your Record has been deleted.',
                                 'success'
                             ).then(() => {
                                 window.location.reload();
@@ -151,7 +137,7 @@
                         } else {
                             Swal.fire(
                                 'Failed!',
-                                'Failed to delete Driver Information.',
+                                'Failed to delete record.',
                                 'error'
                             );
                         }
@@ -172,4 +158,36 @@
 @endsection
 
 
-
+{{--
+<div class="row">
+    <div class="col-md-12">
+        <form action="{{ route('admin.fuel_filling.custompdf')}}" method="POST" >
+            @csrf
+            <div class="mb-2">
+            <div class="d-flex align-items-center">
+                    <label for="" class="me-2">Vehicle No</label>
+                    <select class="form-control me-2" name="vehicle_no" id="">
+                        <option value="">Select Vehicle</option>
+                        @foreach($vehicles as $vehicle)
+                            <option value="{{$vehicle->vehicle_no }}">{{ $vehicle->vehicle_no }}</option>
+                        @endforeach
+                    </select>
+                    <label for="" class="me-2">Customer</label>
+                    <select class="form-control me-2" name="customer_id" id="">
+                        <option value="">Select Customer</option>
+                        @foreach($customers as $customer)
+                            <option value="{{$customer->id }}">{{ $customer->customer_name }}</option>
+                        @endforeach
+                    </select>
+                    <label for="" class="ms-2 me-2">From Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control">
+                    <label for="" class="ms-2 me-2">To Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control">
+                    <button type="submit" class=" me-2 ms-2 btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<br>
+<hr> --}}

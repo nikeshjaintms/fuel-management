@@ -163,13 +163,7 @@
                     },
                     success: function(response) {
                         if (response) {
-                            Swal.fire(
-                                'Deleted!',
-                                'Vehicle Information has been deleted.',
-                                'success'
-                            ).then(() => {
                                 window.location.reload();
-                            });
                         } else {
                             Swal.fire(
                                 'Failed!',

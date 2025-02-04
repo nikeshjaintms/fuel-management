@@ -17,18 +17,6 @@ use Maatwebsite\Excel\Facades\Excel;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-
-
-// Route::get('/index', function () {
-//     return view('index');
-// });
-// Route::get('/login', function () {
-//     return view('login');
-// });
 
 Route::get('/login', [\App\Http\Controllers\AdminController::class, 'loginPage'])->name('login');
 Route::post('/login', [\App\Http\Controllers\AdminController::class, 'login'])->name('login.submit');
@@ -48,7 +36,6 @@ Route::middleware('auth:admin')->group(function () {
         Route::get('/vehicles/edit/{id}', 'edit')->name('admin.vehicles.edit');
         Route::put('/vehicles/edit/{id}', 'update')->name('admin.vehicles.update');
         Route::delete('/vehicles/delete/{id}', 'destroy')->name('admin.vehicles.destroy');
-        Route::get('/vehicles/alert', 'alertmsg')->name('admin.vehicles.msg');
         Route::post('/admin/vehicles/check', 'check')->name('admin.vehicles.check');
         Route::post('/vehicles/import', 'import')->name('admin.vehicles.import');
     });
@@ -103,5 +90,17 @@ Route::middleware('auth:admin')->group(function () {
         Route::put('/owner/edit/{id}', 'update')->name('admin.owner.update');
         Route::delete('/owner/delete/{id}', 'destroy')->name('admin.owner.destroy');
         Route::post('/owner/import', 'import')->name('admin.owner.import');
+    });
+
+    Route::controller(\App\Http\Controllers\RTOController::class)->group(function () {
+        Route::get('/rto', 'index')->name('admin.rto.index');
+        Route::get('/rto/create', 'create')->name('admin.rto.create');
+        Route::post('/rto/create', 'store')->name('admin.rto.store');
+        Route::get('/rto/{id}', 'show')->name('admin.rto.show');
+        Route::get('/rto/edit/{id}', 'edit')->name('admin.rto.edit');
+        Route::put('/rto/edit/{id}', 'update')->name('admin.rto.update');
+        Route::delete('/rto/delete/{id}', 'destroy')->name('admin.rto.destroy');
+        Route::post('/rto/checkVehicle', 'checkVehicle')->name('admin.rto.checkVehicle');
+        Route::post('/rto/paytax/{id}', 'paytax')->name('admin.rto.pay_tax');
     });
 });

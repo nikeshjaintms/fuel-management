@@ -18,7 +18,7 @@
             <i class="icon-arrow-right"></i>
           </li>
           <li class="nav-item">
-            <a href="{{ route('admin.vehicles.index') }}">Fuel Fillings Information</a>
+            <a href="{{ route('admin.fuel_filling.index') }}">Fuel Fillings Information</a>
           </li>
           <li class="separator">
             <i class="icon-arrow-right"></i>

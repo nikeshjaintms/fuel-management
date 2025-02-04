@@ -44,34 +44,9 @@ class VehiclesController extends Controller
         $today = Carbon::today();
         $alerts = [];
 
-        // Loop through tasks and check if the due_date is within 10 days
-        foreach ($vehicles as $item) {
-            $Policydate = Carbon::parse($item->vehicle_policy_expiry_date);
-            $fitnessDate = Carbon::parse($item->vehicle_fitness_expiry_date);
-            $PUCdate = Carbon::parse($item->vehicle_puc_expiry_date);
-
-            // // dd($daysforpolicy);
-
-            $itemVehicleNoOrChassisNo = $item->vehicle_no ?? $item->vehicle_chassis_no;
-
-            if ($Policydate->diffInDays($today) <= 10 && $Policydate->isFuture()) {
-                $alerts[] = "Expiry: " . $itemVehicleNoOrChassisNo . " Policy is due on " . $Policydate->toFormattedDateString();
-            }
-
-            if ($fitnessDate->diffInDays($today) <= 10 && $fitnessDate->isFuture()) {
-                $alerts[] = "Expiry: " . $itemVehicleNoOrChassisNo . " Fitness is due on " . $fitnessDate->toFormattedDateString();
-            }
-
-            if ($PUCdate->diffInDays($today) <= 10 && $PUCdate->isFuture()) {
-                $alerts[] = "Expiry: " . $itemVehicleNoOrChassisNo . " PUC is due on " . $PUCdate->toFormattedDateString();
-            }
-
-            // If there are any alerts, you can display them, for example:
-
-            return view('vehicle_info.index', compact(['vehicles', 'alerts']));
-        //
-        }
+        return view('vehicle_info.index', compact(['vehicles']));
     }
+
 
     public function check(Request $request)
     {
@@ -110,10 +85,6 @@ class VehiclesController extends Controller
             "vehicle_no" => $request->post('vehicle_no'),
             "vehicle_engine_no" => $request->post('vehicle_engine_no'),
             "vehicle_chassis_no" => $request->post('vehicle_chassis_no'),
-            "vehicle_policy_no" => $request->post('vehicle_policy_no'),
-            "vehicle_policy_expiry_date" => $request->post('vehicle_policy_expiry_date'),
-            "vehicle_fitness_expiry_date" => $request->post('vehicle_fitness_expiry_date'),
-            "vehicle_puc_expiry_date" => $request->post('vehicle_puc_expiry_date'),
             "average" => $request->post('average'),
         ]);
 
@@ -152,15 +123,12 @@ class VehiclesController extends Controller
         $vehicle->vehicle_no = $request->post('vehicle_no');
         $vehicle->vehicle_engine_no = $request->post('vehicle_engine_no');
         $vehicle->vehicle_chassis_no = $request->post('vehicle_chassis_no');
-        $vehicle->vehicle_policy_no = $request->post('vehicle_policy_no');
-        $vehicle->vehicle_policy_expiry_date = $request->post('vehicle_policy_expiry_date');
-        $vehicle->vehicle_fitness_expiry_date = $request->post('vehicle_fitness_expiry_date');
-        $vehicle->vehicle_puc_expiry_date = $request->post('vehicle_puc_expiry_date');
         $vehicle->average = $request->post('average');
         $vehicle->save();
 
-        Session::flash('success', 'Vehicle updated successfully');
-        return redirect()->route('admin.vehicles.index');
+        // Session::flash('success', 'Vehicle update successfully');
+        return redirect()->route('admin.vehicles.index')->with('success', 'Vehicle update successfully');
+
 
         //
     }
@@ -173,6 +141,8 @@ class VehiclesController extends Controller
         $vehicle = Vehicles::find($id);
         $vehicle->delete();
         $msg = "Vehicle deleted successfully";
+        Session::flash('success','Vehicle deleted successfully');
+
         return response()->json($msg);
     }
 }
