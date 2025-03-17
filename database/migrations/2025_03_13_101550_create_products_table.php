@@ -20,18 +20,20 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('maintenance_product_used', function (Blueprint $table)
+        Schema::create('maintenance_items', function (Blueprint $table)
         {
             $table->id();
-            $table->
+            $table->unsignedBigInteger('maintenaces_id')->nullable();
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->bigInteger('quantity')->nullable();
             $table->string('unit')->nullable();
             $table->decimal('rate')->nullable();
             $table->decimal('discount')->nullable();
+            $table->decimal('amount_without_tax')->nullable();
             $table->decimal('tax')->nullable();
             $table->decimal('tax_amount')->nullable();
             $table->decimal('amount')->nullable();
-
+            $table->timestamps();
         });
     }
 

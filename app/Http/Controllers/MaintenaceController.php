@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Maintenace;
 use App\Models\Vehicles;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
@@ -32,6 +33,11 @@ class MaintenaceController extends Controller
      */
     public function store(Request $request)
     {
+        $add = new Maintenace();
+        $add->vehicle_id = $request->post('vehicle_id');
+        $add->vendor_id = $request->post('vendor_id');
+        $add->invoice_no = $request->post('invoice_no');
+        
         //
     }
 

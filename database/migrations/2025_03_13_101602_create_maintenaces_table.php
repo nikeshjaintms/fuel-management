@@ -13,16 +13,18 @@ return new class extends Migration
     {
         Schema::create('maintenaces', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id')->nullable();
             $table->unsignedBigInteger('vendor_id')->nullable();
             $table->unsignedBigInteger('vehicle_id')->nullable();
             $table->string('invoice_no')->nullable();
             $table->date('invoice_date')->nullable();
             $table->date('maintenance_date')->nullable();
             $table->text('supervisor_name')->nullable();
+            $table->text('subtotal')->nullable();
+            $table->text('discount')->nullable();
+            $table->text('tax')->nullable();
+            $table->text('tax_amount')->nullable();
             $table->decimal('total_bill_amount')->nullable();
             $table->enum('status',['pending','paid'])->nullable();
-            $table->unsignedBigInteger('payment_id')->nullable();
             $table->timestamps();
         });
     }
