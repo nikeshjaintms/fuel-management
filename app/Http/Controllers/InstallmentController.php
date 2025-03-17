@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Installment;
+use App\Models\Vehicles;
 use Illuminate\Http\Request;
 
 class InstallmentController extends Controller
@@ -12,7 +13,8 @@ class InstallmentController extends Controller
      */
     public function index()
     {
-        //
+        $installments = Installment::get();
+        return view('installment.index', compact('installments'));
     }
 
     /**
@@ -20,7 +22,8 @@ class InstallmentController extends Controller
      */
     public function create()
     {
-        //
+        $vehicle = Vehicles::get();
+        return view('installment.create', compact('vehicle'));
     }
 
     /**
@@ -28,7 +31,12 @@ class InstallmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Installment::create([
+            'vehicle_id' => $request->post('vehicle_id'),
+            'amount' => $request->post('amount'),
+            'installment_date' => $request->post('installment_date'),
+        ]);
+        return redirect()->route('installment.index')->with('success', 'Installment created successfully.');
     }
 
     /**

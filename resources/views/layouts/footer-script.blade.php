@@ -118,5 +118,67 @@
       });
     });
   </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+let notificationInterval;
+
+$(document).ready(function () {
+    function fetchNotifications() {
+        $.ajax({
+            url: "{{ route('notifications.fetch') }}", // Backend route
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+                console.log(response); // Debugging: Check if data is received
+
+                if (response.length > 0) {
+                    let notifications = response;
+                    let notifCount = notifications.length;
+
+                    // ✅ Update Notification Count
+                    $("#notif-count").text(notifCount);
+                    $("#notif-title").text(notifCount);
+
+                    // ✅ Clear previous notifications
+                    $("#notification-list").empty();
+
+                    // ✅ Append new notifications
+                    notifications.forEach(function (notif) {
+                        $("#notification-list").append(`
+                            <a href="#">
+                                <div class="notif-icon notif-primary">
+                                    <i class="fa fa-bell"></i>
+                                </div>
+                                <div class="notif-content">
+                                    <span class="block">${notif.message}</span>
+                                    <span class="time">${notif.title}</span>
+                                </div>
+                            </a>
+                        `);
+                    });
+                } else {
+                    $("#notif-count").text("0");
+                    $("#notif-title").text("0");
+                    $("#notification-list").html('<p class="text-center p-3">No new notifications</p>');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching notifications:", error);
+            }
+        });
+    }
+
+    // Fetch notifications on page load
+    fetchNotifications();
+
+    // Prevent multiple intervals
+    if (notificationInterval) {
+        clearInterval(notificationInterval);
+    }
+    notificationInterval = setInterval(fetchNotifications, 30000); // 30 seconds
+});
+
+</script>
+
 </body>
 </html>

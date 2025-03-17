@@ -21,17 +21,6 @@ return new class extends Migration
             $table->string('model');
             $table->string('body');
             $table->date('yom');
-            $table->string('finance_by');
-            $table->string('loan_amount');
-            $table->string('loan_account');
-            $table->string('emi_amount');
-            $table->string('total_emi');
-            $table->string('emi_paid');
-            $table->string('pending_emi');
-            $table->string('start_date');
-            $table->string('end_date');
-            $table->bigInteger('customer_id');
-            $table->string('rate_of_interest');
             $table->timestamps();
         });
     }

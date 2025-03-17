@@ -86,6 +86,7 @@ class VehiclesController extends Controller
             "vehicle_engine_no" => $request->post('vehicle_engine_no'),
             "vehicle_chassis_no" => $request->post('vehicle_chassis_no'),
             "average" => $request->post('average'),
+            "road_tax_amount" => $request->post('road_tax_amount'),
         ]);
 
         Session::flash('success', 'Vehicle added successfully');
@@ -124,6 +125,7 @@ class VehiclesController extends Controller
         $vehicle->vehicle_engine_no = $request->post('vehicle_engine_no');
         $vehicle->vehicle_chassis_no = $request->post('vehicle_chassis_no');
         $vehicle->average = $request->post('average');
+        $vehicle->road_tax_amount = $request->post('road_tax_amount');
         $vehicle->save();
 
         // Session::flash('success', 'Vehicle update successfully');

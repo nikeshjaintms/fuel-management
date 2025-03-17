@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Exports\VehiclesExport;
 use App\Exports\FuelFillingExport;
-
+use App\Models\Notification;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 /*
@@ -26,6 +27,11 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/', function(){
         return view('index');
     })->name('index');
+
+    Route::get('/fetch-notifications', function () {
+        $notifications = Notification::where('is_read', false)->limit(3)->orderBy('id','DESC')->get();
+        return response()->json($notifications);
+    })->name('notifications.fetch');
 
     Route::get('/dashboard-data', [App\Http\Controllers\DashboardController::class, 'getData']);
 
@@ -108,6 +114,7 @@ Route::middleware('auth:admin')->group(function () {
         Route::delete('/rto/delete/{id}', 'destroy')->name('admin.rto.destroy');
         Route::post('/rto/checkVehicle', 'checkVehicle')->name('admin.rto.checkVehicle');
         Route::post('/rto/paytax/{id}', 'paytax')->name('admin.rto.pay_tax');
+        Route::post('/rto/bulk_pay', 'bulkPay')->name('admin.tax.bulk_pay');
     });
 
     Route::controller(\App\Http\Controllers\PUCController::class)->group(function(){
@@ -151,6 +158,31 @@ Route::middleware('auth:admin')->group(function () {
         Route::put('/vendor/edit/{id}', 'update')->name('admin.vendor.update');
         Route::delete('/vendor/delete/{id}', 'destroy')->name('admin.vendor.destroy');
         Route::post('/vendor/check-gst', 'checkGst')->name('admin.check.vendor_gst');
+    });
+
+    Route::controller(App\Http\Controllers\LoanController::class)->group(function(){
+        Route::get('/loan','index')->name('admin.loan.index');
+        Route::get('/loan/create','create')->name('admin.loan.create');
+        Route::post('/loan/create','store')->name('admin.loan.store');
+        Route::get('/loan/{id}','show')->name('admin.loan.show');
+        Route::get('/loan/edit/{id}','edit')->name('admin.loan.edit');
+        Route::put('/loan/edit/{id}','update')->name('admin.loan.update');
+        Route::delete('/loan/delete/{id}','destroy')->name('admin.loan.destroy');
+        Route::post('/loan/checkVehicle','checkVehicle')->name('admin.loan.checkVehicle');
+        Route::post('/loan/update-emi', 'updateEmiPaid')->name('admin.loan.updateEmiPaid');
+    });
+
+
+    Route::controller(App\Http\Controllers\MaintenaceController::class)->group(function(){
+        Route::get('/maintenance','index')->name('admin.maintenance.index');
+        Route::get('/maintenance/create','create')->name('admin.maintenance.create');
+        Route::post('/maintenance/create','store')->name('admin.maintenance.store');
+        Route::get('/maintenance/{id}','show')->name('admin.maintenance.show');
+        Route::get('/maintenance/edit/{id}','edit')->name('admin.maintenance.edit');
+        Route::put('/maintenance/edit/{id}','update')->name('admin.maintenance.update');
+        Route::delete('/maintenance/delete/{id}','destroy')->name('admin.maintenance.destroy');
+        Route::post('/maintenance/checkVehicle','checkVehicle')->name('admin.maintenance.checkVehicle');
+        Route::post('/maintenance/check-maintenance','checkMaintenance')->name('admin.maintenance.checkMaintenance');
     });
 
 });

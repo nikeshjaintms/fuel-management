@@ -1,12 +1,13 @@
 @extends('layouts.app')
 @if(Auth::guard('admin')->check())
-    @section('title','Admin Panel')
+@section('title','Admin Panel')
+
 @endif
 @section('content-page')
 <div class="container">
     <div class="page-inner">
       <div class="page-header">
-        <h3 class="fw-bold mb-3">Vehicle Information</h3>
+        <h3 class="fw-bold mb-3">Drivers Information</h3>
         <ul class="breadcrumbs mb-3">
           <li class="nav-home">
             <a href="{{ route('index') }}">
@@ -17,7 +18,7 @@
             <i class="icon-arrow-right"></i>
           </li>
           <li class="nav-item">
-            <a href="{{ route('admin.vehicles.index') }}">Vehicle Information</a>
+            <a href="{{ route('admin.vehicles.index') }}">Drivers Information</a>
           </li>
           <li class="separator">
             <i class="icon-arrow-right"></i>
@@ -32,7 +33,7 @@
           <div class="card">
             <div class="card-header">
               <a href="{{ route('admin.vehicles.index') }}" class="btn btn-rounded btn-primary float-end" > <i class="fas fa-angle-left"></i> Back</a>
-              <h4 class="card-title">Vehicle Detailed</h4>
+              <h4 class="card-title">Driver Detailed</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -42,25 +43,10 @@
                       <td>{{ $data->id}}</td>
                     </tr>
                     <tr>
-                        <th>Registered Number</th>
-                        <td>{{ $data->vehicle_no}}</td>
+                        <th>Driver Name</th>
+                        <td>{{ $data->driver_name}}</td>
                     </tr>
-                    <tr>
-                        <th>Engine No</th>
-                        <td>{{ $data->vehicle_engine_no}}</td>
-                    </tr>
-                    <tr>
-                        <th>Chassis No</th>
-                        <td>{{ $data->vehicle_chassis_no}}</td>
-                    </tr>
-                     <tr>
-                        <th>Average </th>
-                        <td>{{ $data->average}}</td>
-                     </tr>
-                     <tr>
-                        <th>Average </th>
-                        <td>{{ $data->road_tax_amount}}</td>
-                     </tr>
+
                 </table>
               </div>
             </div>

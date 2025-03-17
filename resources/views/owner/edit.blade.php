@@ -36,6 +36,7 @@
                         </div>
                         <form method="POST" action="{{ route('admin.owner.update', $data->id ) }}" id="vehicleForm" >
                             @csrf
+                            @method('PUT')
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -105,60 +106,6 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="finance_by">Financed By </label>
-                                            <input type="text" class="form-control" value="{{ $data->finance_by ?? NULL }}" name="finance_by" id="finance_by" placeholder="for eg: Bank, firm, etc" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="loan_amount">Financed Amount </label>
-                                            <input type="number" class="form-control" value="{{ $data->loan_amount ?? NULL }}" name="loan_amount" id="loan_amount" placeholder="Enter a financed amount" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="loan_account">Financed Account </label>
-                                            <input type="number" class="form-control"  value="{{ $data->loan_account ?? NULL }}" name="loan_account" id="loan_account" placeholder="Enter a financed Account" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="emi_amount">EMI Amount </label>
-                                            <input type="number" class="form-control"  value="{{ $data->emi_amount ?? NULL }}" name="emi_amount" id="emi_amount" placeholder="Enter a EMI Amount" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="total_emi">Total EMI </label>
-                                            <input type="number" class="form-control" value="{{ $data->total_emi ?? NULL }}" name="total_emi" id="total_emi" placeholder="Enter a Total EMI " />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="emi_paid">EMI Paid</label>
-                                            <input type="number" class="form-control" value="{{ $data->emi_paid ?? NULL }}" name="emi_paid" id="emi_paid" placeholder="Enter a Total EMI " />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="emi_paid">EMI Paid</label>
-                                            <input type="number" class="form-control" value="{{ $data->emi_paid ?? NULL }}" name="emi_paid" id="emi_paid" placeholder="Enter a Total EMI " />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="start_date">Start Date</label>
-                                            <input type="date" class="form-control" value="{{ $data->start_date ?? NULL }}" name="start_date" id="start_date" placeholder="" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="end_date">End Date</label>
-                                            <input type="date" class="form-control" value="{{ $data->end_date ?? NULL }}" name="end_date" id="end_date" placeholder="" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
                                             <label for="customer_id">Customer<span style="color: red">*</span></label>
                                             <select name="customer_id" id="customer_id" class="form-control">
                                                 <option value="">Select Customer</option>
@@ -167,12 +114,6 @@
                                                     value="{{$customer->id }}">{{ $customer->customer_name }}</option>
                                                 @endforeach
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="roi">Rate of Interst</label>
-                                            <input type="number" class="form-control" value="{{ $data->roi ?? NULL }}" name="roi" id="roi" placeholder="Enter Rate of Interst" />
                                         </div>
                                     </div>
                                 </div>
@@ -282,41 +223,8 @@ $(document).ready(function () {
                 min: 1990,
                 max: new Date().getFullYear()
             },
-            finance_by: {
-                maxlength: 255
-            },
-            loan_amount: {
-                number: true,
-                min: 0
-            },
-            loan_account: {
-                number: true,
-                min: 0
-            },
-            emi_amount: {
-                number: true,
-                min: 0
-            },
-            total_emi: {
-                digits: true,
-                min: 0
-            },
-            emi_paid: {
-                digits: true,
-                min: 0
-            },
-            start_date: {
-                date: true
-            },
-            end_date: {
-                date: true
-            },
             customer_id: {
                 required: true
-            },
-            roi: {
-                number: true,
-                min: 0
             },
         },
         messages: {
@@ -344,29 +252,6 @@ $(document).ready(function () {
             body: {
                 required: "Body is required."
             },
-            finance_by: {
-                maxlength: "Finance by cannot exceed 255 characters."
-            },
-            loan_amount: {
-                number: "Please enter a valid loan amount.",
-                min: "Loan amount cannot be negative."
-            },
-            loan_account: {
-                number: "Please enter a valid loan account number.",
-                min: "Loan account number cannot be negative."
-            },
-            emi_amount: {
-                number: "Please enter a valid EMI amount.",
-                min: "EMI amount cannot be negative."
-            },
-            total_emi: {
-                digits: "Please enter a valid total EMI.",
-                min: "Total EMI cannot be negative."
-            },
-            emi_paid: {
-                digits: "Please enter a valid EMI paid.",
-                min: "EMI paid cannot be negative."
-            },
             yom: {
                 required: "Year is required.",
                 number: "Please enter a valid year.",
@@ -375,10 +260,6 @@ $(document).ready(function () {
             },
             customer_id: {
                 required: "Please select a customer."
-            },
-            roi: {
-                number: "Please enter a valid number.",
-                min: "Rate of interest cannot be negative."
             },
 
         },

@@ -39,11 +39,32 @@ public function index()
         $paytax->vehicle_id =  $request->vehicle_id;
         $paytax->month = Carbon::now()->format('M');
         $paytax->year = Carbon::now()->format('Y');
-        $paytax->status =  $request->status ?? "Pending";
+        $paytax->status = "Pending";
         $paytax->save();
 
         return redirect()->route('admin.rto.index')->with('success', 'RTO record added successfully');
         //
+    }
+
+    public function bulkPay(Request $request)
+    {
+        if (!$request->has('ids') || empty($request->ids)) {
+            return response()->json(['success' => false, 'message' => 'No records selected.']);
+        }
+
+        // Check for already paid taxes
+        $alreadyPaid = RTOTaxPayment::whereIn('id', $request->ids)->where('status', 'Paid')->count();
+        if ($alreadyPaid == count($request->ids)) {
+            return response()->json(['success' => false, 'message' => 'All selected taxes are already paid.']);
+        }
+
+        // Update status and set the payment_date to the current timestamp
+        RTOTaxPayment::whereIn('id', $request->ids)->update([
+            'status' => 'Paid',
+            'payment_date' => now() // Stores the current date and time
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Taxes marked as paid successfully.']);
     }
 
     public function paytax(Request $request, $id){

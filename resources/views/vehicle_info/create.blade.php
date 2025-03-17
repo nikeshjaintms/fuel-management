@@ -65,6 +65,12 @@
                                             <input type="number" class="form-control" name="average" id="average" required placeholder="Enter a Average" />
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="road_tax_amount">Road Tax Amount<span style="color: red">*</span></label>
+                                            <input type="number" class="form-control" name="road_tax_amount" id="road_tax_amount" required placeholder="Enter a Amount" />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-action">
@@ -158,6 +164,11 @@
                 },
                 average: {
                     required: true,
+                },
+                road_tax_amount: {
+                    required: true,
+                    number: true,
+                    min: 0,
                 }
             },
             messages: {
@@ -175,6 +186,11 @@
                 },
                 average: {
                     required: "Average claim by company is required",
+                },
+                road_tax_amount: {
+                    required: "Road tax amount is required",
+                    number: "Please enter a valid number",
+                    min: "Road tax amount cannot be negative"
                 }
             },
             errorClass: "text-danger",

@@ -42,16 +42,6 @@ class MasterdataController extends Controller
         $add->model = $request->post('model');
         $add->body = $request->post('body');
         $add->yom = $request->post('yom');
-        $add->finance_by = $request->post('finance_by');
-        $add->loan_amount = $request->post('loan_amount');
-        $add->loan_account = $request->post('loan_account');
-        $add->emi_amount = $request->post('emi_amount');
-        $add->total_emi = $request->post('total_emi');
-        $add->emi_paid = $request->post('emi_paid');
-        $add->pending_emi = $request->post('pending_emi');
-        $add->start_date = $request->post('start_date');
-        $add->end_date = $request->post('end_date');
-        $add->rate_of_interest = $request->post('rate_of_interest');
         $add->save();
 
 
@@ -103,16 +93,6 @@ class MasterdataController extends Controller
         $update->model = $request->post('model');
         $update->body = $request->post('body');
         $update->yom = $request->post('yom');
-        $update->finance_by = $request->post('finance_by');
-        $update->loan_amount = $request->post('loan_amount');
-        $update->loan_account = $request->post('loan_account');
-        $update->emi_amount = $request->post('emi_amount');
-        $update->total_emi = $request->post('total_emi');
-        $update->emi_paid = $request->post('emi_paid');
-        $update->pending_emi = $request->post('pending_emi');
-        $update->start_date = $request->post('start_date');
-        $update->end_date = $request->post('end_date');
-        $update->rate_of_interest = $request->post('rate_of_interest');
         $update->save();
 
         return redirect()->route('admin.owner.index')->with('success','Updated Successfully');

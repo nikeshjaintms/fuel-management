@@ -10,7 +10,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">RTO information</h3>
+                <h3 class="fw-bold mb-3">Fitness</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ route('index') }}">
@@ -21,13 +21,13 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.rto.index')}}">RTO Information</a>
+                        <a href="{{ route('admin.fitness.index')}}">Fitness</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">List of RTO Information</a>
+                        <a href="#">List of Fitness </a>
                     </li>
                 </ul>
 
@@ -38,8 +38,8 @@
                     <div class="card-header">
                         {{-- <a href="{{ route('admin.rto.pdf')}}" class="float-end btn btn-sm btn-rounded btn-info ">PDF</a>
                         <a href="{{ route('admin.rto.export')}}" class=" float-end btn btn-sm btn-rounded btn-success me-2"><i class="fas fa-file-excel"></i> Export</a> --}}
-                        <a href="{{ route('admin.rto.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary me-2"><i class="fas fa-plus"></i> RTO Information</a>
-                      <h4 class="card-title">Add RTO Information</h4>
+                        <a href="{{ route('admin.fitness.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary me-2"><i class="fas fa-plus"></i> Fitness Information</a>
+                      <h4 class="card-title">List Fitness Information</h4>
                     </div>
                     <div class="card-body">
 
@@ -47,34 +47,21 @@
                         <table id="basic-datatables" class="display table table-striped table-hover">
                           <thead>
                             <tr>
-                              <th><input type="checkbox" id="select-all"></th>
                               <th>Id</th>
                               <th>Vehicle No</th>
-                              <th>Status</th>
-                              <th>Action</th>
+                              <th>Expiry Date</th>
                             </tr>
                           </thead>
                           <tbody>
-                            @foreach ($rtos as $item)
+                            @foreach ($fitnesses as $item)
                             <tr>
-                              <td><input type="checkbox" name="tax_id[]" value="{{ $item->id }}"></td>
                               <td>{{$item->id }}</td>
                               <td>{{$item->vehicle_no }}</td>
+                              <td>{{$item->expiry_date }}</td>
                               <td>
-                                @if ($item->status == 'Paid')
-                                <span class="badge badge-success text-center">Paid</span>
-                                @else
-                                <form action="{{ route('admin.rto.pay_tax', $item->id) }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="status" value="Paid">
-                                    <button {{ $item->status ? '' : ''}} type="submit" class="btn btn-lg btn-link btn-primary">
-                                        <i class="fas fa-money-check-alt"></i> Pay Tax
-                                    </button>
-                                </form>
-                                @endif
-                              </td>
-                              <td>
-
+                                <a href="{{ route('admin.fitness.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                  <i class="fa fa-edit">
+                                </i></a>
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
                                   <i class="fa fa-trash">
                                 </i>
@@ -84,7 +71,6 @@
                             @endforeach
                           </tbody>
                         </table>
-                        <button id="mark-paid" class="btn btn-success btn-sm mt-2 mb-2"> <i class="fas fa-money-check-alt"></i> Pay TAX</button>
                       </div>
                     </div>
                   </div>
@@ -93,71 +79,11 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 <script>
-    // Select All Functionality
-    document.getElementById("select-all").addEventListener("click", function() {
-        let checkboxes = document.querySelectorAll('input[name="tax_id[]"]');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = this.checked;
-        });
-    });
-
-    $(document).ready(function () {
-        $("#mark-paid").click(function () {
-            let selectedIds = [];
-
-            // Collect selected tax IDs
-            $('input[name="tax_id[]"]:checked').each(function () {
-                selectedIds.push($(this).val());
-            });
-
-            if (selectedIds.length === 0) {
-                Swal.fire("No Selection", "Please select at least one tax record.", "warning");
-                return;
-            }
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "This will mark selected records as Paid.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, Mark as Paid'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '{{ route("admin.tax.bulk_pay") }}',
-                        type: 'POST',
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            ids: selectedIds
-                        },
-                        success: function (response) {
-                            Swal.fire("Updated!", response.message, "success").then(() => {
-                                window.location.reload();
-                            });
-                        },
-                        error: function (xhr) {
-                            let response = JSON.parse(xhr.responseText);
-                            if (response.message === "All selected taxes are already paid.") {
-                                Swal.fire("No Changes", "Selected taxes are already fully paid!", "info");
-                            } else {
-                                Swal.fire("Error!", "An error occurred while updating tax payments.", "error");
-                            }
-                        }
-                    });
-                }
-            });
-        });
-    });
-</script>
-<script>
-
     function deletevehicle_info(id) {
-        var url = '{{ route("admin.rto.destroy", "id") }}'.replace("id", id);
+        var url = '{{ route("admin.fitness.destroy", "id") }}'.replace("id", id);
 
         Swal.fire({
             title: 'Are you sure?',

@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('installments', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('vehicle_id')->nullable();
-            $table->bigInteger('loan_id')->nullable();
-            $table->decimal('amount', 10, 2)->nullable();
-            $table->date('installmet_date')->nullable();
-            $table->string('status')->nullable();
+            $table->string('title');
+            $table->text('message')->nullable();
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('installments');
+        Schema::dropIfExists('notifications');
     }
 };

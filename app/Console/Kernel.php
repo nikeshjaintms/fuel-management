@@ -13,6 +13,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('rto:generate-tax')->monthlyOn(1, '00:00'); // Runs on the 1st day of every month at midnight
+        $schedule->command('check:expiry-notifications')->everyMinute();
+
     }
 
     /**

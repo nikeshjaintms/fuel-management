@@ -7,7 +7,7 @@
 <div class="container">
     <div class="page-inner">
       <div class="page-header">
-        <h3 class="fw-bold mb-3">Owner Information</h3>
+        <h3 class="fw-bold mb-3">Fitness Information</h3>
         <ul class="breadcrumbs mb-3">
           <li class="nav-home">
             <a href="{{ route('index') }}">
@@ -18,7 +18,7 @@
             <i class="icon-arrow-right"></i>
           </li>
           <li class="nav-item">
-            <a href="{{ route('admin.owner.index') }}">Owner Information</a>
+            <a href="{{ route('admin.rto.index') }}">Fitness Information</a>
           </li>
           <li class="separator">
             <i class="icon-arrow-right"></i>
@@ -32,51 +32,42 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
-              <a href="{{ route('admin.owner.index') }}" class="btn btn-rounded btn-primary float-end" > <i class="fas fa-angle-left"></i> Back</a>
-              <h4 class="card-title">Detailed</h4>
+              <a href="{{ route('admin.rto.index') }}" class="btn btn-rounded btn-primary float-end" > <i class="fas fa-angle-left"></i> Back</a>
+              <h4 class="card-title">Fitness Detailed</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table id="basic-datatables" class="display table table-striped table-hover">
                     <tr>
                       <th>ID</th>
-                      <td>{{ $data->id }}</td>
+                      <td>{{ $data->id}}</td>
                     </tr>
                     <tr>
-                        <th>Registered Number</th>
-                        <td>{{ $data->vehicle_no }}</td>
+                        <th>Vehicle no</th>
+                        <td>{{ $data->vehicle_no}}</td>
                     </tr>
                     <tr>
-                        <th>Name</th>
-                        <td>{{ $data->owner_name }}</td>
+                        <th>Policy No</th>
+                        <td>{{ $data->policy_no}}</td>
                     </tr>
                     <tr>
-                        <th>Relationship</th>
-                        <td>{{ $data->type }}</td>
+                        <th>Policy Expiry</th>
+                        <td>{{ $data->policy_expiry_date }}</td>
                     </tr>
                     <tr>
-                        <th>Asset make Model</th>
-                        <td>{{ $data->asset_make_model }}</td>
+                        <th>Fitness Expiry</th>
+                        <td>{{ $data->fitness_expiry_date}}</td>
                     </tr>
                     <tr>
-                        <th> Segement</th>
-                        <td>{{ $data->segment }}</td>
+                        <th>PUC Expiry</th>
+                        <td>{{ $data->puc_expiry_date}}</td>
+                    </tr><tr>
+                        <th>Road Tax Status</th>
+                        <td>{{ $data->status ?? "--"}}</td>
                     </tr>
                     <tr>
-                        <th>Model </th>
-                        <td>{{ $data->model }}</td>
-                    </tr>
-                    <tr>
-                        <th>Body </th>
-                        <td>{{ $data->body }}</td>
-                    </tr>
-                    <tr>
-                        <th>Year of Model</th>
-                        <td>{{ $data->yom }}</td>
-                    </tr>
-                    <tr>
-                        <th>Customer</th>
-                        <td>{{ $data->customer_name ?? '--' }}</td>
+                        <th>Paid Month</th>
+                        <td>{{ $data->month ?? "--"}}</td>
                     </tr>
                 </table>
               </div>
