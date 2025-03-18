@@ -19,10 +19,8 @@ return new class extends Migration
             $table->date('invoice_date')->nullable();
             $table->date('maintenance_date')->nullable();
             $table->text('supervisor_name')->nullable();
-            $table->text('subtotal')->nullable();
-            $table->text('discount')->nullable();
-            $table->text('tax')->nullable();
-            $table->text('tax_amount')->nullable();
+            $table->string('km_driven')->nullable();
+            $table->date('next_service_date')->nullable();
             $table->decimal('total_bill_amount')->nullable();
             $table->enum('status',['pending','paid'])->nullable();
             $table->timestamps();

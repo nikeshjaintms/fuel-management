@@ -25,7 +25,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Drivers information</h3>
+                <h3 class="fw-bold mb-3">Maintenance information</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ route('index') }}">
@@ -36,40 +36,22 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.driver.index')}}">Drivers Information</a>
+                        <a href="{{ route('admin.driver.index')}}">Maintenance Information</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">List of Drivers Information</a>
+                        <a href="#">List of Maintenance Information</a>
                     </li>
                 </ul>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                <form action="{{ route('admin.driver.import')}}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <div class="d-flex align-items-center">
-                        <div class="mb-2">
-                            <input type="file" name="file" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary mb-2">
-                            <i class="fas fa-upload"></i> import
-                        </button>
-                        <a href="{{ asset('samples/driver_sample.xlsx') }}" download class="ms-3 mb-2 btn btn-info btn-sm ">
-                            <i class="fas fa-download"></i> Download Sample
-                        </a>
-
-                </form>
-                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
-                        <a href="{{ route('admin.driver.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Driver Information</a>
-                      <h4 class="card-title">Add Drivers Information</h4>
+                        <a href="{{ route('admin.maintenance.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Maintenance Information</a>
+                      <h4 class="card-title">Add Maintenance Information</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -77,21 +59,33 @@
                           <thead>
                             <tr>
                               <th>Id</th>
-                              <th>Driver Name</th>
+                              <th>Vehicle</th>
+                              <th>Vendor Name</th>
+                              <th>Total Bill Amount</th>
+                              <th>Status</th>
                             <th>Action</th>
 
                             </tr>
                           </thead>
                           <tbody>
-                            @foreach ($drivers as $item)
+                            @foreach ($maintenances as $item)
                             <tr>
                               <td>{{$item->id }}</td>
-                              <td>{{$item->driver_name }}</td>
+                              <td>{{$item->vehicle_no }}</td>
+                              <td>{{$item->vendor_name }}</td>
+                              <td>{{$item->total_bill_amount }}</td>
                               <td>
-                                <a href="{{ route('admin.driver.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                @if($item->status != 'paid')
+                                <span class="badge badge-danger">Not Paid</span>
+                                @else
+                                <span class="badge badge-success">Paid</span>
+                                @endif
+                              </td>
+                              <td>
+                                <a href="{{ route('admin.maintenance.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
-                                <a href="{{ route('admin.driver.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                <a href="{{ route('admin.maintenance.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
@@ -115,7 +109,7 @@
 
 <script>
     function deletevehicle_info(id) {
-        var url = '{{ route("admin.driver.destroy", "id") }}'.replace("id", id);
+        var url = '{{ route("admin.maintenance.destroy", "id") }}'.replace("id", id);
 
         Swal.fire({
             title: 'Are you sure?',
@@ -143,7 +137,7 @@
                         if (response) {
                             Swal.fire(
                                 'Deleted!',
-                                'Driver Information has been deleted.',
+                                'Maintenances Information has been deleted.',
                                 'success'
                             ).then(() => {
                                 window.location.reload();
@@ -151,7 +145,7 @@
                         } else {
                             Swal.fire(
                                 'Failed!',
-                                'Failed to delete Driver Information.',
+                                'Failed to delete Maintenances Information.',
                                 'error'
                             );
                         }

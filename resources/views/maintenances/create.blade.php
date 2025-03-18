@@ -34,14 +34,14 @@
                         <div class="card-header">
                             <div class="card-title">Add Maintenance Information</div>
                         </div>
-                        <form method="POST" action="{{ route('admin.driver.store') }}" id="vehicleForm">
+                        <form method="POST" action="{{ route('admin.maintenance.store') }}" id="vehicleForm">
                             @csrf
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="driver_name">Vendor<span style="color: red">*</span></label>
-                                            <select name="driver_name" id="driver_name" class="form-control" required>
+                                            <label for="vendor_id">Vendor<span style="color: red">*</span></label>
+                                            <select name="vendor_id" id="vendor_id" class="form-control" required>
                                                 <option value="">Select Vendor</option>
                                                 @foreach ($vendors as $vendor)
                                                     <option value="{{ $vendor->id }}">{{ $vendor->name }}</option>
@@ -74,6 +74,8 @@
                                             <label for="invoice_no">Invoice No<span style="color: red">*</span></label>
                                             <input type="text" id="invoice_no" name="invoice_no" class="form-control"
                                                 required>
+                                            <div id="invoice-message"></div>
+
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -85,10 +87,25 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="supervisor_name">Supervisor_name<span
+                                            <label for="supervisor_name">Supervisor Name<span
                                                     style="color: red">*</span></label>
                                             <input type="text" id="supervisor_name" name="supervisor_name"
                                                 class="form-control" required placeholder="Enter a Supervisor Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="km_driven">KM Driven<span style="color: red">*</span></label>
+                                            <input type="text" id="km_driven" name="km_driven" class="form-control"
+                                                required placeholder="Enter a KM Driven">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="next_service_date">Next Service Date<span
+                                                    style="color: red">*</span></label>
+                                            <input type="date" id="next_service_date" name="next_service_date"
+                                                class="form-control" required placeholder="Enter a Next Service Date">
                                         </div>
                                     </div>
 
@@ -112,7 +129,7 @@
                                                 <tr>
                                                     <td>
                                                         <input type="text" id="product_name" name="product_name[]"
-                                                            class="form-control" required >
+                                                            class="form-control" required>
                                                     </td>
                                                     <td>
                                                         <input type="text" id="hsn" name="hsn[]"
@@ -120,7 +137,7 @@
                                                     </td>
                                                     <td>
                                                         <input type="text" id="description" name="description[]"
-                                                            class="form-control" required>
+                                                            class="form-control">
                                                     </td>
                                                     <td>
                                                         <input type="text" id="unit" name="unit[]"
@@ -162,38 +179,6 @@
                                                 </tr>
                                         </table>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="subtotal">Subtotal  Amount<span
-                                                    style="color: red">*</span></label>
-                                            <input type="text" id="subtotal" name="subtotal"
-                                                value="0.00" readonly class="form-control" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="mdiscount">Discount<span
-                                                    style="color: red">*</span></label>
-                                            <input type="text" id="mdiscount" name="mdiscount"
-                                                value="0.00"  class="form-control" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="mtax">Tax<span
-                                                    style="color: red">*</span></label>
-                                            <input type="text" id="mtax" name="mtax"
-                                                value="0.00"  class="form-control" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="mtax_amount">Tax_amount<span
-                                                    style="color: red">*</span></label>
-                                            <input type="text" id="mtax_amount" name="mtax_amount"
-                                                value="0.00" readonly class="form-control" >
-                                        </div>
-                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="total_bill_amount">Total Amount<span
@@ -213,7 +198,7 @@
                                         </div>
                                     </div>
                                     <div class="card-action">
-                                        <button class="btn btn-success" type="submit">Submit</button>
+                                        <button class="btn btn-success" id="submit-button" type="submit">Submit</button>
                                         <a href="{{ route('admin.customer_info.index') }}"
                                             class="btn btn-danger">Cancel</a>
                                     </div>
@@ -231,6 +216,38 @@
 
     <script>
         $(document).ready(function() {
+            $('#invoice_no, #invoice_date, #vehicle_id').on('change', function() {
+                var invoice_no = $('#invoice_no').val();
+                var invoice_date = $('#invoice_date').val();
+                var vehicle_id = $('#vehicle_id').val();
+
+                if (invoice_no && invoice_date && vehicle_id) {
+                    $.ajax({
+                        url: "{{ route('admin.maintenance.checkMaintenance') }}", // Define this route in Laravel
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            invoice_no: invoice_no,
+                            invoice_date: invoice_date,
+                            vehicle_id: vehicle_id
+                        },
+                        success: function(response) {
+                            if (response.exists) {
+                                $('#invoice-message').text(
+                                    'This invoice number, date, and vehicle ID combination already exists!'
+                                    ).css('color', 'red');
+                                $('#submit-button').prop('disabled', true);
+                            } else {
+                                $('#invoice-message').text('');
+                                $('#submit-button').prop('disabled', false);
+                            }
+                        },
+                        error: function() {
+                            alert('Error checking invoice data. Please try again.');
+                        }
+                    });
+                }
+            });
             // Function to calculate total cost for each row
             function calculateAmounts(row) {
                 let quantity = parseFloat($(row).find("input[name='quantity[]']").val()) || 0;
@@ -263,7 +280,7 @@
                 $("input[name='amount[]']").each(function() {
                     totalBill += parseFloat($(this).val()) || 0;
                 });
-                $("#subtotal").val(totalBill.toFixed(2));
+                $("#total_bill_amount").val(totalBill.toFixed(2));
             }
 
             $(document).on("input",
@@ -280,7 +297,7 @@
             <tr>
                 <td><input type="text" name="product_name[]" class="form-control" required></td>
                 <td><input type="text" name="hsn[]" class="form-control" required></td>
-                <td><input type="text" name="description[]" class="form-control" required></td>
+                <td><input type="text" name="description[]" class="form-control"></td>
                 <td><input type="text" name="unit[]" class="form-control" required></td>
                 <td><input type="number" name="quantity[]" class="form-control" required></td>
                 <td><input type="number" name="cost[]" class="form-control" required></td>
@@ -297,12 +314,13 @@
             // Remove row dynamically
             $(document).on('click', '.remove-product', function() {
                 $(this).closest('tr').remove();
+                calculateTotalBill();
             });
 
 
             $("#vehicleForm").validate({
                 rules: {
-                    driver_name: {
+                    vendor_id: {
                         required: true
                     },
                     vehicle_id: {
@@ -324,14 +342,19 @@
                         minlength: 2,
 
                     },
+                    km_driven: {
+                        required: true,
+                        digits: true
+                    },
+                    next_service_date: {
+                        required: true,
+                        date: true
+                    },
                     "product_name[]": {
                         required: true
 
                     },
                     "hsn[]": {
-                        required: true
-                    },
-                    "description[]": {
                         required: true
                     },
                     "unit[]": {
@@ -359,7 +382,7 @@
                     }
                 },
                 messages: {
-                    driver_name: {
+                    vendor_id: {
                         required: "Please select a vendor"
                     },
                     vehicle_id: {
@@ -378,14 +401,17 @@
                         required: "Supervisor name is required",
                         minlength: "Supervisor name must be at least 2 characters long"
                     },
+                    km_driven: {
+                        required: "Total km driven is required"
+                    },
+                    next_service_date: {
+                        required: "Next service date is required"
+                    },
                     "product_name[]": {
                         required: "Enter product name"
                     },
                     "hsn[]": {
                         required: "Enter HSN code"
-                    },
-                    "description[]": {
-                        required: "Enter product description"
                     },
                     "unit[]": {
                         required: "Enter unit (e.g., NOS, KG)"

@@ -100,6 +100,28 @@
                     </div>
                   </div>
                 </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                          <div class="col-icon">
+                            <div
+                              class="icon-big text-center icon-secondary bubble-shadow-small"
+                            >
+                              <i class="fas fa-users"></i>
+                            </div>
+                          </div>
+                          <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                              <p class="card-category">Total Maintenance Amount</p>
+                              {{-- <h4 class="card-title" id="total-drivers">{{ $driver}}</h4> --}}
+                              <h4 class="card-title" id="total-maintenance"></h4>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
             </div>
         </div>
     </div>
@@ -113,10 +135,12 @@
             type: 'GET',
             dataType: 'json',
             success: function(response) {
+                console.log(response);  // For testing purposes, remove this line before deploying
                 $('#total-vehicles').text(response.total_vehicles);
                 $('#total-fuel').text(response.total_fuel + ' ltr');
                 $('#total-customers').text(response.total_customers);
                 $('#total-drivers').text(response.total_drivers);
+                $('#total-maintenance').text(response.total_maintenance);
             }
         });
     }

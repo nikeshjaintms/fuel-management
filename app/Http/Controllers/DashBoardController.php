@@ -6,6 +6,7 @@ use App\Models\FuelFilling;
 use App\Models\Vehicles;
 use App\Models\Customer;
 use App\Models\Driver;
+use App\Models\Maintenace;
 use Illuminate\Http\Request;
 
 class DashBoardController extends Controller
@@ -26,6 +27,7 @@ class DashBoardController extends Controller
             'total_fuel' => FuelFilling::sum('quantity'),
             'total_customers' => Customer::count(),
             'total_drivers' => Driver::count(),
+            'total_maintenance' => Maintenace::sum('total_bill_amount')
         ];
         return response()->json($data);
     }
