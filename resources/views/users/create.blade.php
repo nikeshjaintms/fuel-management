@@ -18,7 +18,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.driver.index') }}">Users</a>
+                        <a href="{{ route('admin.users.index') }}">Users</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
@@ -34,7 +34,7 @@
                         <div class="card-header">
                             <div class="card-title">Add User</div>
                         </div>
-                        <form method="POST" action="{{ route('admin.driver.store') }}" id="vehicleForm">
+                        <form method="POST" action="{{ route('admin.users.store') }}" id="vehicleForm">
                             @csrf
                             @if ($errors->any())
                                 <div class="alert alert-danger">
@@ -45,6 +45,7 @@
                                     </ul>
                                 </div>
                             @endif
+                            <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6 mb-2">
                                     <label for="Name">Name <span class="text-danger">*</span> </label>
@@ -63,12 +64,10 @@
                                     <input type="password" class="form-control mt-1" id="password" name="password"
                                         placeholder="Enter Password" required />
                                 </div>
-
-
                                 <div class="col-md-6 mb-2">
                                     <label for="role" class="required-label">Role <span
                                             class="text-danger">*</span></label>
-                                    <select name="roles[]" id="roles" class="form-control" multiple required>
+                                    <select name="roles[]" id="roles" class="form-control"  required>
                                         <option value="">Select Role</option>
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->name }}">{{ $role->name }}</option>
@@ -76,9 +75,10 @@
                                     </select>
                                 </div>
                             </div>
+                            </div>
                             <div class="card-action">
                                 <button class="btn btn-success" type="submit">Submit</button>
-                                <a href="{{ route('admin.customer_info.index') }}" class="btn btn-danger">Cancel</a>
+                                <a href="{{ route('admin.users.index') }}" class="btn btn-danger">Cancel</a>
                             </div>
                         </form>
                     </div>
@@ -94,31 +94,65 @@
 
     <script>
         $(document).ready(function() {
-            $("#vehicleForm").validate({
-                onfocusout: function(element) {
-                    this.element(element); // Validate the field on blur
-                },
-                onkeyup: false, // Optional: Disable validation on keyup for performance
-                rules: {
-                    driver_name: {
-                        required: true,
-                        minlength: 3,
-                        maxlength: 50,
-                        lettersonly: true
-                    },
+            $.validator.addMethod("lettersonly", function(value, element) {
+                return this.optional(element) || /^[a-zA-Z\s]+$/.test(value);
+            }, "Please enter only alphabetic characters and spaces.");
 
+            $.validator.addMethod("regexEmail", function(value, element) {
+                var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                return this.optional(element) || regex.test(value);
+            });
+
+            $.validator.addMethod("regexPassword", function(value, element) {
+                var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+                return this.optional(element) || regex.test(value);
+            });
+
+            $("#vehicleForm").validate({
+                rules: {
+                    name: {
+                        required: true,
+                        lettersonly: true, // Only allow letters and spaces
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                        regexEmail: true // Custom email validation regex
+                    },
+                    password: {
+                        required: true,
+                        minlength: 8,
+                        maxlength: 12,
+                        regexPassword: true // Custom password complexity rule
+                    },
+                    'roles[]': {
+                        required: true,
+                        minlength: 1 // At least one role must be selected
+                    },
                 },
                 messages: {
-                    customer_type_id: {
-                        required: "Please Select Customer Type",
-                        minleght: "Please Enter Minimum 3 Characters",
-                        maxlength: "Please Enter Maximum 50 Characters",
-                        lettersonly: "Please Enter Only Letters"
-
+                    name: {
+                        required: 'Name field is required.',
+                        lettersonly: 'Name should only contain letters and spaces.',
+                    },
+                    email: {
+                        required: ' Email field is required.',
+                        email: ' Please enter a valid email address.',
+                        regexEmail: ' Please enter a valid email address (e.g., user@example.com)'
+                    },
+                    password: {
+                        required: ' Password field is required.',
+                        minlength: ' Password must be at least 8 characters long.',
+                        maxlength: ' Password cannot exceed 12 characters.',
+                        regexPassword: ' Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.'
+                    },
+                    'roles[]': {
+                        required: 'At least one role must be selected.',
+                        minlength: 'Please select at least one role.'
                     },
                 },
                 errorClass: "text-danger",
-                errorElement: "span",
+                errorElement: "div",
                 highlight: function(element) {
                     $(element).addClass("is-invalid");
                 },

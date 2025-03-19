@@ -205,4 +205,13 @@ Route::middleware('auth:admin')->group(function () {
         Route::delete('/roles/delete/{id}', 'destroy')->name('admin.roles.destroy');
     });
 
+    Route::controller(App\Http\Controllers\AdminController::class)->group(function() {
+        Route::get('/users', 'index')->name('admin.users.index');
+        Route::get('/users/create', 'create')->name('admin.users.create');
+        Route::post('/users/create','store')->name('admin.users.store');
+        Route::get('/users/{id}', 'edit')->name('admin.users.edit');
+        Route::put('/users/{id}', 'update')->name('admin.users.update');
+        Route::delete('/users/delete/{id}', 'destroy')->name('admin.users.destroy');
+    });
+
 });

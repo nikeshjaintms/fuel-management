@@ -6,6 +6,8 @@ use App\Models\Admin;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
+use Session;
 
 class AdminController extends Controller
 {
@@ -40,7 +42,7 @@ class AdminController extends Controller
     public function index()
     {
         $users = Admin::get();
-        return view('users.create', compact('users'));
+        return view('users.index', compact('users'));
     }
 
     /**
@@ -48,7 +50,9 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return
+        $roles = Role::get();
+        return view('users.create', compact('roles'));
+        
     }
 
     /**
@@ -56,7 +60,20 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:6'
+        ]);
+        $user = new Admin();
+        $user->name = $request->post('name');
+        $user->email = $request->post('email');
+        $user->password = Hash::make($request->post('password'));
+        $user->save();
+
+        $user->syncRoles($request->post('roles'));
+        Session::flash('success', 'User created successfully');
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -70,24 +87,37 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Admin $admin)
+    public function edit(Admin $admin, $id)
     {
-        //
+        $admin = Admin::find($id);
+        $roles = Role::get();
+        return view('users.edit', compact('admin', 'roles'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Admin $admin)
+    public function update(Request $request, Admin $admin, $id)
     {
-        //
-    }
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+        ]);
+        $user = Admin::find($id);
+        $user->name = $request->post('name');
+        $user->email = $request->post('email');
+        $user->save();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Admin $admin)
-    {
-        //
+        $user->syncRoles($request->post('roles'));
+        Session::flash('success', 'User updated successfully');
+        return redirect()->route('admin.users.index');
     }
+    
+    public function destroy(Admin $admin, $id)
+    {
+        $user = Admin::find($id);
+        $user->delete();
+        return response()->json(['success' => 'User deleted successfully']);
+    }
+    
 }

@@ -35,8 +35,8 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
-                        <a href="{{ route('admin.roles.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Driver Information</a>
-                      <h4 class="card-title">Add Drivers Information</h4>
+                        <a href="{{ route('admin.roles.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Role Information</a>
+                      <h4 class="card-title">Roles</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -44,15 +44,15 @@
                           <thead>
                             <tr>
                               <th>Id</th>
-                              <th>Driver Name</th>
+                              <th>Role</th>
                               <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            @foreach ($drivers as $item)
+                            @foreach ($roles as $item)
                             <tr>
                               <td>{{$item->id }}</td>
-                              <td>{{$item->driver_name }}</td>
+                              <td>{{$item->name }}</td>
                               <td>
                                 <a href="{{ route('admin.roles.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">

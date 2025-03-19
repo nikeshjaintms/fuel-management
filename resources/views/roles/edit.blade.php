@@ -35,15 +35,28 @@
                         <div class="card-header">
                             <div class="card-title">Edit Role</div>
                         </div>
-                        <form method="POST" action="{{ route('admin.roles.update', $data->id ) }}" id="vehicleForm">
+                        <form method="POST" action="{{ route('admin.roles.update', $role->id ) }}" id="roleForm">
                             @csrf
                             @method('PUT')
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="driver_name">Driver Full Name<span style="color: red">*</span></label>
-                                            <input type="text" class="form-control" name="driver_name" value="{{ $data->driver_name}}" id="driver_name" placeholder="Enter Driver Full Name" required />
+                                            <label for="name">Name<span style="color: red">*</span></label>
+                                            <input type="text" class="form-control" name="name" value="{{ $role->name}}" id="name" placeholder="Enter  Name" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>
+                                                <input type="checkbox" id="select_all"> Select All
+                                            </label>
+                                            @foreach($permissions as $permission)
+                                             <label for=""><input class="permission-checkbox" {{ $role->hasPermissionTo($permission->name) ? 'checked' : ''}} type="checkbox" name="permissions[{{ $permission->name }}]" value="{{ $permission->name }}" id="">  {{ $permission->name }}</label>
+                                            @endforeach
+                                            <span id="permissions-error" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -66,28 +79,55 @@
 
 <script>
     $(document).ready(function () {
-        $("#vehicleForm").validate({
+        // Select all checkboxes feature
+        $('#select_all').on('change', function () {
+            $('.permission-checkbox').prop('checked', this.checked);
+        });
+
+        $('.permission-checkbox').on('change', function () {
+            if ($('.permission-checkbox:checked').length === $('.permission-checkbox').length) {
+                $('#select_all').prop('checked', true);
+            } else {
+                $('#select_all').prop('checked', false);
+            }
+        });
+
+        // Ensure 'Select All' is checked if all individual checkboxes are checked on page load
+        if ($('.permission-checkbox:checked').length === $('.permission-checkbox').length) {
+            $('#select_all').prop('checked', true);
+        }
+
+        // jQuery Validation
+        $.validator.addMethod("lettersonly", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z ]+$/i.test(value);
+        }, "Please enter only letters");
+
+        $("#roleForm").validate({
             onfocusout: function (element) {
-                this.element(element); // Validate the field on blur
+                this.element(element);
             },
-            onkeyup: false, // Optional: Disable validation on keyup for performance
+            onkeyup: false,
             rules: {
-                driver_name: {
+                name: {
                     required: true,
                     minlength: 3,
                     maxlength: 50,
                     lettersonly: true
                 },
-
+                'permissions[]': {
+                    required: true
+                }
             },
             messages: {
-                customer_type_id: {
-                    required: "Please Select Customer Type",
-                    minleght: "Please Enter Minimum 3 Characters",
-                    maxlength: "Please Enter Maximum 50 Characters",
-                    lettersonly: "Please Enter Only Letters"
-
+                name: {
+                    required: "Please enter a name",
+                    minlength: "Please enter at least 3 characters",
+                    maxlength: "Please enter no more than 50 characters",
+                    lettersonly: "Please enter only letters"
                 },
+                'permissions[]': {
+                    required: "Please select at least one permission"
+                }
             },
             errorClass: "text-danger",
             errorElement: "span",
@@ -98,10 +138,16 @@
                 $(element).removeClass("is-invalid");
             },
             submitHandler: function (form) {
-                // Handle successful validation here
-                form.submit();
+                if ($('.permission-checkbox:checked').length === 0) {
+                    $('#permissions-error').text("Please select at least one permission");
+                    return false;
+                } else {
+                    $('#permissions-error').text("");
+                    form.submit();
+                }
             }
         });
     });
 </script>
+
 @endsection

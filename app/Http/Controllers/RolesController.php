@@ -11,6 +11,7 @@ class RolesController extends Controller
     public function index(){
 
         $roles = Role::get();
+        return view('roles.index',compact(['roles']));
 
 
     }
@@ -22,8 +23,15 @@ class RolesController extends Controller
 
     }
 
-    public function store(){
+    public function store(Request $request){
+        $request->validate([
+            'name' => "required",
+        ]);
 
+        $role = Role::create(['name' => $request->name]);
+        $role->syncPermissions($request->permissions);
+
+        return redirect()->route('admin.roles.index')->with('success', 'Role created successfully.');
     }
 
     public function show($id){
@@ -31,14 +39,28 @@ class RolesController extends Controller
     }
 
     public function edit($id){
+        $role = Role::find($id);
+        $permissions = Permission::get();
+        return view('roles.edit',compact(['role','permissions']));
 
     }
 
-    public function update($id){
+    public function update(Request $request, $id){
+        $request->validate([
+            'name' => "required",
+        ]);
+        $role = Role::find($id);
+        $role->update(['name' => $request->name]);
+        $role->syncPermissions($request->permissions);
+
+        return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully.');
 
     }
 
     public function destroy($id){
+        $role = Role::find($id);
+        $role->delete();
+        return response()->json(['success' => 'Role deleted successfully.']);
 
     }
 }

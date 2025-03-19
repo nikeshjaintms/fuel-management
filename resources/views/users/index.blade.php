@@ -36,7 +36,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.driver.index')}}">Users</a>
+                        <a href="{{ route('admin.users.index')}}">Users</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
@@ -51,8 +51,8 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
-                        <a href="{{ route('admin.driver.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Driver Information</a>
-                      <h4 class="card-title">Add Drivers Information</h4>
+                        <a href="{{ route('admin.users.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> User</a>
+                      <h4 class="card-title">Users</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -60,21 +60,28 @@
                           <thead>
                             <tr>
                               <th>Id</th>
-                              <th>Driver Name</th>
+                              <th>Name</th>
+                              <th>Email</th>
+                              <th>Role</th>
                             <th>Action</th>
 
                             </tr>
                           </thead>
                           <tbody>
-                            @foreach ($drivers as $item)
+                            @foreach ($users as $item)
                             <tr>
                               <td>{{$item->id }}</td>
-                              <td>{{$item->driver_name }}</td>
+                              <td>{{$item->name }}</td>
+                              <td>{{$item->email }}</td>
+                              <td>@foreach($item->getRoleNames() as $role)
+                                <span class="badge bg-primary">{{ $role }}</span>
+                                @endforeach
+                              </td>
                               <td>
-                                <a href="{{ route('admin.driver.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                <a href="{{ route('admin.users.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
-                                <a href="{{ route('admin.driver.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                <a href="{{ route('admin.users.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
@@ -98,7 +105,7 @@
 
 <script>
     function deletevehicle_info(id) {
-        var url = '{{ route("admin.driver.destroy", "id") }}'.replace("id", id);
+        var url = '{{ route("admin.users.destroy", "id") }}'.replace("id", id);
 
         Swal.fire({
             title: 'Are you sure?',
