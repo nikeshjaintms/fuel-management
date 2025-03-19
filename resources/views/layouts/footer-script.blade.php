@@ -1,6 +1,7 @@
 <script src="{{ asset('backend/assets/js/core/jquery-3.7.1.min.js')}}"></script>
 <script src="{{ asset('backend/assets/js/core/popper.min.js')}}"></script>
 <script src="{{ asset('backend/assets/js/core/bootstrap.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
 <!-- jQuery Scrollbar -->
 <script src="{{ asset('backend/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>

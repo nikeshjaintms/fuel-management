@@ -185,4 +185,24 @@ Route::middleware('auth:admin')->group(function () {
         Route::post('/maintenance/check-maintenance','checkMaintenance')->name('admin.maintenance.checkMaintenance');
     });
 
+
+    Route::controller(App\Http\Controllers\InvoiceController::class)->group(function(){
+        Route::get('/invoice', 'index')->name('admin.invoice.index');
+        Route::get('/invoice/create', 'create')->name('admin.invoice.create');
+        Route::post('/invoice/create','store')->name('admin.invoice.store');
+        Route::get('/invoice/{id}', 'generate')->name('admin.invoice.generate');
+        Route::get('/invoice/edit/{id}', 'edit')->name('admin.invoice.edit');
+        Route::put('/invoice/edit/{id}', 'update')->name('admin.invoice.update');
+        Route::delete('/invoice/delete/{id}', 'destroy')->name('admin.invoice.destroy');
+    });
+
+    Route::controller(App\Http\Controllers\RolesController::class)->group(function() {
+        Route::get('/roles', 'index')->name('admin.roles.index');
+        Route::get('/roles/create', 'create')->name('admin.roles.create');
+        Route::post('/roles/create','store')->name('admin.roles.store');
+        Route::get('/roles/{id}', 'edit')->name('admin.roles.edit');
+        Route::put('/roles/{id}', 'update')->name('admin.roles.update');
+        Route::delete('/roles/delete/{id}', 'destroy')->name('admin.roles.destroy');
+    });
+
 });

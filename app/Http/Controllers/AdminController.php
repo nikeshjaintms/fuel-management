@@ -39,7 +39,8 @@ class AdminController extends Controller
      }
     public function index()
     {
-        //
+        $users = Admin::get();
+        return view('users.create', compact('users'));
     }
 
     /**
@@ -47,7 +48,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        //
+        return
     }
 
     /**

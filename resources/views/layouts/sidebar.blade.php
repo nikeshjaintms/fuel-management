@@ -106,7 +106,44 @@
                                 </li>
                               </ul>
                             </div>
-                          </li>
+                        </li>
+                        <li class="nav-section">
+                            <span class="sidebar-mini-icon">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </span>
+                            <h4 class="text-section">Accounts</h4>
+                        </li>
+                        <li class="nav-item {{ request()->segment(1) == 'rto' || request()->segment(1) == 'fitness' || request()->segment(1) == 'puc' || request()->segment(1) == 'policy'  ? 'active' : '' }}">
+                            <a data-bs-toggle="collapse" href="#invoicesection">
+                              <i class="fas fa-th-list"></i>
+                              <p>Invoice</p>
+                              <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="invoicesection">
+                              <ul class="nav nav-collapse">
+                                <li>
+                                  <a href="{{ route('admin.fitness.index')}}">
+                                    <span class="sub-item">Generate New Invoice</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="{{ route('admin.puc.index')}}">
+                                    <span class="sub-item">All Invoice</span>
+                                  </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.policy.index')}}">
+                                      <span class="sub-item">Credit/Debit Note</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.rto.index')}}">
+                                      <span class="sub-item">Road Tax</span>
+                                    </a>
+                                </li>
+                              </ul>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
