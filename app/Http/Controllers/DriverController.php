@@ -5,12 +5,18 @@ namespace App\Http\Controllers;
 use App\Imports\DriverImport;
 use App\Models\Driver;
 use Illuminate\Http\Request;
-use Session;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 
 class DriverController extends Controller
 {
+    public function __construct(){
+        $this->middleware('permission:driver-list|driver-create|driver-edit|driver-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:driver-create', ['only' => ['create','store']]);
+        $this->middleware('permission:driver-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:driver-delete', ['only' => ['destroy']]);
+     }
     public function import(Request $request)
     {
         // dd($request->all());

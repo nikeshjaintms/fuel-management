@@ -35,8 +35,10 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
+                        @can('role-create')
                         <a href="{{ route('admin.roles.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Role Information</a>
-                      <h4 class="card-title">Roles</h4>
+                        @endcan
+                        <h4 class="card-title">Roles</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -54,16 +56,22 @@
                               <td>{{$item->id }}</td>
                               <td>{{$item->name }}</td>
                               <td>
+                                @can('role-show')
                                 <a href="{{ route('admin.roles.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
-                                  <i class="fa fa-eye">
+                                    <i class="fa fa-eye">
                                 </i></a>
+                                @endcan
+                                @can('role-edit')
                                 <a href="{{ route('admin.roles.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
+                                @endcan
+                                @can('role-delete')
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
                                   <i class="fa fa-trash">
                                 </i>
                                 </button>
+                                @endcan
                               </td>
                             </tr>
                             @endforeach

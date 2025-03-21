@@ -6,13 +6,20 @@ use App\Models\Loan;
 use App\Models\Vehicles;
 use App\Models\Installment;
 use Illuminate\Http\Request;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 class LoanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct(){
+        $this->middleware('permission:loan-list|loan-create|loan-edit|loan-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:loan-create', ['only' => ['create','store']]);
+        $this->middleware('permission:loan-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:loan-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:loan-payment', ['only' => ['updateEmiPaid']]);
+     }
     public function index()
     {
         $loans = Loan::join('vehicles','loans.vehicle_id','=','vehicles.id')

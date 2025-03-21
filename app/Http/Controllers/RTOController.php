@@ -7,12 +7,21 @@ use App\Models\RTOTaxPayment;
 use App\Models\Vehicles;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class RTOController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware('permission:rto-list|rto-create|rto-edit|rto-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:rto-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:rto-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:rto-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:rto-payment', ['only' => ['updateEmiPaid']]);
+    }
 public function index()
 {
     $rtos = RTOTaxPayment::join('vehicles', 'rto_tax_payment.vehicle_id', '=', 'vehicles.id')

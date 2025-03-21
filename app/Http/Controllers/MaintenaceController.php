@@ -8,21 +8,26 @@ use App\Models\Vendor;
 use App\Models\MaintenanceItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class MaintenaceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('permission:maintenance-list|maintenance-create|maintenance-edit|maintenance-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:maintenance-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:maintenance-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:maintenance-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:maintenance-payment', ['only' => ['updateEmiPaid']]);
+    }
     public function index()
     {
-        $maintenances = Maintenace::join('vehicles','maintenaces.vehicle_id','=','vehicles.id')
-            ->join('vendors','maintenaces.vendor_id','=','vendors.id')
-            ->select('maintenaces.*','vehicles.vehicle_no','vendors.name as vendor_name')
+        $maintenances = Maintenace::join('vehicles', 'maintenaces.vehicle_id', '=', 'vehicles.id')
+            ->join('vendors', 'maintenaces.vendor_id', '=', 'vendors.id')
+            ->select('maintenaces.*', 'vehicles.vehicle_no', 'vendors.name as vendor_name')
             ->get();
 
         return view('maintenances.index', compact('maintenances'));
-
     }
 
     /**
@@ -72,8 +77,8 @@ class MaintenaceController extends Controller
 
                 // Check if product exists by name and hsn
                 $product = Product::where('name', $productName)
-                ->where('hsn_code', $hsn)
-                ->first();
+                    ->where('hsn_code', $hsn)
+                    ->first();
 
                 if (!$product) {
                     // Create a new product if not found
@@ -109,13 +114,13 @@ class MaintenaceController extends Controller
      */
     public function show(string $id)
     {
-        $maintenance = Maintenace::join('vendors','maintenaces.vendor_id','=','vendors.id')
-        ->join('vehicles','maintenaces.vehicle_id','=','vehicles.id')
-        ->select('maintenaces.*','vendors.name as vendor_name','vehicles.vehicle_no')
-        ->find($id);
-        $maintenanceItems = MaintenanceItem::join('products','maintenance_items.product_id','=','products.id')->where('maintenaces_id', $id)->get();
+        $maintenance = Maintenace::join('vendors', 'maintenaces.vendor_id', '=', 'vendors.id')
+            ->join('vehicles', 'maintenaces.vehicle_id', '=', 'vehicles.id')
+            ->select('maintenaces.*', 'vendors.name as vendor_name', 'vehicles.vehicle_no')
+            ->find($id);
+        $maintenanceItems = MaintenanceItem::join('products', 'maintenance_items.product_id', '=', 'products.id')->where('maintenaces_id', $id)->get();
 
-        return view('maintenances.show', compact('maintenance','maintenanceItems'));
+        return view('maintenances.show', compact('maintenance', 'maintenanceItems'));
         //
     }
 
@@ -133,9 +138,9 @@ class MaintenaceController extends Controller
         }
 
         // Fetch related maintenance items along with product details
-        $maintenanceItems = MaintenanceItem::join('products','maintenance_items.product_id','=','products.id')->where('maintenaces_id', $id)->get();
+        $maintenanceItems = MaintenanceItem::join('products', 'maintenance_items.product_id', '=', 'products.id')->where('maintenaces_id', $id)->get();
 
-        return view('maintenances.edit', compact('vendors','vehicles','maintenance', 'maintenanceItems'));
+        return view('maintenances.edit', compact('vendors', 'vehicles', 'maintenance', 'maintenanceItems'));
         // return view('maintenances.edit',compact([]));
     }
 
@@ -234,6 +239,5 @@ class MaintenaceController extends Controller
         }
 
         return response()->json(['error' => 'Maintenance record not found.'], 404);
-
     }
 }

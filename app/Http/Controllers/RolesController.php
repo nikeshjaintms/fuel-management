@@ -3,11 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RolesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:role-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:role-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+    }
     public function index(){
 
         $roles = Role::get();

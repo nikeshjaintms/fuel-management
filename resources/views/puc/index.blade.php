@@ -38,8 +38,10 @@
                     <div class="card-header">
                         {{-- <a href="{{ route('admin.rto.pdf')}}" class="float-end btn btn-sm btn-rounded btn-info ">PDF</a>
                         <a href="{{ route('admin.rto.export')}}" class=" float-end btn btn-sm btn-rounded btn-success me-2"><i class="fas fa-file-excel"></i> Export</a> --}}
+                        @can('puc-create')
                         <a href="{{ route('admin.puc.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary me-2"><i class="fas fa-plus"></i> PUC Information</a>
-                      <h4 class="card-title">PUC Information</h4>
+                        @endcan
+                        <h4 class="card-title">PUC Information</h4>
                     </div>
                     <div class="card-body">
 
@@ -60,13 +62,17 @@
                               <td>{{$item->vehicle_no }}</td>
                               <td>{{$item->expiry_date }}</td>
                               <td>
+                                @can('puc-edit')
                                 <a href="{{ route('admin.puc.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
+                                @endcan
+                                @can('puc-delete')
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
                                   <i class="fa fa-trash">
                                 </i>
                                 </button>
+                                @endcan
                               </td>
                             </tr>
                             @endforeach

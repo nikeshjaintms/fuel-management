@@ -35,8 +35,10 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
+                        @can('owner-list')
                         <a href="{{ route('admin.owner.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Owner Information</a>
-                      <h4 class="card-title">Owner</h4>
+                        @endcan
+                        <h4 class="card-title">Owner</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -58,16 +60,22 @@
                               <td>{{$item->vehicle_no }}</td>
                               <td>{{$item->customer_name }}</td>
                               <td>
+                                @can('owner-show')
                                 <a href="{{ route('admin.owner.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
+                                @endcan
+                                @can('owner-edit')
                                 <a href="{{ route('admin.owner.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
+                                @endcan
+                                @can('owner-delete')
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
                                   <i class="fa fa-trash">
                                 </i>
                                 </button>
+                                @endcan
                               </td>
                             </tr>
                             @endforeach

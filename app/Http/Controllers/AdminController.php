@@ -4,16 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-use Session;
+
 
 class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+     public function __construct(){
+        $this->middleware('permission:user-list|user-create|user-edit|user-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:user-create', ['only' => ['create','store']]);
+        $this->middleware('permission:user-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:user-delete', ['only' => ['destroy']]);
+     }
 
      public function loginPage(){
          return view('login');
@@ -52,7 +60,7 @@ class AdminController extends Controller
     {
         $roles = Role::get();
         return view('users.create', compact('roles'));
-        
+
     }
 
     /**
@@ -112,12 +120,12 @@ class AdminController extends Controller
         Session::flash('success', 'User updated successfully');
         return redirect()->route('admin.users.index');
     }
-    
+
     public function destroy(Admin $admin, $id)
     {
         $user = Admin::find($id);
         $user->delete();
         return response()->json(['success' => 'User deleted successfully']);
     }
-    
+
 }

@@ -6,10 +6,18 @@ use App\Models\Masterdata;
 use App\Models\Vehicles;
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 class MasterdataController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:owner-list|owner-create|owner-edit|owner-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:owner-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:owner-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:owner-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:owner-payment', ['only' => ['updateEmiPaid']]);
+    }
     public function index()
     {
         $owners = Masterdata::join('vehicles','masterdatas.vehicle_id','=','vehicles.id')

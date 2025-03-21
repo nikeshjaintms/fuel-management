@@ -35,8 +35,10 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
+                        @can('loan-create')
                         <a href="{{ route('admin.loan.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Owner Information</a>
-                      <h4 class="card-title">Loan</h4>
+                        @endcan
+                        <h4 class="card-title">Loan</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -74,16 +76,22 @@
                                 @endif
                               </td>
                               <td>
+                                @can('loan-show')
                                 <a href="{{ route('admin.loan.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
+                                @endcan
+                                @can('loan-edit')
                                 <a href="{{ route('admin.loan.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
+                                @endcan
+                                @can('loan-delete')
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
                                   <i class="fa fa-trash">
                                 </i>
                                 </button>
+                                @endcan
                               </td>
                             </tr>
                             @endforeach

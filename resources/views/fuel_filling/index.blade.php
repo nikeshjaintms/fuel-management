@@ -38,8 +38,10 @@
                     <div class="card-header">
                         <a href="{{ route('admin.fuel_filling.pdf')}}" class="float-end btn btn-sm btn-rounded btn-info ">PDF</a>
                         <a href="{{ route('admin.fuel_filling.export')}}" class=" float-end btn btn-sm btn-rounded btn-success me-2"><i class="fas fa-file-excel"></i> Export</a>
+                        @can('fuel-filling-create')
                         <a href="{{ route('admin.fuel_filling.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary me-2"><i class="fas fa-plus"></i> Fuel Filling Information</a>
-                      <h4 class="card-title">Add Fuel Fillings Information</h4>
+                        @endcan
+                        <h4 class="card-title">Add Fuel Fillings Information</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -106,16 +108,22 @@
                               <td>{{$item->filling_date }}</td>
                               <td>{{$item->quantity }}</td>
                               <td>
+                                @can('fuel-filling-show')
                                 <a href="{{ route('admin.fuel_filling.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
+                                @endcan
+                                @can('fuel-filling-edit')
                                 <a href="{{ route('admin.fuel_filling.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
+                                @endcan
+                                @can('fuel-filling-delete')
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
                                   <i class="fa fa-trash">
                                 </i>
                                 </button>
+                                @endcan
                               </td>
                             </tr>
                             @endforeach

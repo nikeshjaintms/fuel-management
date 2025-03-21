@@ -7,8 +7,8 @@ use App\Models\FuelFilling;
 use App\Models\Vehicles;
 use App\Models\Driver;
 use App\Models\Customer;
-use Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Mpdf\Mpdf;
 
 
@@ -17,6 +17,12 @@ class FuelFillingController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct(){
+        $this->middleware('permission:fuel-filling-list|fuel-filling-create|fuel-filling-edit|fuel-filling-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:fuel-filling-create', ['only' => ['create','store']]);
+        $this->middleware('permission:fuel-filling-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:fuel-filling-delete', ['only' => ['destroy']]);
+     }
     public function index()
     {
         $vehicles = Vehicles::get();

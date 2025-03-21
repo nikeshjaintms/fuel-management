@@ -46,13 +46,15 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div class="row">
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
+                        @can('user-create')
                         <a href="{{ route('admin.users.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> User</a>
-                      <h4 class="card-title">Users</h4>
+                        @endcan
+                        <h4 class="card-title">Users</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -78,15 +80,21 @@
                                 @endforeach
                               </td>
                               <td>
+                                @can('user-show')
                                 <a href="{{ route('admin.users.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
+                                @endcan
+                                @can('user-edit')
                                 <a href="{{ route('admin.users.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
+                                @endcan
+                                @can('user-delete')
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
                                   <i class="fa fa-trash">
                                 </i>
+                                @endcan
                                 </button>
                               </td>
                             </tr>

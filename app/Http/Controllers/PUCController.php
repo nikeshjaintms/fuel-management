@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\PUC;
 use App\Models\Vehicles;
 use Illuminate\Http\Request;
-use Session;
+use Illuminate\Support\Facades\Session;
 class PUCController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('permission:puc-list|puc-create|puc-edit|puc-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:puc-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:puc-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:puc-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $pucs = PUC::join('vehicles', 'p_u_c_s.vehicle_id', '=','vehicles.id')

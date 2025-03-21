@@ -5,13 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Policy;
 use App\Models\Vehicles;
 use Illuminate\Http\Request;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 class PolicyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('permission:policy-list|policy-create|policy-edit|policy-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:policy-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:policy-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:policy-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:policy-payment', ['only' => ['updateEmiPaid']]);
+    }
     public function index()
     {
         $polices = Policy::join('vehicles', 'policies.vehicle_id','=','vehicles.id')

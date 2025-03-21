@@ -50,8 +50,10 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
+                        @can('maintenance-list')
                         <a href="{{ route('admin.maintenance.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Maintenance Information</a>
-                      <h4 class="card-title">Add Maintenance Information</h4>
+                        @endcan
+                        <h4 class="card-title">Add Maintenance Information</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -82,16 +84,22 @@
                                 @endif
                               </td>
                               <td>
+                                @can('maintenance-show')
                                 <a href="{{ route('admin.maintenance.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
+                                @endcan
+                                @can('maintenance-edit')
                                 <a href="{{ route('admin.maintenance.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
+                                @endcan
+                                @can('maintenance-delete')
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
                                   <i class="fa fa-trash">
                                 </i>
                                 </button>
+                                @endcan
                               </td>
                             </tr>
                             @endforeach

@@ -38,8 +38,10 @@
                     <div class="card-header">
                         {{-- <a href="{{ route('admin.rto.pdf')}}" class="float-end btn btn-sm btn-rounded btn-info ">PDF</a>
                         <a href="{{ route('admin.rto.export')}}" class=" float-end btn btn-sm btn-rounded btn-success me-2"><i class="fas fa-file-excel"></i> Export</a> --}}
+                        @can('policy-create')
                         <a href="{{ route('admin.policy.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary me-2"><i class="fas fa-plus"></i> Insurance Policy</a>
-                      <h4 class="card-title">Insurance Policy</h4>
+                        @endcan
+                        <h4 class="card-title">Insurance Policy</h4>
                     </div>
                     <div class="card-body">
 
@@ -62,13 +64,17 @@
                               <td>{{$item->policy_no }}</td>
                               <td>{{$item->expiry_date }}</td>
                               <td>
+                                @can('policy-edit')
                                 <a href="{{ route('admin.policy.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
+                                @endcan
+                                @can('policy-delete')
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
                                   <i class="fa fa-trash">
                                 </i>
                                 </button>
+                                @endcan
                               </td>
                             </tr>
                             @endforeach

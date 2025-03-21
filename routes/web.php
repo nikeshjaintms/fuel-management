@@ -196,6 +196,19 @@ Route::middleware('auth:admin')->group(function () {
         Route::delete('/invoice/delete/{id}', 'destroy')->name('admin.invoice.destroy');
     });
 
+
+    Route::controller(App\Http\Controllers\ContractController::class)->group(function(){
+        Route::get('/contract', 'index')->name('admin.contract.index');
+        Route::get('/contract/create', 'create')->name('admin.contract.create');
+        Route::post('/contract/create','store')->name('admin.contract.store');
+        Route::get('/contract/{id}', 'show')->name('admin.contract.show');
+        Route::get('/contract/{id}/edit', 'edit')->name('admin.contract.edit');
+        Route::put('/contract/{id}/edit', 'update')->name('admin.contract.update');
+        Route::delete('/contract/delete/{id}', 'destroy')->name('admin.contract.destroy');
+        Route::post('/contract/checkVehicle', 'checkVehicleAvailability')->name('admin.contract.checkVehicle');
+        Route::post('/contract/checkContract', 'checkContract')->name('admin.contract.checkContract');
+    });
+
     Route::controller(App\Http\Controllers\RolesController::class)->group(function() {
         Route::get('/roles', 'index')->name('admin.roles.index');
         Route::get('/roles/create', 'create')->name('admin.roles.create');

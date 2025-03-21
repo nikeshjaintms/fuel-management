@@ -68,8 +68,10 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
+                        @can('driver-create')
                         <a href="{{ route('admin.driver.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Driver Information</a>
-                      <h4 class="card-title">Add Drivers Information</h4>
+                        @endcan
+                        <h4 class="card-title">Add Drivers Information</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -88,16 +90,22 @@
                               <td>{{$item->id }}</td>
                               <td>{{$item->driver_name }}</td>
                               <td>
+                                @can('driver-show')
                                 <a href="{{ route('admin.driver.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
+                                @endcan
+                                @can('driver-edit')
                                 <a href="{{ route('admin.driver.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
+                                @endcan
+                                @can('driver-delete')
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
                                   <i class="fa fa-trash">
                                 </i>
                                 </button>
+                                @endcan
                               </td>
                             </tr>
                             @endforeach

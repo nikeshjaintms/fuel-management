@@ -5,13 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Fitness;
 use App\Models\Vehicles;
 use Illuminate\Http\Request;
-use Session;
+use Illuminate\Support\Facades\Session;
+
 
 class FitnessController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+     public function __construct(){
+        $this->middleware('permission:fitness-list|fitness-create|fitness-edit|fitness-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:fitness-create', ['only' => ['create','store']]);
+        $this->middleware('permission:fitness-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:fitness-delete', ['only' => ['destroy']]);
+     }
     public function index()
     {
         $fitnesses = Fitness::join('vehicles', 'fitnesses.vehicle_id','=','vehicles.id')

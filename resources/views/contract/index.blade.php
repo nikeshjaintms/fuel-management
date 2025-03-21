@@ -6,26 +6,11 @@
 
 @section('content-page')
 
-{{-- @if (!empty($alerts))
-    <script>
-        window.onload = function() {
-            let alerts = @json($alerts);
-            console.log(alerts);
-            alerts.forEach(function(alert) {
-                Swal.fire({
-                    title: 'Reminder',
-                    text: alert,
-                    icon: 'info',
-                    confirmButtonText: 'Okay'
-                });
-            });
-        };
-    </script>
-@endif --}}
+
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Invoices</h3>
+                <h3 class="fw-bold mb-3">Contract</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ route('index') }}">
@@ -36,13 +21,13 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.invoice.index')}}">Invoices</a>
+                        <a href="{{ route('admin.contract.index')}}">Contract</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Invoices</a>
+                        <a href="#">Contract</a>
                     </li>
                 </ul>
             </div>
@@ -50,8 +35,8 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
-                        <a href="{{ route('admin.invoice.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Driver Information</a>
-                      <h4 class="card-title">Generate Invoice</h4>
+                        <a href="{{ route('admin.contract.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Contract</a>
+                      <h4 class="card-title">Contract</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -59,21 +44,26 @@
                           <thead>
                             <tr>
                               <th>Id</th>
-                              <th>Driver Name</th>
-                            <th>Action</th>
-
+                              <th>Client</th>
+                              <th>Contract No</th>
+                              <th>Start Date</th>
+                              <th>End Date</th>
+                              <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            @foreach ($drivers as $item)
+                            @foreach ($contracts as $item)
                             <tr>
                               <td>{{$item->id }}</td>
-                              <td>{{$item->driver_name }}</td>
+                              <td>{{$item->cname }}</td>
+                              <td>{{$item->contract_no }}</td>
+                              <td>{{$item->start_date }}</td>
+                              <td>{{$item->end_date }}</td>
                               <td>
-                                <a href="{{ route('admin.invoice.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                <a href="{{ route('admin.contract.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
-                                <a href="{{ route('admin.invoice.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
+                                <a href="{{ route('admin.contract.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
@@ -97,7 +87,7 @@
 
 <script>
     function deletevehicle_info(id) {
-        var url = '{{ route("admin.invoice.destroy", "id") }}'.replace("id", id);
+        var url = '{{ route("admin.contract.destroy", "id") }}'.replace("id", id);
 
         Swal.fire({
             title: 'Are you sure?',

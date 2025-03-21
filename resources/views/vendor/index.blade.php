@@ -76,8 +76,10 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
+                        @can('vendor-create')
                         <a href="{{ route('admin.vendor.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Vendor</a>
-                      <h4 class="card-title">Vendor</h4>
+                        @endcan
+                        <h4 class="card-title">Vendor</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
@@ -101,16 +103,22 @@
                               <td>{{$item->email }}</td>
                               <td>{{$item->phone_number }}</td>
                               <td>
+                                @can('vendor-show')
                                 <a href="{{ route('admin.vendor.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
+                                @endcan
+                                @can('vendor-edit')
                                 <a href="{{ route('admin.vendor.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
+                                @endcan
+                                @can('vendor-delete')
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
                                   <i class="fa fa-trash">
                                 </i>
                                 </button>
+                                @endcan
                               </td>
                             </tr>
                             @endforeach

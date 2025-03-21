@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehicles;
 use Auth;
-use Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -18,11 +18,10 @@ class VehiclesController extends Controller
      */
     public function __construct()
     {
-        if (Auth::guard('admin')->check()) {
-            return redirect()->route('index');
-        } else {
-            return redirect()->route('login');
-        }
+        $this->middleware('permission:vehicle-list|vehicle-create|vehicle-edit|vehicle-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:vehicle-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:vehicle-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:vehicle-delete', ['only' => ['destroy']]);
     }
 
     public function import(Request $request){

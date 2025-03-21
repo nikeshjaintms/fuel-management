@@ -86,7 +86,9 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
+                        @can('vehicle-create')
                         <a href="{{ route('admin.vehicles.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary "><i class="fas fa-plus"></i> Vehicle Information</a>
+                        @endcan
                         <a href="{{ route('admin.vehicles.export')}}" class=" float-end btn btn-sm btn-rounded btn-success me-2"><i class="fas fa-file-excel"></i> Export</a>
                       <h4 class="card-title">Add Vehicle Information</h4>
                     </div>
@@ -110,16 +112,22 @@
                               <td>{{$item->vehicle_engine_no }}</td>
                               <td>{{$item->vehicle_chassis_no }}</td>
                               <td>
+                                @can('vehicle-show')
                                 <a href="{{ route('admin.vehicles.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">
                                 </i></a>
+                                @endcan
+                                @can('vehicle-edit')
                                 <a href="{{ route('admin.vehicles.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-edit">
                                 </i></a>
+                                @endcan
+                                @can('vehicle-delete')
                                 <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
                                   <i class="fa fa-trash">
                                 </i>
                                 </button>
+                                @endcan
                               </td>
                             </tr>
                             @endforeach

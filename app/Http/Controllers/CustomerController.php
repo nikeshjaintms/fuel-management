@@ -5,25 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\CustomerType;
 use Illuminate\Http\Request;
-use Session;
+use Illuminate\Support\Facades\Session;
 use App\Imports\CustomerImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+
+        $this->middleware('permission:customer-list|customer-create|customer-edit|customer-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:customer-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:customer-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:customer-delete', ['only' => ['destroy']]);
+    }
 
     public function import(Request $request)
     {
-        if($request->file('file')){
+        if ($request->file('file')) {
             Excel::import(new CustomerImport, $request->file('file'));
             Session::flash('success', 'File imported successfully');
             return redirect()->route('admin.customer_info.index');
         }
-        return back()->with('error','Please Select a File');
+        return back()->with('error', 'Please Select a File');
     }
+
     public function index()
     {
         $customers = Customer::all();
@@ -31,7 +37,7 @@ class CustomerController extends Controller
         //
     }
 
-     public function customerGst(Request $request)
+    public function customerGst(Request $request)
     {
         // Check if the GST number already exists in the database
         $gstExists = Customer::where('customer_gst', $request->value)->exists();
@@ -99,7 +105,7 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Customer $Customer,$id)
+    public function update(Request $request, Customer $Customer, $id)
     {
         $update = Customer::find($id);
         $update->update([
