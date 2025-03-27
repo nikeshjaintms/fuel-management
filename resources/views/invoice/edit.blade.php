@@ -8,7 +8,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Contract</h3>
+                <h3 class="fw-bold mb-3">Invoice</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ route('index') }}">
@@ -19,13 +19,13 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.contract.index') }}">Contract</a>
+                        <a href="{{ route('admin.contract.index') }}">Invoice</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Contract</a>
+                        <a href="#">Invoice</a>
                     </li>
                 </ul>
             </div>
@@ -33,7 +33,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title">Edit Contract</div>
+                            <div class="card-title">Edit Invoice</div>
                         </div>
                         <form method="POST" action="{{ route('admin.contract.update', $data->id) }}" id="vehicleForm">
                             @csrf
@@ -97,8 +97,8 @@
                                                     <tr>
                                                         <th>Vehicle No</th>
                                                         <th>Bus Type</th>
-                                                        <th>Min KM</th>
                                                         <th>Rate</th>
+                                                        <th>Min KM</th>
                                                         <th>Extra Km Rate</th>
                                                         <th>OT Rate</th>
                                                         <th>Action</th>

@@ -131,7 +131,7 @@ $(document).ready(function () {
             type: "GET",
             dataType: "json",
             success: function (response) {
-                console.log(response); // Debugging: Check if data is received
+                // console.log(response); // Debugging: Check if data is received
 
                 if (response.length > 0) {
                     let notifications = response;

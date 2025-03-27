@@ -11,9 +11,27 @@ use Session;
 
 class ContractController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function getContracts(Request $request)
+    {
+        $contracts = Contract::where('customer_id', $request->customer_id)->orderBy('id','desc')->get();
+        return response()->json($contracts);
+    }
+
+    public function getContractDetails(Request $request)
+{
+    $contract = Contract::where('id', $request->contract_id)->first();
+
+    $vehicles = ContractVehicle::where('contract_id', $request->contract_id)
+        ->join('vehicles', 'contract_vehicles.vehicle_id', '=', 'vehicles.id')
+        ->select('vehicles.id', 'vehicles.vehicle_no', 'contract_vehicles.*')
+        ->get();
+
+    return response()->json([
+        'contract' => $contract,
+        'vehicles' => $vehicles
+    ]);
+}
+
     public function index()
     {
         $contracts = Contract::join('customer_masterdatas', 'contracts.customer_id', '=', 'customer_masterdatas.id')

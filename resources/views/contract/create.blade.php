@@ -92,8 +92,8 @@
                                                     <tr>
                                                         <th>Vehicle No</th>
                                                         <th>Bus Type</th>
-                                                        <th>Rate</th>
                                                         <th>Min KM</th>
+                                                        <th>Rate</th>
                                                         <th>Extra Km Rate</th>
                                                         <th>OT Rate</th>
                                                         <th>Action</th>
