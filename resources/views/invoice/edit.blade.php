@@ -35,59 +35,35 @@
                         <div class="card-header">
                             <div class="card-title">Edit Invoice</div>
                         </div>
-                        <form method="POST" action="{{ route('admin.contract.update', $data->id) }}" id="vehicleForm">
+                        <form method="POST" action="{{ route('admin.invoice.update', $invoices->id ) }}" id="vehicleForm">
                             @csrf
-                            @method('PUT')
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="driver_name">Customer<span style="color: red">*</span></label>
-                                            <select name="customer_id" id="customer_id" class="form-control">
-                                                <option value="">Select Customer</option>
-                                                @foreach ($customers as $customer)
-                                                    <option {{ $data->customer_id == $customer->id ? 'selected' : '' }}
-                                                        value="{{ $customer->id }}">{{ $customer->customer_name }}
-                                                        GST:{{ $customer->customer_gst }}</option>
-                                                @endforeach
-                                            </select>
+                                            <input type="text" name="" id=" " value="{{ $invoices->customer_name . ' GST: ' . $invoices->customer_gst }}"class="form-control" readonly>
+
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="contract_no">Contract No<span style="color: red">*</span></label>
-                                            <input type="text" value="{{ $data->contract_no }}" class="form-control"
-                                                name="contract_no" id="contract_no" placeholder="Enter Contract Date"
-                                                required />
+                                            <input type="text" name="" id="" value="{{ $invoices->contract_no }}" class="form-control" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="contract_date">Contract Date<span
-                                                    style="color: red">*</span></label>
-                                            <input type="date" value="{{ $data->contract_date }}" class="form-control"
-                                                name="contract_date" id="contract_date" placeholder="Enter Contract Date"
-                                                required />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <h5>Journey Date</h5>
+                                            <label for="invoice_no">Invoice NO<span style="color: red">*</span></label>
+                                            <input type="text" class="form-control" name="invoice_no" id="invoice_no"
+                                                placeholder="Enter Invoice" readonly value="{{ $invoices->invoice_no }}" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="start_date">From<span style="color: red">*</span></label>
-                                            <input type="date" value="{{ $data->start_date }}" class="form-control"
-                                                name="start_date" id="start_date" placeholder="Enter Contract Date"
-                                                required />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="journey_date_from">To<span style="color: red">*</span></label>
-                                            <input type="date" value="{{ $data->end_date }}" class="form-control"
-                                                name="end_date" id="end_date" placeholder="Enter Contract Date" required />
+                                            <label for="invoice_date">Invoice Date<span style="color: red">*</span></label>
+                                            <input type="date" class="form-control" name="invoice_date" id="invoice_date"
+                                                placeholder="Enter Contract Date" readonly value="{{ $invoices->invoice_date }}" required />
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -96,60 +72,99 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Vehicle No</th>
-                                                        <th>Bus Type</th>
-                                                        <th>Rate</th>
                                                         <th>Min KM</th>
+                                                        <th>Rate</th>
                                                         <th>Extra Km Rate</th>
+                                                        <th>Extra Km Drive</th>
+                                                        <th>Total Drive</th>
+                                                        <th>Extra km Amount</th>
                                                         <th>OT Rate</th>
-                                                        <th>Action</th>
+                                                        <th>OT</th>
+                                                        <th>OT Amount</th>
                                                     </tr>
+                                                    @foreach ($contract_vehicles as $item)
+                                                        @foreach ($invoice_vehicles as $iv)
+                                                            <tr>
+                                                                <td><input type="text"   class="form-control " readonly value="{{ $iv->vehicle_no }}"  id=""></td>
+                                                                <td><input type="text"   class="form-control min_km "readonly value="{{ $item->min_km }}" name="min_km[]" id="min_km"></td>
+                                                                <td><input type="text"   class="form-control rate " readonly value="{{ $item->rate }}"  name="rate[]" id="rate"></td>
+                                                                <td><input type="text"   class="form-control extra-km-rate" readonly value="{{ $item->extra_km_rate }}"  name="extra_km_rate[]" id="extra_km_rate"></td>
+                                                                <td><input type="number" class="form-control extra_km_drive" readonly value="{{ $iv->extra_km_drive }}" name="extra_km_drive[]" id="extra_km_drive" class="form-control extra_km_drive" ></td>
+                                                                <td><input type="text"   class="form-control" value="{{ $iv->km_drive }}" name="km_drive[]" ></td>
+                                                                <td><input type="text"   class="form-control total_extra_km_amount" readonly value="{{ $iv->total_extra_km_amount }}" name="total_extra_km_amount[]" id=""></td>
+                                                                <td><input type="text"   class="form-control rate_per_hour" readonly value="{{ $item->rate_per_hour }}" name="rate_per_hour[]" id="rate_per_hour"></td>
+                                                                <td><input type="text"   class="form-control overtime" name="overtime[]" value="{{ $iv->overtime }}" id="overtime"></td>
+                                                                <td><input type="text"   class="form-control overtime_amount" readonly value="{{ $iv->overtime_amount }}" name="overtime_amount[]" id="overtime_amount"></td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endforeach
                                                 </thead>
                                                 <tbody id="vehicle-body">
-                                                    @foreach ($cvehicles as $cv)
-                                                        <tr class="vehicle-row">
-                                                            <td>
-                                                                <select class="form-control" name="vehicle_id[]" required>
-                                                                    <option value="">Select Vehicle</option>
-                                                                    @foreach ($vehicles as $vehicle)
-                                                                        <option
-                                                                            {{ $cv->vehicle_id == $vehicle->id ? 'selected' : '' }}
-                                                                            value="{{ $vehicle->id }}">
-                                                                            {{ $vehicle->vehicle_no }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </td>
-                                                            <td>
-                                                                <select name="type[]" class="form-control" required>
-                                                                    <option value="">Select Type</option>
-                                                                    <option {{ $cv->type == 'A.C' ? 'selected' : '' }}
-                                                                        value="A.C">A.C</option>
-                                                                    <option {{ $cv->type == 'Non A/C' ? 'selected' : '' }}
-                                                                        value="Non A/C">Non A/C</option>
-                                                                </select>
-                                                            </td>
-                                                            <td><input type="number" value="{{ $cv->min_km }}"
-                                                                    name="min_km[]" class="form-control" required></td>
-                                                            <td><input type="text" name="rate[]"
-                                                                    value="{{ $cv->rate }}" class="form-control rate"
-                                                                    required></td>
-                                                            <td><input type="text" name="extra_km_rate[]"
-                                                                    value="{{ $cv->extra_km_rate }}"
-                                                                    class="form-control extra-km-rate" required></td>
-                                                            <td><input type="text" name="rate_per_hour[]"
-                                                                    value="{{ $cv->rate_per_hour }}"
-                                                                    class="form-control extra-km-amount" required></td>
-                                                            <td>
-                                                                <button type="button"
-                                                                    class="btn btn-success add-vehicle">+</button>
-                                                                <button type="button"
-                                                                    class="btn btn-danger remove-vehicle d-none">−</button>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
+
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Total KM</label>
+                                            <input type="text" readonly name="total_km" value="{{ $invoices->total_km }}"  id="total_km"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Diesel differenes rate</label>
+                                            <input type="text" name="diesel_diff_rate" value="{{ $invoices->diesel_diff_rate }}" id="diesel_diff_rate"
+                                                class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Diesel COST</label>
+                                            <input type="text" readonly name="diesel_cost" value="{{ $invoices->diesel_cost }}" id="diesel_cost"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Subtotal</label>
+                                            <input type="text" readonly name="grand_subtotal" value="{{ $invoices->grand_subtotal }}" id="grand_subtotal"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">GST Type</label>
+                                            <select class="form-control" name="tax_type" required>
+                                                <option value="">Select GST Type</option>
+                                                <option {{$invoices->tax_type ==  'cgst/sgst'  ? 'selected' : '' }} value="cgst/sgst">CGST/SGST</option>
+                                                <option {{$invoices->tax_type ==  'igst' ? 'selected' : '' }} value="igst">IGST</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">TAX</label>
+                                            <input type="text" name="tax" id="tax" value="{{ $invoices->tax }}" class="form-control"
+                                                required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">Tax Amount</label>
+                                            <input type="text" name="tax_amount" id="tax_amount" readonly value="{{ $invoices->tax_amount }}"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">Total Amount</label>
+                                            <input type="text" readonly name="total_amount" id="total_amount" value="{{ $invoices->total_amount }}"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="card-action">
                                     <button class="btn btn-success" type="submit">Submit</button>
@@ -164,177 +179,298 @@
 @endsection
 
 @section('footer-script')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-    {{-- <script src="{{ asset('backend/assets/js/select2.min.js') }}"></script> --}}
 
-    <script>
-        $(document).ready(function () {
-    function updateButtons() {
-        $("#vehicle-body .vehicle-row").each(function (index) {
-            var addBtn = $(this).find(".add-vehicle");
-            var removeBtn = $(this).find(".remove-vehicle");
-
-            // Ensure only the last row has "+"
-
-
-            // Show "-" button for all except the first row
-            if (index === 0) {
-
-                removeBtn.addClass("d-none");
-            } else {
-                addBtn.addClass("d-none");
-                removeBtn.removeClass("d-none").show();
-            }
-        });
-    }
-
-    // Add a new vehicle row
-    $(document).on("click", ".add-vehicle", function () {
-        var row = $(".vehicle-row:first").clone(); // Clone the first row
-        row.find("input, select").val(""); // Clear input values
-
-        // Ensure newly cloned row has remove button visible
-        row.find(".add-vehicle").hide(); // Hide "+" in cloned row
-        row.find(".remove-vehicle").removeClass("d-none").show(); // Show "-" button
-
-        $("#vehicle-body").append(row); // Append new row
-        updateButtons(); // Update button visibility
-    });
-
-    // Remove vehicle row
-    $(document).on("click", ".remove-vehicle", function () {
-        $(this).closest(".vehicle-row").remove();
-        updateButtons(); // Update button visibility
-    });
-
-    // Initial check on page load
-    updateButtons();
-});
-    </script>
     <script>
         $(document).ready(function() {
-            // Custom method to check duplicate vehicle selection
-            $.validator.addMethod("uniqueVehicle", function(value, element) {
-                var selectedVehicles = [];
-                var isValid = true;
+            $('#customer_id').on('change', function() {
+                var customerId = $(this).val(); // Get selected customer ID
 
-                $("select[name='vehicle_id[]']").each(function() {
-                    var vehicleVal = $(this).val();
-                    if (vehicleVal !== "") {
-                        if (selectedVehicles.includes(vehicleVal)) {
-                            isValid = false;
-                        } else {
-                            selectedVehicles.push(vehicleVal);
+                if (customerId) {
+                    $.ajax({
+                        url: "{{ route('admin.getContracts') }}", // Route to fetch contracts
+                        type: "GET",
+                        data: {
+                            customer_id: customerId
+                        }, // Send customer ID
+                        success: function(response) {
+                            var contractDropdown = $('select[name="contract_id"]');
+                            contractDropdown.empty();
+                            contractDropdown.append(
+                                '<option value="">Select Contract</option>');
+
+                            if (response.length > 0) {
+                                $.each(response, function(key, contract) {
+                                    contractDropdown.append('<option value="' + contract
+                                        .id + '">' + contract.contract_no +
+                                        '</option>');
+                                });
+                            } else {
+                                contractDropdown.append(
+                                    '<option value="">No Contracts Found</option>');
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    $('select[name="contract_id"]').html('<option value="">Select Contract</option>');
+                }
+            });
+            $('select[name="contract_id"]').on('change', function() {
+                var contractId = $(this).val();
+                if (contractId) {
+                    $.ajax({
+                        url: "{{ route('admin.getContractDetails') }}", // Ensure this route is correct
+                        type: "GET",
+                        data: {
+                            contract_id: contractId
+                        },
+                        success: function(response) {
+                            console.log(response); // Log the response for debugging
+                            var vehicleBody = $('#vehicle-body');
+                            vehicleBody.empty(); // Clear existing rows
 
-                return isValid;
+                            if (response.vehicles.length > 0) {
+                                $.each(response.vehicles, function(index, vehicle) {
+                                    var newRow = `<tr class="vehicle-row">
+                                        <td>
+                                            <select class="form-control" readonly name="vehicle_id[]" required>
+                                                <option value="${vehicle.vehicle_id}" selected>${vehicle.vehicle_no}</option>
+                                            </select>
+                                        </td>
+                                        <td><input type="number" readonly name="min_km[]" class="form-control min_km" value="${vehicle.min_km}" ></td>
+                                        <td><input type="text" readonly name="rate[]" class="form-control rate" value="${vehicle.rate}" ></td>
+                                        <td><input type="text" readonly name="extra_km_rate[]" class="form-control extra-km-rate" value="${vehicle.extra_km_rate}" ></td>
+                                        <td><input type="number" readonly name="extra_km_drive[]" class="form-control extra_km_drive" ></td>
+                                        <td><input type="number" name="km_drive[]" class="form-control"></td>
+                                        <td><input type="number" readonly name="total_extra_km_amount[]" class="form-control total_extra_km_amount" ></td>
+                                        <td><input type="text" readonly name="rate_per_hour[]" class="form-control rate_per_hour" value="${vehicle.rate_per_hour}" ></td>
+                                        <td><input type="number" name="overtime[]" class="form-control overtime"></td>
+                                        <td><input type="number" readonly name="overtime_amount[]" class="form-control overtime_amount" ></td>
+                                    </tr>`;
+                                    vehicleBody.append(newRow);
+                                });
+                            } else {
+                                vehicleBody.append(
+                                    '<tr><td colspan="10" class="text-center">No Vehicles Found</td></tr>'
+                                );
+                            }
+
+                        }
+                    });
+                }
             });
 
+
+            $(document).on("input", "input[name='km_drive[]']", function() {
+                var currentRow = $(this).closest("tr");
+                var kmDrive = parseFloat($(this).val()) || 0;
+                var minKm = parseFloat(currentRow.find("input[name='min_km[]']").val()) || 0;
+
+                if (kmDrive <= minKm) {
+                    currentRow.find("input[name='extra_km_drive[]']").val(0);
+                } else {
+                    var extraKmDrive = kmDrive - minKm;
+                    currentRow.find("input[name='extra_km_drive[]']").val(extraKmDrive);
+                }
+            });
+
+            function updateExtraKmAmount(row) {
+                var extraKmDrive = parseFloat(row.find("input[name='extra_km_drive[]']").val()) || 0;
+                var extraKmRate = parseFloat(row.find("input[name='extra_km_rate[]']").val()) || 0;
+
+                var extraKmAmount = extraKmDrive * extraKmRate;
+                row.find("input[name='total_extra_km_amount[]']").val(extraKmAmount.toFixed(
+                    2)); // Set with 2 decimal places
+            }
+
+            // Trigger calculation when km_drive or extra_km_rate changes
+            $(document).on("input", "input[name='km_drive[]'], input[name='extra_km_rate[]']", function() {
+                var currentRow = $(this).closest("tr");
+                updateExtraKmAmount(currentRow);
+                updateTotalKM();
+                calculateSubtotal();
+            calculateTaxAndTotal();
+
+
+            });
+
+            function updateOtAmount(row) {
+                var overtime = parseFloat(row.find("input[name='overtime[]']").val()) || 0;
+                var ratePerHour = parseFloat(row.find("input[name='rate_per_hour[]']").val()) || 0;
+
+                var otAmount = overtime * ratePerHour;
+                row.find("input[name='overtime_amount[]']").val(otAmount.toFixed(2)); // Set with 2 decimal places
+            }
+
+            // Trigger calculation when overtime or rate_per_hour changes
+            $(document).on("input", "input[name='overtime[]'], input[name='rate_per_hour[]']", function() {
+                var currentRow = $(this).closest("tr");
+                updateOtAmount(currentRow);
+                updateTotalKM();
+                updateDieselCost();
+                calculateSubtotal();
+            calculateTaxAndTotal();
+
+
+            });
+
+            function updateTotalKM() {
+                var totalKM = 0;
+
+                $("input[name='km_drive[]']").each(function() {
+                    var kmValue = parseFloat($(this).val()) || 0;
+                    totalKM += kmValue;
+                });
+
+                $("#total_km").val(totalKM);
+            }
+
+            // Trigger the function when any "km_drive[]" input changes
+            $(document).on("input", "input[name='km_drive[]']", function() {
+                updateTotalKM();
+                updateDieselCost();
+                calculateSubtotal();
+            calculateTaxAndTotal();
+            });
+
+            function updateDieselCost() {
+                var totalKM = parseFloat($("#total_km").val()) || 0;
+                var dieselRate = parseFloat($("#diesel_diff_rate").val()) || 0;
+
+                var dieselCost = totalKM * dieselRate;
+                $("#diesel_cost").val(dieselCost.toFixed(2)); // Set value with 2 decimal places
+            }
+
+            // Trigger function when "diesel_diff_rate" or "total_km" changes
+            $(document).on("input", "#diesel_diff_rate, #total_km", function() {
+                updateDieselCost();
+                calculateSubtotal();
+            calculateTaxAndTotal();
+
+            });
+
+
             // Custom validator for date comparison
+            function calculateSubtotal() {
+                var totalRate = 0,
+                    totalExtraKmAmount = 0,
+                    totalOtAmount = 0;
+                var dieselCost = parseFloat($("#diesel_cost").val()) || 0;
+
+                console.log("Diesel Cost:", dieselCost);
+
+                $(".rate").each(function() {
+                    totalRate += parseFloat($(this).val()) || 0;
+                });
+
+                $(".total_extra_km_amount").each(function() {
+                    totalExtraKmAmount += parseFloat($(this).val()) || 0;
+                });
+
+                $(".overtime_amount").each(function() {
+                    totalOtAmount += parseFloat($(this).val()) || 0;
+                });
+
+                var subtotal = totalRate + totalExtraKmAmount + totalOtAmount - dieselCost;
+                console.log("Subtotal:", subtotal);
+
+                var $grandSubtotal = $("#grand_subtotal");
+                if ($grandSubtotal.length > 0) {
+                    $grandSubtotal.val(subtotal.toFixed(2));
+                } else {
+                    console.error("Element #grand_subtotal not found!");
+                }
+            }
+
+            // Event listener for input changes
+            $(document).on("keyup", ".rate, .total_extra_km_amount, .overtime_amount, #diesel_cost", function() {
+                calculateSubtotal();
+            calculateTaxAndTotal();
+
+            });
+
+            // Initial calculation on page load
+            calculateSubtotal();
+
+            function calculateTaxAndTotal() {
+                var subtotal = parseFloat($("#grand_subtotal").val()) || 0;
+                var taxPercentage = parseFloat($("#tax").val()) || 0;
+
+                var taxAmount = (subtotal * taxPercentage) / 100;
+                $("#tax_amount").val(taxAmount.toFixed(2));
+
+                var totalAmount = subtotal + taxAmount;
+                $("#total_amount").val(totalAmount.toFixed(2));
+            }
+
+            // Trigger calculations when tax input changes
+            $(document).on("input", "#tax", function() {
+                calculateTaxAndTotal();
+            });
+
+            calculateTaxAndTotal();
+
+
             $.validator.addMethod("greaterThan", function(value, element, param) {
                 var startDate = $(param).val();
                 return Date.parse(value) > Date.parse(startDate);
             }, "End date must be after start date");
 
-            // Validate form
-            $("#vehicleForm").validate({
+            $('#vehicleForm').validate({
+                ignore: ":hidden, [readonly]",
                 rules: {
                     customer_id: {
                         required: true
                     },
-                    contract_no: {
+                    contract_id: {
                         required: true
                     },
-                    contract_date: {
+                    invoice_no: {
+                        required: true
+                    },
+                    invoice_date: {
                         required: true,
                         date: true
                     },
-                    start_date: {
+                    diesel_diff_rate: {
                         required: true,
-                        date: true
+                        number: true
                     },
-                    end_date: {
+                    tax: {
                         required: true,
-                        date: true,
-                        greaterThan: "#start_date"
+                        number: true
                     },
-                    "vehicle_id[]": {
-                        required: true,
-                        uniqueVehicle: true
-                    },
-                    "type[]": {
+                    tax_type: {
                         required: true
-                    },
-                    "min_km[]": {
-                        required: true,
-                        number: true,
-                        min: 1
-                    },
-                    "rate[]": {
-                        required: true,
-                        number: true,
-                        min: 0
-                    },
-                    "extra_km_rate[]": {
-                        required: true,
-                        number: true,
-                        min: 0
-                    },
-                    "rate_per_hour[]": {
-                        required: true,
-                        number: true,
-                        min: 0
                     }
                 },
                 messages: {
                     customer_id: {
-                        required: "Please select a customer"
+                        required: "Please select a customer."
                     },
-                    contract_no: {
-                        required: "Please enter contract number"
+                    contract_id: {
+                        required: "Please select a contract."
                     },
-                    contract_date: {
-                        required: "Please select a valid contract date"
+                    invoice_no: {
+                        required: "Please enter an invoice number."
                     },
-                    start_date: {
-                        required: "Please select a journey start date"
+                    invoice_date: {
+                        required: "Please select an invoice date.",
+                        date: "Please enter a valid date."
                     },
-                    end_date: {
-                        required: "Please select a journey end date",
-                        greaterThan: "End date must be after start date"
+                    diesel_diff_rate: {
+                        required: "Please enter diesel rate.",
+                        number: "Please enter a valid diesel rate."
                     },
-                    "vehicle_id[]": {
-                        required: "Please select a vehicle",
-                        uniqueVehicle: "Duplicate vehicle selection is not allowed"
+                    tax: {
+                        required: "Please enter tax (in Percentage).",
+                        number: "Please enter a valid tax (in Percentage)."
                     },
-                    "type[]": {
-                        required: "Please select a bus type"
-                    },
-                    "min_km[]": {
-                        required: "Please enter minimum km",
-                        number: "Please enter a valid number",
-                        min: "Value must be greater than 0"
-                    },
-                    "rate[]": {
-                        required: "Please enter rate",
-                        number: "Please enter a valid number",
-                        min: "Value must be 0 or greater"
-                    },
-                    "extra_km_rate[]": {
-                        required: "Please enter extra km rate",
-                        number: "Please enter a valid number",
-                        min: "Value must be 0 or greater"
-                    },
-                    "rate_per_hour[]": {
-                        required: "Please enter overtime rate",
-                        number: "Please enter a valid number",
-                        min: "Value must be 0 or greater"
+                    tax_type: {
+                        required: "Please select a tax type."
                     }
                 },
-                errorElement: "span",
                 errorPlacement: function(error, element) {
                     error.addClass("text-danger small");
                     if (element.closest("td").length) {
@@ -351,7 +487,39 @@
                 }
             });
 
+            $('#vehicleForm').on('submit', function(e) {
+                let isValid = true;
 
+                // Loop through each row
+                $('.vehicle-row').each(function() {
+                    let kmDrive = $(this).find('input[name="km_drive[]"]');
+                    let ot = $(this).find('input[name="overtime[]"]');
+
+                    if (!kmDrive.val() || isNaN(kmDrive.val())) {
+                        kmDrive.addClass('is-invalid');
+                        kmDrive.after(
+                            '<span class="text-danger">Please enter extra KM drive.</span>');
+                        isValid = false;
+                    } else {
+                        kmDrive.removeClass('is-invalid');
+                        kmDrive.next('.text-danger').remove();
+                    }
+
+                    if (!ot.val() || isNaN(ot.val())) {
+                        ot.addClass('is-invalid');
+                        ot.after('<span class="text-danger">Please enter OT.</span>');
+                        isValid = false;
+                    } else {
+                        ot.removeClass('is-invalid');
+                        ot.next('.text-danger').remove();
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
         });
     </script>
+
 @endsection

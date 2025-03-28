@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('contract_id');
             $table->string('invoice_no');
             $table->date('invoice_date');
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->decimal('tax');
             $table->decimal('tax_amount');
             $table->decimal('total_amount', 10, 2);
+            $table->enum('status', ['pending', 'paid', 'cancelled']);
             $table->timestamps();
         });
 

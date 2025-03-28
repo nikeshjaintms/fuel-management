@@ -18,7 +18,7 @@
             <i class="icon-arrow-right"></i>
           </li>
           <li class="nav-item">
-            <a href="{{ route('admin.contract.index') }}">Invoice</a>
+            <a href="{{ route('admin.invoice.index') }}">Invoice</a>
           </li>
           <li class="separator">
             <i class="icon-arrow-right"></i>
@@ -32,7 +32,7 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
-              <a href="{{ route('admin.contract.index') }}" class="btn btn-rounded btn-primary float-end" > <i class="fas fa-angle-left"></i> Back</a>
+              <a href="{{ route('admin.invoice.index') }}" class="btn btn-rounded btn-primary float-end" > <i class="fas fa-angle-left"></i> Back</a>
               <h4 class="card-title">Invoice</h4>
             </div>
             <div class="card-body">
@@ -40,27 +40,23 @@
                 <table id="basic-datatables" class="display table table-striped table-hover">
                     <tr>
                       <th>ID</th>
-                      <td>{{ $data->id}}</td>
+                      <td>{{ $invoices->id}}</td>
                     </tr>
                     <tr>
-                        <th>Driver Name</th>
-                        <td>{{ $data->cname}}</td>
+                        <th>Client</th>
+                        <td>{{ $invoices->customer_name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Invoice No</th>
+                        <td>{{ $invoices->invoice_no}}</td>
+                    </tr>
+                    <tr>
+                        <th>Invoice Date</th>
+                        <td>{{ $invoices->invoice_date}}</td>
                     </tr>
                     <tr>
                         <th>Contract No</th>
-                        <td>{{ $data->contract_no}}</td>
-                    </tr>
-                    <tr>
-                        <th>Contract Date</th>
-                        <td>{{ $data->contract_date}}</td>
-                    </tr>
-                    <tr>
-                        <th>Start Date</th>
-                        <td>{{ $data->start_date}}</td>
-                    </tr>
-                    <tr>
-                        <th>End Date</th>
-                        <td>{{ $data->end_date}}</td>
+                        <td>{{ $invoices->contract_no}}</td>
                     </tr>
                 </table>
                 <table id="basic-datatables" class="display table table-striped table-hover">
@@ -70,17 +66,31 @@
                         <th>Min km</th>
                         <th>Rate</th>
                         <th>Extra Rate KM</th>
+                        <th>Extra KM Drive</th>
+                        <th>KM Drive</th>
+                        <th>Total Extra KM Amount</th>
                         <th>Rate Per Hour</th>
+                        <th>Overtime</th>
+                        <th>Overtime Amount</th>
+
                     </tr>
-                    @foreach($vehicles as $vehicle)
-                    <tr>
-                        <td>{{ $vehicle->vehicle_no }}</td>
-                        <td>{{ $vehicle->type }}</td>
-                        <td>{{ $vehicle->min_km }}</td>
-                        <td>{{ $vehicle->rate }}</td>
-                        <td>{{ $vehicle->extra_km_rate }}</td>
-                        <td>{{ $vehicle->rate_per_hour }}</td>
-                    </tr>
+                    @foreach($invoice_vehicles as $vehicle)
+                        @foreach ($contract_vehicles as $item)
+                        <tr>
+                            <td>{{ $vehicle->vehicle_no }}</td>
+                            <td>{{ $item->type }}</td>
+                            <td>{{ $item->min_km }}</td>
+                            <td>{{ $item->rate }}</td>
+                            <td>{{ $item->extra_km_rate }}</td>
+                            <td>{{ $vehicle->extra_km_drive }}</td>
+                            <td>{{ $vehicle->km_drive }}</td>
+                            <td>{{ $vehicle->total_extra_km_amount }}</td>
+                            <td>{{ $item->rate_per_hour }}</td>
+                            <td>{{ $vehicle->overtime }}</td>
+                            <td>{{ $vehicle->overtime_amount }}</td>
+                        </tr>
+                        @endforeach
+
                     @endforeach
                 </table>
               </div>

@@ -191,9 +191,12 @@ Route::middleware('auth:admin')->group(function () {
         Route::get('/invoice/create', 'create')->name('admin.invoice.create');
         Route::post('/invoice/create','store')->name('admin.invoice.store');
         Route::get('/invoice/{id}', 'generate')->name('admin.invoice.generate');
+        Route::get('/invoice/{id}', 'show')->name('admin.invoice.show');
         Route::get('/invoice/edit/{id}', 'edit')->name('admin.invoice.edit');
         Route::put('/invoice/edit/{id}', 'update')->name('admin.invoice.update');
         Route::delete('/invoice/delete/{id}', 'destroy')->name('admin.invoice.destroy');
+        Route::put('invoice/{id}/cancel', 'cancel')->name('admin.invoice.cancel');
+
     });
 
 

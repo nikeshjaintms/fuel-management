@@ -1,7 +1,6 @@
 @extends('layouts.app')
-@if(Auth::guard('admin')->check())
-@section('title','Admin Panel')
-
+@if (Auth::guard('admin')->check())
+    @section('title', 'Admin Panel')
 @endif
 
 @section('content-page')
@@ -21,7 +20,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.contract.index')}}">Invoice</a>
+                        <a href="{{ route('admin.contract.index') }}">Invoice</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
@@ -33,51 +32,75 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                  <div class="card">
-                    <div class="card-header">
-                        <a href="{{ route('admin.contract.create') }}" class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i> Invoice</a>
-                      <h4 class="card-title">Invoice</h4>
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="{{ route('admin.invoice.create') }}"
+                                class=" float-end btn btn-sm btn-rounded btn-primary"><i class="fas fa-plus"></i>
+                                Invoice</a>
+                            <h4 class="card-title">Invoice</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="basic-datatables" class="display table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Client</th>
+                                            <th>Invoice No</th>
+                                            <th>Contract</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($invoices as $item)
+                                            <tr>
+                                                <td>{{ $item->id }}</td>
+                                                <td>{{ $item->customer_name }}</td>
+                                                <td>{{ $item->invoice_no }}</td>
+                                                <td>{{ $item->contract_no }}</td>
+                                                <td>
+                                                    @if ($item->status == 'paid')
+                                                        <span
+                                                            class="badge badge-success">{{ ucfirst($item->status) }}</span>
+                                                    @elseif($item->status == 'cancelled')
+                                                        <span class="badge badge-danger">{{ ucfirst($item->status) }}</span>
+                                                    @else
+                                                        <span
+                                                            class="badge badge-warning">{{ ucfirst($item->status) }}</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <a href="{{ route('admin.invoice.show', $item->id) }}"
+                                                        class="btn btn-lg btn-link btn-primary">
+                                                        <i class="fa fa-eye">
+                                                        </i></a>
+
+                                                    <a href="{{ route('admin.invoice.edit', $item->id) }}"
+                                                        class="btn btn-lg btn-link btn-primary">
+                                                        <i class="fa fa-edit">
+                                                        </i></a>
+                                                    @if ($item->status != 'cancelled')
+                                                        <button onclick="cancelInvoice({{ $item->id }})"
+                                                            class="btn btn-link btn-danger"
+                                                            id="cancel-btn-{{ $item->id }}">
+                                                            <i class="fa fa-ban"></i>
+                                                        </button>
+                                                    @endif
+                                                    <button onclick="deletevehicle_info({{ $item->id }})"
+                                                        class="btn btn-link btn-danger">
+                                                        <i class="fa fa-trash">
+                                                        </i>
+                                                    </button>
+
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                      <div class="table-responsive">
-                        <table id="basic-datatables" class="display table table-striped table-hover">
-                          <thead>
-                            <tr>
-                              <th>Id</th>
-                              <th>Client</th>
-                              <th>Contract No</th>
-                              <th>Start Date</th>
-                              <th>End Date</th>
-                              <th>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            @foreach ($contracts as $item)
-                            <tr>
-                              <td>{{$item->id }}</td>
-                              <td>{{$item->cname }}</td>
-                              <td>{{$item->contract_no }}</td>
-                              <td>{{$item->start_date }}</td>
-                              <td>{{$item->end_date }}</td>
-                              <td>
-                                <a href="{{ route('admin.contract.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
-                                  <i class="fa fa-eye">
-                                </i></a>
-                                <a href="{{ route('admin.contract.edit', $item->id) }}" class="btn btn-lg btn-link btn-primary">
-                                  <i class="fa fa-edit">
-                                </i></a>
-                                <button  onclick="deletevehicle_info({{ $item->id }})" class="btn btn-link btn-danger">
-                                  <i class="fa fa-trash">
-                                </i>
-                                </button>
-                              </td>
-                            </tr>
-                            @endforeach
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
                 </div>
             </div>
         </div>
@@ -85,24 +108,78 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-<script>
-    function deletevehicle_info(id) {
-        var url = '{{ route("admin.contract.destroy", "id") }}'.replace("id", id);
+    <script>
+        function deletevehicle_info(id) {
+            var url = '{{ route('admin.contract.destroy', 'id') }}'.replace("id", id);
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            id: id
+                        },
+                        dataType: 'json',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Driver Information has been deleted.',
+                                    'success'
+                                ).then(() => {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    'Failed to delete Driver Information.',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire(
+                                'Error!',
+                                'An error occurred: ' + xhr.responseText,
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        }
+
+        function cancelInvoice(id) {
+        var url = '{{ route('admin.invoice.cancel', 'id') }}'.replace("id", id);
 
         Swal.fire({
             title: 'Are you sure?',
-            text: 'You won\'t be able to revert this!',
+            text: 'You want to cancel this invoice!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
+            confirmButtonText: 'Yes, cancel it!',
+            cancelButtonText: 'No'
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
                     url: url,
-                    type: 'DELETE',
+                    type: 'PUT',
                     data: {
                         "_token": "{{ csrf_token() }}",
                         id: id
@@ -112,18 +189,22 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
-                        if (response) {
+                        if (response.success) {
                             Swal.fire(
-                                'Deleted!',
-                                'Driver Information has been deleted.',
+                                'Cancelled!',
+                                'Invoice has been cancelled successfully.',
                                 'success'
                             ).then(() => {
-                                window.location.reload();
-                            });
+                                    window.location.reload();
+                                });
+
+                            // Update the status in the table
+                            $("#status-" + id).html('<span class="badge badge-danger">Cancelled</span>');
+                            $("#cancel-btn-" + id).remove(); // Remove the cancel button
                         } else {
                             Swal.fire(
                                 'Failed!',
-                                'Failed to delete Driver Information.',
+                                'Failed to cancel the invoice. Try again.',
                                 'error'
                             );
                         }
@@ -139,9 +220,6 @@
             }
         });
     }
-</script>
+    </script>
 
 @endsection
-
-
-
