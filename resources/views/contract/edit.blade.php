@@ -72,26 +72,6 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <h5>Journey Date</h5>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="start_date">From<span style="color: red">*</span></label>
-                                            <input type="date" value="{{ $data->start_date }}" class="form-control"
-                                                name="start_date" id="start_date" placeholder="Enter Contract Date"
-                                                required />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="journey_date_from">To<span style="color: red">*</span></label>
-                                            <input type="date" value="{{ $data->end_date }}" class="form-control"
-                                                name="end_date" id="end_date" placeholder="Enter Contract Date" required />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
                                             <table id="vehicle-table" class="display table table-striped-rows table-hover">
                                                 <thead>
                                                     <tr>

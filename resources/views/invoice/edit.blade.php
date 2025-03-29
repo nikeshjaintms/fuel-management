@@ -19,7 +19,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.contract.index') }}">Invoice</a>
+                        <a href="{{ route('admin.invoice.index') }}">Invoice</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
@@ -35,8 +35,9 @@
                         <div class="card-header">
                             <div class="card-title">Edit Invoice</div>
                         </div>
-                        <form method="POST" action="{{ route('admin.invoice.update', $invoices->id ) }}" id="vehicleForm">
+                        <form method="POST" target="_blank" action="{{ route('admin.invoice.update', $invoices->id ) }}" id="vehicleForm">
                             @csrf
+                            @method('PUT')
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -68,6 +69,44 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
+                                            <h5>Journey Date</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="start_date">From<span style="color: red">*</span></label>
+                                            <input type="date" class="form-control" name="start_date"
+                                                id="start_date" placeholder="Enter Contract Date" value="{{ $invoices->start_date  }}" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="journey_date_from">To<span style="color: red">*</span></label>
+                                            <input type="date" class="form-control" name="end_date"
+                                                id="end_date" placeholder="Enter Contract Date" value="{{ $invoices->end_date  }}" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <h5>Journey Route</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="from_point">From Pickup Point <span style="color: red">*</span></label>
+                                            <input type="text" class="form-control" name="from_point"
+                                                id="from_point" placeholder="Enter Contract Date" value="{{ $invoices->from_point  }}" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="to_point">To Drop Point<span style="color: red">*</span></label>
+                                            <input type="text" class="form-control" name="to_point"
+                                                id="to_point" placeholder="Enter Contract Date" value="{{ $invoices->to_point  }}" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
                                             <table id="vehicle-table" class="display table table-striped-rows table-hover">
                                                 <thead>
                                                     <tr>
@@ -84,8 +123,11 @@
                                                     </tr>
                                                     @foreach ($contract_vehicles as $item)
                                                         @foreach ($invoice_vehicles as $iv)
-                                                            <tr>
-                                                                <td><input type="text"   class="form-control " readonly value="{{ $iv->vehicle_no }}"  id=""></td>
+                                                        @if($iv->vehicle_id == $item->vehicle_id)                                                           <tr>
+                                                                <td>
+                                                                    <input type="hidden"   value="{{ $iv->vehicle_id }}" name="vehicle_id[]"  id="vehicle_id">
+                                                                    <input type="text"   class="form-control " readonly value="{{ $iv->vehicle_no }}">
+                                                                </td>
                                                                 <td><input type="text"   class="form-control min_km "readonly value="{{ $item->min_km }}" name="min_km[]" id="min_km"></td>
                                                                 <td><input type="text"   class="form-control rate " readonly value="{{ $item->rate }}"  name="rate[]" id="rate"></td>
                                                                 <td><input type="text"   class="form-control extra-km-rate" readonly value="{{ $item->extra_km_rate }}"  name="extra_km_rate[]" id="extra_km_rate"></td>
@@ -96,6 +138,7 @@
                                                                 <td><input type="text"   class="form-control overtime" name="overtime[]" value="{{ $iv->overtime }}" id="overtime"></td>
                                                                 <td><input type="text"   class="form-control overtime_amount" readonly value="{{ $iv->overtime_amount }}" name="overtime_amount[]" id="overtime_amount"></td>
                                                             </tr>
+                                                            @endif
                                                         @endforeach
                                                     @endforeach
                                                 </thead>

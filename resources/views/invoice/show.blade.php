@@ -76,6 +76,7 @@
                     </tr>
                     @foreach($invoice_vehicles as $vehicle)
                         @foreach ($contract_vehicles as $item)
+                        @if ($vehicle->vehicle_id == $item->vehicle_id)
                         <tr>
                             <td>{{ $vehicle->vehicle_no }}</td>
                             <td>{{ $item->type }}</td>
@@ -89,6 +90,7 @@
                             <td>{{ $vehicle->overtime }}</td>
                             <td>{{ $vehicle->overtime_amount }}</td>
                         </tr>
+                        @endif
                         @endforeach
 
                     @endforeach

@@ -9,6 +9,8 @@ use App\Models\Invoice_vehicle;
 use App\Models\Vehicles;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class InvoiceController extends Controller
 {
@@ -36,6 +38,12 @@ class InvoiceController extends Controller
         return view('invoice.create', compact('customers'));
     }
 
+    public function checkContract(Request $request)
+    {
+        $exists = Invoice::where('contract_id', $request->contract_id)->exists();
+        return response()->json(['exists' => $exists]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -43,9 +51,14 @@ class InvoiceController extends Controller
     {
         // dd($request->all());
         $add = new Invoice();
+        $add->customer_id = $request->post('customer_id');
         $add->contract_id = $request->post('contract_id');
         $add->invoice_no = $request->post('invoice_no');
         $add->invoice_date = $request->post('invoice_date');
+        $add->start_date = $request->post('start_date');
+        $add->end_date = $request->post('end_date');
+        $add->from_point = $request->post('from_point');
+        $add->to_point = $request->post('to_point');
         $add->total_km = $request->post('total_km');
         $add->diesel_diff_rate = $request->post('diesel_diff_rate');
         $add->diesel_cost = $request->post('diesel_cost');
@@ -70,27 +83,63 @@ class InvoiceController extends Controller
                 'overtime_amount' => $request->overtime_amount[$i] ?? 0,
             ]);
         }
-        return redirect()->route('admin.invoice.index')->with('success', 'Invoice created successfully');
+        return redirect()->away(route('admin.invoice.getInvoiceDetails', ['id' => $invoice_id]));
+    }
+
+    public function downloadInvoiceDetails($id)
+    {
+        $invoices = Invoice::join('contracts', 'invoices.contract_id', '=', 'contracts.id')
+            ->join('customer_masterdatas', 'contracts.customer_id', '=', 'customer_masterdatas.id')
+            ->select('invoices.*', 'contracts.contract_no','contracts.contract_date' ,'customer_masterdatas.customer_name' ,'customer_masterdatas.customer_address','customer_masterdatas.customer_gst')
+            ->where('invoices.status', '!=', 'cancelled')
+            ->where('invoices.id', $id)
+            ->first();
+
+        if (!$invoices) {
+            return back()->withErrors(['message' => 'Invoice not found']);
+        }
+
+        $invoice_vehicles = Invoice_vehicle::leftjoin('vehicles', 'invoice_vehicle.vehicle_id', '=', 'vehicles.id')
+            ->select('invoice_vehicle.*', 'vehicles.vehicle_no')
+            ->where('invoice_vehicle.invoice_id', $id)
+            ->get();
+        $contract_vehicles = ContractVehicle::where('contract_id', $invoices->contract_id)->get();
+
+        $pdf = Pdf::loadView('invoice.pdf', compact('invoices', 'invoice_vehicles','contract_vehicles'));
+
+
+        return $pdf->stream('invoice_details.pdf');
     }
 
     /**
      * Display the specified resource.
      */
+
+
     public function show(Invoice $invoice, $id)
     {
         $invoices = Invoice::join('contracts', 'invoices.contract_id', '=', 'contracts.id')
             ->join('customer_masterdatas', 'contracts.customer_id', '=', 'customer_masterdatas.id')
             ->select('invoices.*', 'contracts.contract_no', 'customer_masterdatas.customer_name')
-            ->find($id);
-        $invoice_vehicles = Invoice_vehicle::leftjoin('vehicles', 'invoice_vehicle.vehicle_id', '=', 'vehicles.id')
+            ->where('invoices.id', $id)
+            ->first(); // FIXED: Use where() and first() instead of find()
+
+
+            if (!$invoices) {
+                return back()->withErrors(['message' => 'Invoice not found']);
+            }
+
+            $invoice_vehicles = Invoice_vehicle::leftjoin('vehicles', 'invoice_vehicle.vehicle_id', '=', 'vehicles.id')
             ->select('invoice_vehicle.*', 'vehicles.vehicle_no')
             ->where('invoice_vehicle.invoice_id', $id)
+
             ->get();
 
         $contract_vehicles = ContractVehicle::where('contract_id', $invoices->contract_id)->get();
-        // dd([$invoices, $invoice_vehicles, $contract_vehicles]);
+
         return view('invoice.show', compact('invoices', 'invoice_vehicles', 'contract_vehicles'));
     }
+
 
     public function cancel($id)
     {
@@ -106,6 +155,35 @@ class InvoiceController extends Controller
         return response()->json(['success' => true, 'message' => 'Invoice cancelled successfully.']);
     }
 
+
+    public function bulkPayInvoices(Request $request)
+    {
+        if (!$request->has('invoice_ids') || empty($request->invoice_ids)) {
+            return response()->json(['success' => false, 'message' => 'No invoices selected.']);
+        }
+
+        // Count already paid invoices
+        $invalidInvoices = Invoice::whereIn('id', $request->invoice_ids)
+            ->whereIn('status', ['paid', 'cancelled'])
+            ->count();
+
+        if ($invalidInvoices == count($request->invoice_ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Selected invoices are either already paid or cancelled.',
+            ]);
+        }
+
+        // Update only pending invoices to paid
+        Invoice::whereIn('id', $request->invoice_ids)
+            ->where('status', 'pending')
+            ->update([
+                'status' => 'Paid',
+            ]);
+
+        return response()->json(['success' => true, 'message' => 'Invoices marked as paid successfully.']);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -113,16 +191,15 @@ class InvoiceController extends Controller
     {
         $customers = Customer::get();
         $invoices = Invoice::join('contracts', 'invoices.contract_id', '=', 'contracts.id')
-        ->join('customer_masterdatas', 'contracts.customer_id', '=', 'customer_masterdatas.id')
-        ->select('invoices.*', 'contracts.contract_no', 'customer_masterdatas.customer_name')
-        ->find($id);
+            ->join('customer_masterdatas', 'contracts.customer_id', '=', 'customer_masterdatas.id')
+            ->select('invoices.*', 'contracts.contract_no', 'customer_masterdatas.customer_name')
+            ->find($id);
         $invoice_vehicles = Invoice_vehicle::leftjoin('vehicles', 'invoice_vehicle.vehicle_id', '=', 'vehicles.id')
-        ->select('invoice_vehicle.*', 'vehicles.vehicle_no')
-        ->where('invoice_id', $id)->get();
+            ->select('invoice_vehicle.*', 'vehicles.vehicle_no')
+            ->where('invoice_id', $id)->get();
         $contract_vehicles = ContractVehicle::where('contract_id', $invoices->contract_id)->get();
 
-        return view('invoice.edit', compact('customers', 'invoices', 'invoice_vehicles','contract_vehicles'));
-
+        return view('invoice.edit', compact('customers', 'invoices', 'invoice_vehicles', 'contract_vehicles'));
     }
 
     /**
@@ -130,7 +207,13 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, Invoice $invoice, $id)
     {
+        // dd($request->all());
+
         $invoice = Invoice::findOrFail($id);
+        $invoice->start_date = $request->post('start_date');
+        $invoice->end_date = $request->post('end_date');
+        $invoice->from_point = $request->post('from_point');
+        $invoice->to_point = $request->post('to_point');
         $invoice->total_km = $request->post('total_km');
         $invoice->diesel_diff_rate = $request->post('diesel_diff_rate');
         $invoice->diesel_cost = $request->post('diesel_cost');
@@ -139,51 +222,35 @@ class InvoiceController extends Controller
         $invoice->tax = $request->post('tax');
         $invoice->tax_amount = $request->post('tax_amount');
         $invoice->total_amount = $request->post('total_amount');
-        
+
         $invoice->save();
 
+        $invoice_id = $invoice->id;
 
-          // Store vehicle IDs to track which ones were updated/added
+        // Store vehicle IDs to track which ones were updated/added
         $updatedVehicleIds = [];
 
-        if ($request->has('vehicles')) {
-            foreach ($request->vehicles as $vehicle) {
-                $invoiceVehicle = Invoice_vehicle::where('invoice_id', $invoice->id)
-                    ->where('vehicle_id', $vehicle['vehicle_id'])
-                    ->first();
-
-                if ($invoiceVehicle) {
-                    // Update existing record
-                    $invoiceVehicle->update([
-                        'rate' => $vehicle['rate'],
-                        'extra_km_drive' => $vehicle['extra_km_drive'],
-                        'extra_km_rate' => $vehicle['extra_km_rate'],
-                        'total_extra_km_amount' => $vehicle['total_extra_km_amount'],
-                        'overtime' => $vehicle['overtime'],
-                        'rate_per_hour' => $vehicle['rate_per_hour'],
-                        'overtime_amount' => $vehicle['overtime_amount'],
-                    ]);
-                } else {
-                    // Create new record if not exists
-                    $invoiceVehicle = Invoice_vehicle::create([
+        if ($request->has('vehicle_id')) {
+            foreach ($request->vehicle_id as $key => $vehicle_id) {
+                $invoiceVehicle = Invoice_vehicle::updateOrCreate(
+                    [
                         'invoice_id' => $invoice->id,
-                        'vehicle_id' => $vehicle['vehicle_id'],
-                        'rate' => $vehicle['rate'],
-                        'extra_km_drive' => $vehicle['extra_km_drive'],
-                        'extra_km_rate' => $vehicle['extra_km_rate'],
-                        'total_extra_km_amount' => $vehicle['total_extra_km_amount'],
-                        'overtime' => $vehicle['overtime'],
-                        'rate_per_hour' => $vehicle['rate_per_hour'],
-                        'overtime_amount' => $vehicle['overtime_amount'],
-                    ]);
-                }
+                        'vehicle_id' => $vehicle_id,
+                    ],
+                    [
+                        'extra_km_drive' => $request->extra_km_drive[$key] ?? 0,
+                        'km_drive' => $request->km_drive[$key] ?? 0,
+                        'total_extra_km_amount' => $request->total_extra_km_amount[$key] ?? 0,
+                        'overtime' => $request->overtime[$key] ?? 0,
+                        'overtime_amount' => $request->overtime_amount[$key] ?? 0,
+                    ]
+                );
 
                 $updatedVehicleIds[] = $invoiceVehicle->id;
             }
         }
 
-        return redirect()->route('admin.invoice.index')->with('success', 'Invoice updated successfully');
-
+        return redirect()->away(route('admin.invoice.getInvoiceDetails', ['id' => $invoice_id]));;
     }
 
     /**
@@ -191,6 +258,14 @@ class InvoiceController extends Controller
      */
     public function destroy(Invoice $invoice, $id)
     {
-        //
+        $invoice = Invoice::findOrFail($id);
+
+        // Delete associated vehicles
+        Invoice_vehicle::where('invoice_id', $invoice->id)->delete();
+
+        // Delete the invoice
+        $invoice->delete();
+
+        return response()->json(['success' => 'Invoice deleted successfully.']);
     }
 }

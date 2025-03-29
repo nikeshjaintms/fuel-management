@@ -20,7 +20,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.contract.index') }}">Invoice</a>
+                        <a href="{{ route('admin.invoice.index') }}">Invoice</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
@@ -55,7 +55,10 @@
                                     <tbody>
                                         @foreach ($invoices as $item)
                                             <tr>
-                                                <td>{{ $item->id }}</td>
+                                                <td>
+                                                    <input type="checkbox" name="ids[]" value="{{ $item->id }}">
+                                                    {{ $item->id }}
+                                                </td>
                                                 <td>{{ $item->customer_name }}</td>
                                                 <td>{{ $item->invoice_no }}</td>
                                                 <td>{{ $item->contract_no }}</td>
@@ -99,6 +102,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <button id="mark-paid" class="btn btn-success btn-sm mt-2 mb-2"> <i class="fas fa-money-check-alt"></i> Pay TAX</button>
                         </div>
                     </div>
                 </div>
@@ -106,11 +110,69 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
 
 
     <script>
+        $(document).ready(function() {
+            $("#mark-paid").click(function() {
+                let selectedIds = [];
+
+                // Collect selected invoice IDs
+                $('input[name="ids[]"]:checked').each(function() {
+                    selectedIds.push($(this).val());
+                });
+
+                if (selectedIds.length === 0) {
+                    Swal.fire("No Selection", "Please select at least one invoice.", "warning");
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This will mark selected invoices as Paid.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Mark as Paid'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '{{ route('admin.invoice.bulkUpdateStatus') }}', // Adjust route accordingly
+                            type: 'POST',
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                invoice_ids: selectedIds
+                            },
+                            success: function(response) {
+                                Swal.fire("Updated!", response.message, "success").then(
+                                    () => {
+                                        window.location.reload();
+                                    });
+                            },
+                            error: function(xhr) {
+                                let response = JSON.parse(xhr.responseText);
+                                if (response.message ===
+                                    "All selected invoices are already paid.") {
+                                    Swal.fire("No Changes",
+                                        "Selected invoices are already fully paid!",
+                                        "info");
+                                } else {
+                                    Swal.fire("Error!",
+                                        "An error occurred while updating invoices.",
+                                        "error");
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
         function deletevehicle_info(id) {
-            var url = '{{ route('admin.contract.destroy', 'id') }}'.replace("id", id);
+            var url = '{{ route('admin.invoice.destroy', 'id') }}'.replace("id", id);
 
             Swal.fire({
                 title: 'Are you sure?',
@@ -138,7 +200,7 @@
                             if (response) {
                                 Swal.fire(
                                     'Deleted!',
-                                    'Driver Information has been deleted.',
+                                    'Invoice  has been deleted.',
                                     'success'
                                 ).then(() => {
                                     window.location.reload();
@@ -146,7 +208,7 @@
                             } else {
                                 Swal.fire(
                                     'Failed!',
-                                    'Failed to delete Driver Information.',
+                                    'Failed to delete Invoice Information.',
                                     'error'
                                 );
                             }
@@ -164,62 +226,63 @@
         }
 
         function cancelInvoice(id) {
-        var url = '{{ route('admin.invoice.cancel', 'id') }}'.replace("id", id);
+            var url = '{{ route('admin.invoice.cancel', 'id') }}'.replace("id", id);
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You want to cancel this invoice!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, cancel it!',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: url,
-                    type: 'PUT',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        id: id
-                    },
-                    dataType: 'json',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire(
-                                'Cancelled!',
-                                'Invoice has been cancelled successfully.',
-                                'success'
-                            ).then(() => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You want to cancel this invoice!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, cancel it!',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: 'PUT',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            id: id
+                        },
+                        dataType: 'json',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Cancelled!',
+                                    'Invoice has been cancelled successfully.',
+                                    'success'
+                                ).then(() => {
                                     window.location.reload();
                                 });
 
-                            // Update the status in the table
-                            $("#status-" + id).html('<span class="badge badge-danger">Cancelled</span>');
-                            $("#cancel-btn-" + id).remove(); // Remove the cancel button
-                        } else {
+                                // Update the status in the table
+                                $("#status-" + id).html(
+                                    '<span class="badge badge-danger">Cancelled</span>');
+                                $("#cancel-btn-" + id).remove(); // Remove the cancel button
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    'Failed to cancel the invoice. Try again.',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr) {
                             Swal.fire(
-                                'Failed!',
-                                'Failed to cancel the invoice. Try again.',
+                                'Error!',
+                                'An error occurred: ' + xhr.responseText,
                                 'error'
                             );
                         }
-                    },
-                    error: function(xhr) {
-                        Swal.fire(
-                            'Error!',
-                            'An error occurred: ' + xhr.responseText,
-                            'error'
-                        );
-                    }
-                });
-            }
-        });
-    }
+                    });
+                }
+            });
+        }
     </script>
 
 @endsection

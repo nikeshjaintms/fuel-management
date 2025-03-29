@@ -56,12 +56,11 @@ class ContractController extends Controller
      */
     public function store(Request $request)
     {
+
         $add = new Contract();
         $add->customer_id = $request->post('customer_id');
         $add->contract_no = $request->post('contract_no');
         $add->contract_date = $request->post('contract_date');
-        $add->start_date = $request->post('start_date');
-        $add->end_date = $request->post('end_date');
         $add->save();
 
         foreach ($request['vehicle_id'] as $index => $vehicleId) {
@@ -79,6 +78,8 @@ class ContractController extends Controller
         Session::flash('success', 'Vehicle Created Successfully');
         return redirect()->route('admin.contract.index');
     }
+
+   
 
     /**
      * Display the specified resource.
@@ -101,13 +102,12 @@ class ContractController extends Controller
 {
     $vehicleId = $request->vehicle_id;
     $startDate = $request->start_date;
-    $endDate = $request->end_date;
 
     // Check if the vehicle is booked within the given date range
     $isBooked = ContractVehicle::join('contracts', 'contract_vehicles.contract_id', '=', 'contracts.id')
         ->where('contract_vehicles.vehicle_id', $vehicleId)
         ->where(function ($query) use ($startDate, $endDate) {
-            $query->whereBetween('contracts.start_date', [$startDate, $endDate]) // Check contract start date
+            $query->where('contracts.start_date', $startDate) // Check contract start date
                   ->orWhereBetween('contracts.end_date', [$startDate, $endDate]) // Check contract vehicle end date
                   ->orWhereRaw('? BETWEEN contracts.start_date AND contracts.end_date', [$startDate])
                   ->orWhereRaw('? BETWEEN contracts.start_date AND contracts.end_date', [$endDate]);
@@ -149,8 +149,6 @@ class ContractController extends Controller
         $edit->customer_id = $request->post('customer_id');
         $edit->contract_no = $request->post('contract_no');
         $edit->contract_date = $request->post('contract_date');
-        $edit->start_date = $request->post('start_date');
-        $edit->end_date = $request->post('end_date');
         $edit->save();
 
         // Get existing vehicle IDs

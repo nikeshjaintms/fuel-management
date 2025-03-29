@@ -17,6 +17,10 @@ return new class extends Migration
             $table->unsignedBigInteger('contract_id');
             $table->string('invoice_no');
             $table->date('invoice_date');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->string('from_point');
+            $table->string('to_point');
             $table->string('total_km');
             $table->decimal('diesel_diff_rate');
             $table->decimal('diesel_cost');

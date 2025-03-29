@@ -68,25 +68,6 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <h5>Journey Date</h5>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="start_date">From<span style="color: red">*</span></label>
-                                            <input type="date" class="form-control" name="start_date"
-                                                id="start_date" placeholder="Enter Contract Date" required />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="journey_date_from">To<span style="color: red">*</span></label>
-                                            <input type="date" class="form-control" name="end_date"
-                                                id="end_date" placeholder="Enter Contract Date" required />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
                                             <table id="vehicle-table" class="display table table-striped-rows table-hover">
                                                 <thead>
                                                     <tr>
@@ -325,19 +306,17 @@
         $(document).ready(function() {
             $(document).on("change", "select[name='vehicle_id[]']", function() {
                 var vehicleId = $(this).val();
-                var startDate = $("#start_date").val();
-                var endDate = $("#end_date").val();
+                var startDate = $("#contract_date").val();
                 var currentRow = $(this).closest("tr");
 
-                if (vehicleId && startDate && endDate) {
+                if (vehicleId && startDate) {
                     $.ajax({
                         url: "{{ route('admin.contract.checkVehicle') }}",
                         type: "POST",
                         data: {
                             _token: "{{ csrf_token() }}",
                             vehicle_id: vehicleId,
-                            start_date: startDate,
-                            end_date: endDate
+                            start_date: startDate
                         },
                         success: function(response) {
                             currentRow.find(".error-message").remove();

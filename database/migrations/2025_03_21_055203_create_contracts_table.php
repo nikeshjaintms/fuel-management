@@ -16,8 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->string('contract_no');
             $table->date('contract_date');
-            $table->date('start_date');
-            $table->date('end_date');
+            
             $table->timestamps();
         });
 

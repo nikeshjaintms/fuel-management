@@ -46,8 +46,8 @@
                               <th>Id</th>
                               <th>Client</th>
                               <th>Contract No</th>
-                              <th>Start Date</th>
-                              <th>End Date</th>
+                              <th>Contract Date</th>
+
                               <th>Action</th>
                             </tr>
                           </thead>
@@ -57,8 +57,8 @@
                               <td>{{$item->id }}</td>
                               <td>{{$item->cname }}</td>
                               <td>{{$item->contract_no }}</td>
-                              <td>{{$item->start_date }}</td>
-                              <td>{{$item->end_date }}</td>
+                              <td>{{$item->contract_date }}</td>
+
                               <td>
                                 <a href="{{ route('admin.contract.show', $item->id) }}" class="btn btn-lg btn-link btn-primary">
                                   <i class="fa fa-eye">

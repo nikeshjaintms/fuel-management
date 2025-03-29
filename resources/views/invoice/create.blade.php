@@ -54,9 +54,11 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="contract_no">Contract No<span style="color: red">*</span></label>
-                                            <select class="form-control" name="contract_id">
+                                            <select class="form-control" name="contract_id" id="contract_id">
                                                 <option value="">Select Contract</option>
                                             </select>
+                                            <div id="contract-message" style="display: none; color: red; margin-top: 5px;"></div>
+
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -71,6 +73,44 @@
                                             <label for="invoice_date">Invoice Date<span style="color: red">*</span></label>
                                             <input type="date" class="form-control" name="invoice_date" id="invoice_date"
                                                 placeholder="Enter Contract Date" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <h5>Journey Date</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="start_date">From<span style="color: red">*</span></label>
+                                            <input type="date" class="form-control" name="start_date"
+                                                id="start_date" placeholder="Enter Contract Date" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="journey_date_from">To<span style="color: red">*</span></label>
+                                            <input type="date" class="form-control" name="end_date"
+                                                id="end_date" placeholder="Enter Contract Date" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <h5>Journey Route</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="from_point">From Pickup Point <span style="color: red">*</span></label>
+                                            <input type="text" class="form-control" name="from_point"
+                                                id="from_point" placeholder="Enter Contract Date" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="to_point">To Drop Point<span style="color: red">*</span></label>
+                                            <input type="text" class="form-control" name="to_point"
+                                                id="to_point" placeholder="Enter Contract Date" required />
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -158,7 +198,7 @@
 
                                 </div>
                                 <div class="card-action">
-                                    <button class="btn btn-success" type="submit">Submit</button>
+                                    <button class="btn btn-success" id="submit-button" type="submit">Submit</button>
                                     <a href="{{ route('admin.invoice.index') }}" class="btn btn-danger">Cancel</a>
                                 </div>
                         </form>
@@ -172,7 +212,42 @@
 @section('footer-script')
     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}" // Set CSRF token globally
+                }
+            });
+            $('select[name="contract_id"]').change(function() {
+                var contractId = $(this).val();
+                var messageDiv = $("#contract-message"); // Div to show the message
+                var submitBtn = $("#submit-button");
 
+                messageDiv.text("").hide(); // Clear message initially
+                submitBtn.prop("disabled", false); // Enable button by default
+
+                if (contractId) {
+                    $.ajax({
+                        url: "{{ route('admin.invoice.checkContract') }}",
+                        type: "POST",
+                        data: {
+                            contract_id: contractId
+                        },
+                        success: function(response) {
+                            if (response.exists) {
+                                messageDiv.text(
+                                    "This contract is already linked to an invoice.").css(
+                                    "color", "red").show();
+                                $('select[name="contract_id"]').val('');
+                                submitBtn.prop("disabled", true);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
     <script>
         $(document).ready(function() {
             $('#customer_id').on('change', function() {
@@ -394,7 +469,6 @@
             }, "End date must be after start date");
 
             $('#vehicleForm').validate({
-                ignore: ":hidden, [readonly]",
                 rules: {
                     customer_id: {
                         required: true
@@ -409,6 +483,21 @@
                         required: true,
                         date: true
                     },
+                    start_date: {
+                        required: true,
+                        date: true,
+                    },
+                    end_date: {
+                        required: true,
+                        date: true,
+                        greaterThan: "#start_date"
+                    },
+                    from_point: {
+                        required: true
+                    },
+                    to_point: {
+                        required: true
+                    },
                     diesel_diff_rate: {
                         required: true,
                         number: true
@@ -417,14 +506,6 @@
                         required: true,
                         number: true
                     },
-                    // 'km_drive[]': {
-                    //     required: true,
-                    //     number: true
-                    // },
-                    // 'overtime[]': {
-                    //     required: true,
-                    //     number: true
-                    // },
                     tax_type: {
                         required: true
                     }
@@ -443,6 +524,21 @@
                         required: "Please select an invoice date.",
                         date: "Please enter a valid date."
                     },
+                    start_date: {
+                        required: "Please select a start date.",
+                        date: "Please enter a valid date."
+                    },
+                    end_date: {
+                        required: "Please select an end date.",
+                        date: "Please enter a valid date.",
+                        greaterThan: "End date must be after start date."
+                    },
+                    from_point: {
+                        required: "Please enter a pickup point."
+                    },
+                    to_point: {
+                        required: "Please enter a drop point."
+                    },
                     diesel_diff_rate: {
                         required: "Please enter diesel rate.",
                         number: "Please enter a valid diesel rate."
@@ -451,14 +547,6 @@
                         required: "Please enter tax (in Percentage).",
                         number: "Please enter a valid tax (in Percentage)."
                     },
-                    // 'km_drive[]': {
-                    //     required: "Please enter  KM drive.",
-                    //     number: "Please enter a valid number."
-                    // },
-                    // 'overtime[]': {
-                    //     required: "Please enter OT rate.",
-                    //     number: "Please enter a valid number."
-                    // },
                     tax_type: {
                         required: "Please select a tax type."
                     }
