@@ -183,6 +183,23 @@ Route::middleware('auth:admin')->group(function () {
         Route::post('/maintenance/check-maintenance', 'checkMaintenance')->name('admin.maintenance.checkMaintenance');
     });
 
+    Route::controller(App\Http\Controllers\RolesController::class)->group(function () {
+        Route::get('/roles', 'index')->name('admin.roles.index');
+        Route::get('/roles/create', 'create')->name('admin.roles.create');
+        Route::post('/roles/create', 'store')->name('admin.roles.store');
+        Route::get('/roles/{id}', 'edit')->name('admin.roles.edit');
+        Route::put('/roles/{id}', 'update')->name('admin.roles.update');
+        Route::delete('/roles/delete/{id}', 'destroy')->name('admin.roles.destroy');
+    });
+
+    Route::controller(App\Http\Controllers\AdminController::class)->group(function () {
+        Route::get('/users', 'index')->name('admin.users.index');
+        Route::get('/users/create', 'create')->name('admin.users.create');
+        Route::post('/users/create', 'store')->name('admin.users.store');
+        Route::get('/users/{id}', 'edit')->name('admin.users.edit');
+        Route::put('/users/{id}', 'update')->name('admin.users.update');
+        Route::delete('/users/delete/{id}', 'destroy')->name('admin.users.destroy');
+    });
 
     Route::controller(App\Http\Controllers\InvoiceController::class)->group(function () {
         Route::get('/invoice', 'index')->name('admin.invoice.index');
@@ -197,6 +214,8 @@ Route::middleware('auth:admin')->group(function () {
         Route::post('/invoice/bulk-update-status', 'bulkPayInvoices')->name('admin.invoice.bulkUpdateStatus');
         Route::post('/invoice/check-contract', 'checkContract')->name('admin.invoice.checkContract');
         Route::get('/invoice/get-invoice-details/{id}', 'downloadInvoiceDetails')->name('admin.invoice.getInvoiceDetails');
+        Route::get('/fetch-invoices/{customer_id}', 'getInvoices')->name('fetch.invoices');
+
     });
     Route::get('/invoice/success/{id}', function ($id) {
         return view('invoice.success', compact('id'));
@@ -217,24 +236,24 @@ Route::middleware('auth:admin')->group(function () {
         Route::post('/contract/checkContract', 'checkContract')->name('admin.contract.checkContract');
     });
 
-
-
-
-    Route::controller(App\Http\Controllers\RolesController::class)->group(function () {
-        Route::get('/roles', 'index')->name('admin.roles.index');
-        Route::get('/roles/create', 'create')->name('admin.roles.create');
-        Route::post('/roles/create', 'store')->name('admin.roles.store');
-        Route::get('/roles/{id}', 'edit')->name('admin.roles.edit');
-        Route::put('/roles/{id}', 'update')->name('admin.roles.update');
-        Route::delete('/roles/delete/{id}', 'destroy')->name('admin.roles.destroy');
+    Route::controller(App\Http\Controllers\CreditController::class)->group(function () {
+        Route::get('/credits', 'index')->name('admin.credits.index');
+        Route::get('/credits/create', 'create')->name('admin.credits.create');
+        Route::post('/credits/create', 'store')->name('admin.credits.store');
+        Route::get('/credits/{id}', 'show')->name('admin.credits.show');
+        Route::get('/credits/edit/{id}', 'edit')->name('admin.credits.edit');
+        Route::put('/credits/edit/{id}', 'update')->name('admin.credits.update');
+        Route::delete('/credits/delete/{id}', 'destroy')->name('admin.credits.destroy');
     });
 
-    Route::controller(App\Http\Controllers\AdminController::class)->group(function () {
-        Route::get('/users', 'index')->name('admin.users.index');
-        Route::get('/users/create', 'create')->name('admin.users.create');
-        Route::post('/users/create', 'store')->name('admin.users.store');
-        Route::get('/users/{id}', 'edit')->name('admin.users.edit');
-        Route::put('/users/{id}', 'update')->name('admin.users.update');
-        Route::delete('/users/delete/{id}', 'destroy')->name('admin.users.destroy');
+    Route::controller(App\Http\Controllers\DebitController::class)->group(function () {
+        Route::get('/debits', 'index')->name('admin.debits.index');
+        Route::get('/debits/create', 'create')->name('admin.debits.create');
+        Route::post('/debits/create', 'store')->name('admin.debits.store');
+        Route::get('/debits/{id}', 'show')->name('admin.debits.show');
+        Route::get('/debits/edit/{id}', 'edit')->name('admin.debits.edit');
+        Route::put('/debits/edit/{id}', 'update')->name('admin.debits.update');
+        Route::delete('/debits/delete/{id}', 'destroy')->name('admin.debits.destroy');
     });
+    
 });

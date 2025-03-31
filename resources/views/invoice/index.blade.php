@@ -102,7 +102,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <button id="mark-paid" class="btn btn-success btn-sm mt-2 mb-2"> <i class="fas fa-money-check-alt"></i> Pay TAX</button>
+                            <button id="mark-paid" class="btn btn-success btn-sm mt-2 mb-2"> <i class="fas fa-money-check-alt"></i> Paid ?</button>
                         </div>
                     </div>
                 </div>
@@ -111,7 +111,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
 
 
     <script>

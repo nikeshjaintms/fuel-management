@@ -64,7 +64,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="invoice_no">Invoice NO<span style="color: red">*</span></label>
-                                            <input type="text" class="form-control" name="invoice_no" id="invoice_no"
+                                            <input type="text" class="form-control" readonly value="{{ $invoiceNumber }}" name="invoice_no" id="invoice_no"
                                                 placeholder="Enter Invoice" required />
                                         </div>
                                     </div>

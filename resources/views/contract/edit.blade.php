@@ -133,7 +133,7 @@
                                 </div>
                                 <div class="card-action">
                                     <button class="btn btn-success" type="submit">Submit</button>
-                                    <a href="{{ route('admin.invoice.index') }}" class="btn btn-danger">Cancel</a>
+                                    <a href="{{ route('admin.contract.index') }}" class="btn btn-danger">Cancel</a>
                                 </div>
                         </form>
                     </div>

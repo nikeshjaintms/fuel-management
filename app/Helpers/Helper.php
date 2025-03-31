@@ -24,30 +24,45 @@ if (!function_exists('convertToIndianWords')) {
         $integerPart = floor($number);
         $decimalPart = round(($number - $integerPart) * 100);
 
-        $result = convertIntegerToWords($integerPart, $words, $units);
+        $result = convertIntegerToIndianWords($integerPart, $words, $units);
 
         if ($decimalPart > 0) {
-            $result .= " and " . convertIntegerToWords($decimalPart, $words, $units) . " Paise";
+            $result .= " and " . convertIntegerToIndianWords($decimalPart, $words, $units) . " Paise";
         }
 
         return $result . " Only";
     }
 
-    function convertIntegerToWords($number, $words, $units)
+    function convertIntegerToIndianWords($number, $words, $units)
     {
         if ($number == 0) {
             return 'Zero';
         }
 
         $result = '';
-        $i = 0;
+        $partArray = [];
 
+        // Handle first 3 digits separately (Hundreds)
+        if ($number >= 1000) {
+            $partArray[] = $number % 1000;
+            $number = (int)($number / 1000);
+        } else {
+            $partArray[] = $number;
+            $number = 0;
+        }
+
+        // Handle rest of the digits in two-digit groups (Indian system: Lakh, Crore)
         while ($number > 0) {
-            $part = $number % 1000;
+            $partArray[] = $number % 100;
+            $number = (int)($number / 100);
+        }
+
+        // Convert each part
+        $i = 0;
+        foreach ($partArray as $part) {
             if ($part > 0) {
                 $result = convertThreeDigits($part, $words) . ' ' . ($units[$i] ?? '') . ' ' . $result;
             }
-            $number = (int) ($number / 1000);
             $i++;
         }
 

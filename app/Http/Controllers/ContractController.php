@@ -79,7 +79,7 @@ class ContractController extends Controller
         return redirect()->route('admin.contract.index');
     }
 
-   
+
 
     /**
      * Display the specified resource.
@@ -106,12 +106,7 @@ class ContractController extends Controller
     // Check if the vehicle is booked within the given date range
     $isBooked = ContractVehicle::join('contracts', 'contract_vehicles.contract_id', '=', 'contracts.id')
         ->where('contract_vehicles.vehicle_id', $vehicleId)
-        ->where(function ($query) use ($startDate, $endDate) {
-            $query->where('contracts.start_date', $startDate) // Check contract start date
-                  ->orWhereBetween('contracts.end_date', [$startDate, $endDate]) // Check contract vehicle end date
-                  ->orWhereRaw('? BETWEEN contracts.start_date AND contracts.end_date', [$startDate])
-                  ->orWhereRaw('? BETWEEN contracts.start_date AND contracts.end_date', [$endDate]);
-        })
+        ->where('contracts.contract_Date', '!=', $startDate)
         ->exists();
 
     return response()->json([

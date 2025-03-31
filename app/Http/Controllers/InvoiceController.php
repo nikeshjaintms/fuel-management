@@ -35,7 +35,37 @@ class InvoiceController extends Controller
     {
         $customers = Customer::get();
 
-        return view('invoice.create', compact('customers'));
+        // Determine the current fiscal year
+        $currentYear = date('Y');
+        $nextYear = $currentYear + 1;
+        $previousYear = $currentYear - 1;
+
+        // Determine if the fiscal year should be previous year - current year or current year - next year
+        if (date('m') < 4) {
+            // Before April 1st, use the previous fiscal year
+            $fiscalYear = ($previousYear % 100) . '-' . ($currentYear % 100);
+        } else {
+            // From April 1st onwards, use the current fiscal year
+            $fiscalYear = ($currentYear % 100) . '-' . ($nextYear % 100);
+        }
+
+        // Get the latest invoice for the current fiscal year
+        $latestInvoice = Invoice::where('invoice_no', 'LIKE', "%/$fiscalYear/%")->latest()->first();
+
+        // Extract and increment the last number, reset if new fiscal year
+        if ($latestInvoice) {
+            $lastNumber = intval(explode('/', $latestInvoice->invoice_no)[2]);
+            $nextNumber = $lastNumber + 1;
+        } else {
+            $nextNumber = 1; // Reset if no invoice exists for this fiscal year
+        }
+
+        // Format the invoice number
+        $invoiceNumber = 'DIVYA/' . $fiscalYear . '/' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+
+        // dd($invoiceNumber);
+
+        return view('invoice.create', compact('customers', 'invoiceNumber'));
     }
 
     public function checkContract(Request $request)
@@ -86,11 +116,17 @@ class InvoiceController extends Controller
         return redirect()->away(route('admin.invoice.getInvoiceDetails', ['id' => $invoice_id]));
     }
 
+    public function getInvoices($customer_id)
+    {
+        $invoices = Invoice::where('customer_id', $customer_id)->get(['id', 'invoice_no']);
+        return response()->json($invoices);
+    }
+
     public function downloadInvoiceDetails($id)
     {
         $invoices = Invoice::join('contracts', 'invoices.contract_id', '=', 'contracts.id')
             ->join('customer_masterdatas', 'contracts.customer_id', '=', 'customer_masterdatas.id')
-            ->select('invoices.*', 'contracts.contract_no','contracts.contract_date' ,'customer_masterdatas.customer_name' ,'customer_masterdatas.customer_address','customer_masterdatas.customer_gst')
+            ->select('invoices.*', 'contracts.contract_no', 'contracts.contract_date', 'customer_masterdatas.customer_name', 'customer_masterdatas.customer_address', 'customer_masterdatas.customer_gst')
             ->where('invoices.status', '!=', 'cancelled')
             ->where('invoices.id', $id)
             ->first();
@@ -105,7 +141,7 @@ class InvoiceController extends Controller
             ->get();
         $contract_vehicles = ContractVehicle::where('contract_id', $invoices->contract_id)->get();
 
-        $pdf = Pdf::loadView('invoice.pdf', compact('invoices', 'invoice_vehicles','contract_vehicles'));
+        $pdf = Pdf::loadView('invoice.pdf', compact('invoices', 'invoice_vehicles', 'contract_vehicles'));
 
 
         return $pdf->stream('invoice_details.pdf');
@@ -125,11 +161,11 @@ class InvoiceController extends Controller
             ->first(); // FIXED: Use where() and first() instead of find()
 
 
-            if (!$invoices) {
-                return back()->withErrors(['message' => 'Invoice not found']);
-            }
+        if (!$invoices) {
+            return back()->withErrors(['message' => 'Invoice not found']);
+        }
 
-            $invoice_vehicles = Invoice_vehicle::leftjoin('vehicles', 'invoice_vehicle.vehicle_id', '=', 'vehicles.id')
+        $invoice_vehicles = Invoice_vehicle::leftjoin('vehicles', 'invoice_vehicle.vehicle_id', '=', 'vehicles.id')
             ->select('invoice_vehicle.*', 'vehicles.vehicle_no')
             ->where('invoice_vehicle.invoice_id', $id)
 

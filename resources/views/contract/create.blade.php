@@ -4,7 +4,7 @@
 @endif
 
 @section('content-page')
-{{-- <link rel="stylesheet" href="{{ asset('backend/assets/css/select2.min.css')}}" /> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('backend/assets/css/select2.min.css')}}" /> --}}
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
@@ -83,8 +83,8 @@
                                                 <tbody id="vehicle-body">
                                                     <tr class="vehicle-row">
                                                         <td>
-                                                            <select class="form-control"
-                                                                name="vehicle_id[]" required>
+                                                            <select class="form-control vehicle-id" name="vehicle_id[]"
+                                                                required>
                                                                 <option value="">Select Vehicle</option>
                                                                 @foreach ($vehicles as $vehicle)
                                                                     <option value="{{ $vehicle->id }}">
@@ -121,7 +121,7 @@
                                 </div>
                                 <div class="card-action">
                                     <button class="btn btn-success" type="submit">Submit</button>
-                                    <a href="{{ route('admin.invoice.index') }}" class="btn btn-danger">Cancel</a>
+                                    <a href="{{ route('admin.contract.index') }}" class="btn btn-danger">Cancel</a>
                                 </div>
                         </form>
                     </div>
@@ -136,7 +136,6 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     {{-- <script src="{{ asset('backend/assets/js/select2.min.js') }}"></script> --}}
     <script>
-
         $(document).ready(function() {
 
             $(document).on("click", ".add-vehicle", function() {
@@ -162,13 +161,13 @@
         });
     </script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Custom method to check duplicate vehicle selection
-            $.validator.addMethod("uniqueVehicle", function (value, element) {
+            $.validator.addMethod("uniqueVehicle", function(value, element) {
                 var selectedVehicles = [];
                 var isValid = true;
 
-                $("select[name='vehicle_id[]']").each(function () {
+                $("select[name='vehicle_id[]']").each(function() {
                     var vehicleVal = $(this).val();
                     if (vehicleVal !== "") {
                         if (selectedVehicles.includes(vehicleVal)) {
@@ -183,7 +182,7 @@
             });
 
             // Custom validator for date comparison
-            $.validator.addMethod("greaterThan", function (value, element, param) {
+            $.validator.addMethod("greaterThan", function(value, element, param) {
                 var startDate = $(param).val();
                 return Date.parse(value) > Date.parse(startDate);
             }, "End date must be after start date");
@@ -249,7 +248,8 @@
                         required: "Please select a valid contract date"
                     },
                     start_date: {
-                        required: "Please select a journey start date"},
+                        required: "Please select a journey start date"
+                    },
                     end_date: {
                         required: "Please select a journey end date",
                         greaterThan: "End date must be after start date"
@@ -283,7 +283,7 @@
                     }
                 },
                 errorElement: "span",
-                errorPlacement: function (error, element) {
+                errorPlacement: function(error, element) {
                     error.addClass("text-danger small");
                     if (element.closest("td").length) {
                         element.closest("td").append(error); // Place error inside the table cell
@@ -291,10 +291,10 @@
                         element.closest(".form-group").append(error);
                     }
                 },
-                highlight: function (element) {
+                highlight: function(element) {
                     $(element).addClass("is-invalid");
                 },
-                unhighlight: function (element) {
+                unhighlight: function(element) {
                     $(element).removeClass("is-invalid");
                 }
             });
@@ -308,6 +308,7 @@
                 var vehicleId = $(this).val();
                 var startDate = $("#contract_date").val();
                 var currentRow = $(this).closest("tr");
+                var selectField = $(this);
 
                 if (vehicleId && startDate) {
                     $.ajax({
@@ -319,17 +320,27 @@
                             start_date: startDate
                         },
                         success: function(response) {
-                            currentRow.find(".error-message").remove();
-                            currentRow.append('<span class="text-success">✔ ' + response.message + '</span>');
+                            selectField.next(".error-message").remove();
+                            selectField.after('<span class="text-success success-message">✔ ' +
+                                response.message + '</span>');
+                            setTimeout(() => {
+                                selectField.next(".success-message").remove();
+
+                            }, 3000);
+
                         },
                         error: function(xhr) {
-                            currentRow.find(".error-message").remove();
-                            currentRow.append('<span class="text-danger error-message">❌ ' + xhr.responseJSON.message + '</span>');
-                            currentRow.find("select[name='vehicle_id[]']").val(""); // Reset selection
+                            selectField.next(".error-message, .success-message").remove();
+                            selectField.after('<span class="text-danger error-message">❌ ' + xhr
+                                .responseJSON.message + '</span>');
+                            selectField.val(""); // Reset selection
+                            setTimeout(() => {
+                                selectField.next(".error-message").remove();
+                            }, 10000);
                         }
                     });
                 }
             });
         });
-        </script>
+    </script>
 @endsection
