@@ -244,7 +244,11 @@ Route::middleware('auth:admin')->group(function () {
         Route::get('/credits/edit/{id}', 'edit')->name('admin.credits.edit');
         Route::put('/credits/edit/{id}', 'update')->name('admin.credits.update');
         Route::delete('/credits/delete/{id}', 'destroy')->name('admin.credits.destroy');
+        Route::get('/credits/print/{id}', 'PrintCredit')->name('admin.credits.print');
     });
+    Route::get('/credits/success/{id}', function ($id) {
+        return view('credits.success', compact('id'));
+    })->name('credits.success');
 
     Route::controller(App\Http\Controllers\DebitController::class)->group(function () {
         Route::get('/debits', 'index')->name('admin.debits.index');
@@ -254,6 +258,24 @@ Route::middleware('auth:admin')->group(function () {
         Route::get('/debits/edit/{id}', 'edit')->name('admin.debits.edit');
         Route::put('/debits/edit/{id}', 'update')->name('admin.debits.update');
         Route::delete('/debits/delete/{id}', 'destroy')->name('admin.debits.destroy');
+        Route::get('/debits/print/{id}', 'PrintDebit')->name('admin.debits.print');
     });
-    
+    Route::get('/debits/success/{id}', function ($id) {
+        return view('debits.success', compact('id'));
+    })->name('debits.success');
+
+    Route::controller(App\Http\Controllers\QuotationController::class)->group(function (){
+        Route::get('/quotation', 'index')->name('admin.quotations.index');
+        Route::get('/quotation/create', 'create')->name('admin.quotations.create');
+        Route::post('/quotation/create', 'store')->name('admin.quotations.store');
+        Route::get('/quotation/detail/{id}', 'show')->name('admin.quotations.show');
+        Route::get('/quotation/{id}', 'edit')->name('admin.quotations.edit');
+        Route::put('/quotation/{id}', 'update')->name('admin.quotations.update');
+        Route::delete('/quotation/delete/{id}', 'destroy')->name('admin.quotations.destroy');
+        Route::get('/quotation/print/{id}', 'printQuotation')->name('admin.quotations.generatePdf');
+    });
+    Route::get('/quotation/success/{id}', function ($id) {
+        return view('quotation.success', compact('id'));
+    })->name('quotations.success');
+
 });

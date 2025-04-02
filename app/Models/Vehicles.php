@@ -9,7 +9,7 @@ class Vehicles extends Model
 {
     protected $table = 'vehicles';
     protected $primaryKey = 'id';
-    protected $fillable = ['vehicle_no','vehicle_engine_no','vehicle_chassis_no','average','road_tax_amount'];
+    protected $fillable = ['vehicle_no','type_of_vehicle','vehicle_engine_no','vehicle_chassis_no','average','road_tax_amount'];
 
     use HasFactory;
 

@@ -113,7 +113,8 @@ class InvoiceController extends Controller
                 'overtime_amount' => $request->overtime_amount[$i] ?? 0,
             ]);
         }
-        return redirect()->away(route('admin.invoice.getInvoiceDetails', ['id' => $invoice_id]));
+        return redirect()->route('invoice.success', ['id' => $invoice_id]);
+
     }
 
     public function getInvoices($customer_id)
@@ -127,7 +128,6 @@ class InvoiceController extends Controller
         $invoices = Invoice::join('contracts', 'invoices.contract_id', '=', 'contracts.id')
             ->join('customer_masterdatas', 'contracts.customer_id', '=', 'customer_masterdatas.id')
             ->select('invoices.*', 'contracts.contract_no', 'contracts.contract_date', 'customer_masterdatas.customer_name', 'customer_masterdatas.customer_address', 'customer_masterdatas.customer_gst')
-            ->where('invoices.status', '!=', 'cancelled')
             ->where('invoices.id', $id)
             ->first();
 
@@ -141,10 +141,15 @@ class InvoiceController extends Controller
             ->get();
         $contract_vehicles = ContractVehicle::where('contract_id', $invoices->contract_id)->get();
 
-        $pdf = Pdf::loadView('invoice.pdf', compact('invoices', 'invoice_vehicles', 'contract_vehicles'));
+        $pdf = Pdf::loadView('invoice.pdf', [
+            'invoices' => $invoices,
+            'invoice_vehicles' => $invoice_vehicles,
+            'contract_vehicles' => $contract_vehicles,
+            'isCancelled' => $invoices->status === 'cancelled'
+        ]);
 
-
-        return $pdf->stream('invoice_details.pdf');
+        $invoiceNo = str_replace('/', '-', (string) $invoices->invoice_no);
+        return $pdf->stream('invoice-' . $invoiceNo . '.pdf');
     }
 
     /**

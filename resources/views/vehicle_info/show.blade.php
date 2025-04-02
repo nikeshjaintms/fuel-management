@@ -58,7 +58,11 @@
                         <td>{{ $data->average}}</td>
                      </tr>
                      <tr>
-                        <th>Average </th>
+                        <th>Type of Vehicle </th>
+                        <td>{{ $data->type_of_vehicle}}</td>
+                     </tr>
+                     <tr>
+                        <th>Road Tax </th>
                         <td>{{ $data->road_tax_amount}}</td>
                      </tr>
                 </table>

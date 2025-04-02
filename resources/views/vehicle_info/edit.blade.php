@@ -65,6 +65,12 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            <label for="road_tax_amount">Type of Vehicle<span style="color: red">*</span></label>
+                                            <input type="text" class="form-control" value="{{ $vehicle->type_of_vehicle }}" name="type_of_vehicle" id="type_of_vehicle" required placeholder="56 seat Bus..." />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
                                             <label for="road_tax_amount">Road Tax Amount<span style="color: red">*</span></label>
                                             <input type="number" class="form-control" value="{{ $vehicle->road_tax_amount }}" name="road_tax_amount" id="road_tax_amount" required placeholder="Enter a Amount" />
                                         </div>

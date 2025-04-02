@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Debit;
 use App\Models\DebitItem;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -70,7 +71,27 @@ class DebitController extends Controller
         }
 
         Session::flash('success', 'Debit Note has been created successfully.');
-        return redirect()->route('admin.debits.index');
+        return redirect()->route('debits.success', ['id' =>$did]);
+
+    }
+
+
+    public function PrintDebit($id){
+        $debits = Debit::join('customer_masterdatas','debits.customer_id','=','customer_masterdatas.id')
+        ->join('invoices','debits.invoice_id','=','invoices.id')
+        ->select('debits.*','customer_masterdatas.customer_name','customer_masterdatas.customer_address','customer_masterdatas.customer_gst','invoices.invoice_no','invoices.invoice_date')
+        ->orderBy('debits.id', 'desc')
+        ->find($id);
+
+        $debits_items = DebitItem::where('debit_id', $id)->get();
+
+        $pdf = Pdf::loadView('debits.pdf', compact('debits', 'debits_items'));
+
+        $dno = $debits->debit_number;
+        $dno = str_replace('/', '-', $dno);
+
+        return $pdf->stream('debit'.$dno.'.pdf');
+        // return view('credits.pdf', compact('credits', 'credits_items'));
     }
 
     /**

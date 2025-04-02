@@ -7,7 +7,7 @@
     <script>
         window.onload = function() {
             // Open invoice in a new tab
-            let newTab = window.open("{{ route('admin.invoice.getInvoiceDetails', ['id' => $id]) }}", "_blank", "noopener,noreferrer");
+            let newTab = window.open("{{ route('admin.debits.print', ['id' => $id]) }}", "_blank", "noopener,noreferrer");
 
             if (newTab) {
                 // Focus the new tab (optional)
@@ -18,7 +18,7 @@
 
             // Redirect to invoice list after 2 seconds
             setTimeout(function() {
-                window.location.href = "{{ route('admin.invoice.index') }}";
+                window.location.href = "{{ route('admin.debits.index') }}";
             }, 2000);
         };
     </script>

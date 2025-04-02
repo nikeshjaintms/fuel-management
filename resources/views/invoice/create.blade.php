@@ -19,7 +19,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.contract.index') }}">Invoice</a>
+                        <a href="{{ route('admin.invoice.index') }}">Invoice</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
@@ -212,7 +212,7 @@
 @section('footer-script')
     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: {
@@ -247,7 +247,7 @@
                 }
             });
         });
-    </script>
+    </script> --}}
     <script>
         $(document).ready(function() {
             $('#customer_id').on('change', function() {

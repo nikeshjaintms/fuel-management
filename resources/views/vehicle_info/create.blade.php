@@ -67,6 +67,12 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            <label for="road_tax_amount">Type of Vehicle<span style="color: red">*</span></label>
+                                            <input type="text" class="form-control" name="type_of_vehicle" id="type_of_vehicle" required placeholder="56 seat Bus..." />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
                                             <label for="road_tax_amount">Road Tax Amount<span style="color: red">*</span></label>
                                             <input type="number" class="form-control" name="road_tax_amount" id="road_tax_amount" required placeholder="Enter a Amount" />
                                         </div>
@@ -152,6 +158,10 @@
                     maxlength: 10,
                     alphanumeric: true
                 },
+                type_of_vehicle:{
+                    required: true,
+                    minlength: 3,
+                },
                 vehicle_engine_no: {
                     required: true,
                     maxlength: 20,
@@ -176,6 +186,10 @@
                     required: "Vehicle number is required",
                     maxlength: "Vehicle number cannot exceed 10 characters"
                 },
+                type_of_vehicle:{
+                    required: "Type of vehicle is required",
+                    minlength: "Type of vehicle should be at least 3 characters long"
+                    },
                 vehicle_engine_no: {
                     required: "Engine number is required",
                     maxlength: "Engine number cannot exceed 20 characters"

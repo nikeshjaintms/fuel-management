@@ -29,21 +29,15 @@ class VehiclesImport implements ToModel, WithHeadingRow
         {
             return null;
         }
-        $policydate = Date::excelToDateTimeObject($row['vehicle_policy_expiry_date']);
-        $fitnessdate = Date::excelToDateTimeObject($row['vehicle_fitness_expiry_date']);
-        $pucdate = Date::excelToDateTimeObject($row['vehicle_puc_expiry_date']);
+
 
         return new Vehicles([
             'vehicle_no' => $row['vehicle_no'],
+            'type_of_vehicle' => $row['type_of_vehicle'],
             'vehicle_engine_no' => $row['vehicle_engine_no'],
             'vehicle_chassis_no' => $row['vehicle_chassis_no'],
-            'vehicle_policy_no' => $row['vehicle_policy_no'],
             'average' => $row['average'],
-            'vehicle_policy_expiry_date' => $policydate,
-            'vehicle_fitness_expiry_date' => $fitnessdate,
-            'vehicle_puc_expiry_date' => $pucdate,
-
-            //
+            'road_tax_amount' => $row['road_tax_amount'],
         ]);
     }
 

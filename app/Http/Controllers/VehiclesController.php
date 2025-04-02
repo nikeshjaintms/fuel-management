@@ -82,6 +82,7 @@ class VehiclesController extends Controller
         $add = new Vehicles();
         $add->create([
             "vehicle_no" => $request->post('vehicle_no'),
+            "type_of_vehicle" => $request->post('type_of_vehicle'),
             "vehicle_engine_no" => $request->post('vehicle_engine_no'),
             "vehicle_chassis_no" => $request->post('vehicle_chassis_no'),
             "average" => $request->post('average'),
@@ -121,6 +122,7 @@ class VehiclesController extends Controller
     {
         $vehicle = Vehicles::find($id);
         $vehicle->vehicle_no = $request->post('vehicle_no');
+        $vehicle->type_of_vehicle = $request->post('type_of_vehicle');
         $vehicle->vehicle_engine_no = $request->post('vehicle_engine_no');
         $vehicle->vehicle_chassis_no = $request->post('vehicle_chassis_no');
         $vehicle->average = $request->post('average');

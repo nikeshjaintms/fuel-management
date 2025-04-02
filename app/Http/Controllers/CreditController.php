@@ -6,6 +6,7 @@ use App\Models\Credit;
 use App\Models\CreditItem;
 use App\Models\Customer;
 use App\Models\Invoice;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class CreditController extends Controller
@@ -68,7 +69,26 @@ class CreditController extends Controller
         }
 
 
-        return redirect()->route('admin.credits.index')->with('success', 'Credit created successfully.');
+        return redirect()->route('credits.success', ['id' =>$add->id]);
+
+    }
+
+    public function PrintCredit($id){
+        $credits = Credit::join('customer_masterdatas','credits.customer_id','=','customer_masterdatas.id')
+        ->join('invoices','credits.invoice_id','=','invoices.id')
+        ->select('credits.*','customer_masterdatas.customer_name','customer_masterdatas.customer_address','customer_masterdatas.customer_gst','invoices.invoice_no','invoices.invoice_date')
+        ->orderBy('credits.id', 'desc')
+        ->find($id);
+
+        $credits_items = CreditItem::where('credit_id', $id)->get();
+
+        $pdf = Pdf::loadView('credits.pdf', compact('credits', 'credits_items'));
+
+        $cno = $credits->credit_number;
+        $cno = str_replace('/', '-', $cno);
+
+        return $pdf->stream('credit'.$cno.'.pdf');
+        // return view('credits.pdf', compact('credits', 'credits_items'));
     }
 
     /**
@@ -116,7 +136,7 @@ class CreditController extends Controller
         $update->tax_amount = $request->post('tax_amount');
         $update->total_amount = $request->post('total_amount');
         $update->save();
-        
+
         if ($request->has('item')) {
             foreach ($request->post('item') as $index => $item) {
                 $creditItemId = $request->post('credit_item_id')[$index] ?? null;

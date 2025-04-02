@@ -141,23 +141,28 @@
                             <div class="collapse" id="invoicesection">
                               <ul class="nav nav-collapse">
                                 <li>
-                                  <a href="{{ route('admin.fitness.index')}}">
+                                  <a href="{{ route('admin.invoice.create')}}">
                                     <span class="sub-item">Generate New Invoice</span>
                                   </a>
                                 </li>
                                 <li>
-                                  <a href="{{ route('admin.puc.index')}}">
+                                  <a href="{{ route('admin.invoice.index')}}">
                                     <span class="sub-item">All Invoice</span>
                                   </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.policy.index')}}">
-                                      <span class="sub-item">Credit/Debit Note</span>
+                                    <a href="{{ route('admin.contract.index')}}">
+                                      <span class="sub-item">Contract</span>
+                                    </a>
+                                  </li>
+                                <li>
+                                    <a href="{{ route('admin.credits.index')}}">
+                                      <span class="sub-item">Credit Note</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.rto.index')}}">
-                                      <span class="sub-item">Road Tax</span>
+                                    <a href="{{ route('admin.debits.index')}}">
+                                      <span class="sub-item">Debit Note</span>
                                     </a>
                                 </li>
                               </ul>

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
             $table->string('vehicle_no');
+            $table->string('type_of_vehicle');
             $table->string('vehicle_engine_no');
             $table->string('vehicle_chassis_no');
             $table->string('vehicle_policy_no');
